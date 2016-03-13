@@ -1,0 +1,32 @@
+diff fuzzer2/id:000023,orig:id:000257,src:000001,op:havoc,rep:8.min -> fuzzer2/id:000024,orig:id:000262,src:000001,op:havoc,rep:2,+cov.min
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'function' coverage: _ZN4YAML7Scanner15ScanBlockScalarEv()
+  New 'line' coverage: 375
+  New 'line' coverage: 376
+  New 'line' coverage: 378
+  New 'line' coverage: 379
+  New 'line' coverage: 380
+  New 'line' coverage: 383
+  New 'line' coverage: 384
+  New 'line' coverage: 385
+  New 'line' coverage: 388
+  New 'line' coverage: 389
+  New 'line' coverage: 390
+  New 'line' coverage: 406
+  New 'line' coverage: 407
+  New 'line' coverage: 410
+  New 'line' coverage: 415
+  New 'line' coverage: 416
+Src file: /root/yaml-cpp/src/exp.h
+  New 'function' coverage: _ZN4YAML3Exp14ChompIndicatorEv()
+  New 'function' coverage: _ZN4YAML3Exp5ChompEv()
+  New 'line' coverage: 190
+  New 'line' coverage: 191
+  New 'line' coverage: 192
+  New 'line' coverage: 194
+  New 'line' coverage: 195
+  New 'line' coverage: 196
+  New 'line' coverage: 197
+  New 'line' coverage: 198
+Src file: /root/yaml-cpp/src/scanner.cpp
+  New 'line' coverage: 151

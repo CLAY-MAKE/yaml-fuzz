@@ -1,0 +1,560 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/emitterutils.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - emitterutils.cpp<span style="font-size: 80%;"> (source / <a href="emitterutils.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">153</td>
+            <td class="headerCovTableEntry">270</td>
+            <td class="headerCovTableEntryLo">56.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntryLo">65.2 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;iomanip&gt;</a>
+<span class="lineNum">       2 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;emitterutils.h&quot;
+<span class="lineNum">       5 </span>            : #include &quot;exp.h&quot;
+<span class="lineNum">       6 </span>            : #include &quot;indentation.h&quot;
+<span class="lineNum">       7 </span>            : #include &quot;regex_yaml.h&quot;
+<span class="lineNum">       8 </span>            : #include &quot;regeximpl.h&quot;
+<span class="lineNum">       9 </span>            : #include &quot;stringsource.h&quot;
+<span class="lineNum">      10 </span>            : #include &quot;yaml-cpp/binary.h&quot;  // IWYU pragma: keep
+<span class="lineNum">      11 </span>            : #include &quot;yaml-cpp/ostream_wrapper.h&quot;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : namespace YAML {
+<span class="lineNum">      14 </span>            : namespace Utils {
+<span class="lineNum">      15 </span>            : namespace {
+<a name="16"><span class="lineNum">      16 </span>            : enum { REPLACEMENT_CHARACTER = 0xFFFD };</a>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span><span class="lineCov">       4140 : bool IsAnchorChar(int ch) {  // test for ns-anchor-char</span>
+<span class="lineNum">      19 </span><span class="lineCov">       4140 :   switch (ch) {</span>
+<span class="lineNum">      20 </span>            :     case ',':
+<span class="lineNum">      21 </span>            :     case '[':
+<span class="lineNum">      22 </span>            :     case ']':
+<span class="lineNum">      23 </span>            :     case '{':
+<span class="lineNum">      24 </span>            :     case '}':  // c-flow-indicator
+<span class="lineNum">      25 </span>            :     case ' ':
+<span class="lineNum">      26 </span>            :     case '\t':    // s-white
+<span class="lineNum">      27 </span>            :     case 0xFEFF:  // c-byte-order-mark
+<span class="lineNum">      28 </span>            :     case 0xA:
+<span class="lineNum">      29 </span>            :     case 0xD:  // b-char
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">      31 </span>            :     case 0x85:
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">      33 </span>            :   }
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span><span class="lineCov">       4140 :   if (ch &lt; 0x20) {</span>
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      37 </span>            :   }
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span><span class="lineCov">       4140 :   if (ch &lt; 0x7E) {</span>
+<span class="lineNum">      40 </span><span class="lineCov">       4140 :     return true;</span>
+<span class="lineNum">      41 </span>            :   }
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 :   if (ch &lt; 0xA0) {</span>
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      45 </span>            :   }
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :   if (ch &gt;= 0xD800 &amp;&amp; ch &lt;= 0xDFFF) {</span>
+<span class="lineNum">      47 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      48 </span>            :   }
+<span class="lineNum">      49 </span><span class="lineNoCov">          0 :   if ((ch &amp; 0xFFFE) == 0xFFFE) {</span>
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      51 </span>            :   }
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :   if ((ch &gt;= 0xFDD0) &amp;&amp; (ch &lt;= 0xFDEF)) {</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      54 </span>            :   }
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :   if (ch &gt; 0x10FFFF) {</span>
+<span class="lineNum">      56 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      57 </span>            :   }
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="60"><span class="lineNum">      60 </span>            : }</a>
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span><span class="lineCov">     165137 : int Utf8BytesIndicated(char ch) {</span>
+<span class="lineNum">      63 </span><span class="lineCov">     165137 :   int byteVal = static_cast&lt;unsigned char&gt;(ch);</span>
+<span class="lineNum">      64 </span><span class="lineCov">     165137 :   switch (byteVal &gt;&gt; 4) {</span>
+<span class="lineNum">      65 </span>            :     case 0:
+<span class="lineNum">      66 </span>            :     case 1:
+<span class="lineNum">      67 </span>            :     case 2:
+<span class="lineNum">      68 </span>            :     case 3:
+<span class="lineNum">      69 </span>            :     case 4:
+<span class="lineNum">      70 </span>            :     case 5:
+<span class="lineNum">      71 </span>            :     case 6:
+<span class="lineNum">      72 </span>            :     case 7:
+<span class="lineNum">      73 </span><span class="lineCov">     122792 :       return 1;</span>
+<span class="lineNum">      74 </span>            :     case 12:
+<span class="lineNum">      75 </span>            :     case 13:
+<span class="lineNum">      76 </span><span class="lineCov">       1477 :       return 2;</span>
+<span class="lineNum">      77 </span>            :     case 14:
+<span class="lineNum">      78 </span><span class="lineCov">       6985 :       return 3;</span>
+<span class="lineNum">      79 </span>            :     case 15:
+<span class="lineNum">      80 </span><span class="lineCov">      31372 :       return 4;</span>
+<span class="lineNum">      81 </span>            :     default:
+<span class="lineNum">      82 </span><span class="lineCov">       2511 :       return -1;</span>
+<span class="lineNum">      83 </span>            :   }
+<a name="84"><span class="lineNum">      84 </span>            : }</a>
+<span class="lineNum">      85 </span>            : 
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">     101675 : bool IsTrailingByte(char ch) { return (ch &amp; 0xC0) == 0x80; }</span></a>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineCov">     172636 : bool GetNextCodePointAndAdvance(int&amp; codePoint,</span>
+<span class="lineNum">      89 </span>            :                                 std::string::const_iterator&amp; first,
+<span class="lineNum">      90 </span>            :                                 std::string::const_iterator last) {
+<span class="lineNum">      91 </span><span class="lineCov">     172636 :   if (first == last)</span>
+<span class="lineNum">      92 </span><span class="lineCov">       7499 :     return false;</span>
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span><span class="lineCov">     165137 :   int nBytes = Utf8BytesIndicated(*first);</span>
+<span class="lineNum">      95 </span><span class="lineCov">     165137 :   if (nBytes &lt; 1) {</span>
+<span class="lineNum">      96 </span>            :     // Bad lead byte
+<span class="lineNum">      97 </span><span class="lineCov">       2511 :     ++first;</span>
+<span class="lineNum">      98 </span><span class="lineCov">       2511 :     codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">      99 </span><span class="lineCov">       2511 :     return true;</span>
+<span class="lineNum">     100 </span>            :   }
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span><span class="lineCov">     162626 :   if (nBytes == 1) {</span>
+<span class="lineNum">     103 </span><span class="lineCov">     122792 :     codePoint = *first++;</span>
+<span class="lineNum">     104 </span><span class="lineCov">     122792 :     return true;</span>
+<span class="lineNum">     105 </span>            :   }
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            :   // Gather bits from trailing bytes
+<span class="lineNum">     108 </span><span class="lineCov">      39834 :   codePoint = static_cast&lt;unsigned char&gt;(*first) &amp; ~(0xFF &lt;&lt; (7 - nBytes));</span>
+<span class="lineNum">     109 </span><span class="lineCov">      39834 :   ++first;</span>
+<span class="lineNum">     110 </span><span class="lineCov">      39834 :   --nBytes;</span>
+<span class="lineNum">     111 </span><span class="lineCov">     233186 :   for (; nBytes &gt; 0; ++first, --nBytes) {</span>
+<span class="lineNum">     112 </span><span class="lineCov">     101910 :     if ((first == last) || !IsTrailingByte(*first)) {</span>
+<span class="lineNum">     113 </span><span class="lineCov">       5234 :       codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     114 </span><span class="lineCov">       5234 :       break;</span>
+<span class="lineNum">     115 </span>            :     }
+<span class="lineNum">     116 </span><span class="lineCov">      96676 :     codePoint &lt;&lt;= 6;</span>
+<span class="lineNum">     117 </span><span class="lineCov">      96676 :     codePoint |= *first &amp; 0x3F;</span>
+<span class="lineNum">     118 </span>            :   }
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span>            :   // Check for illegal code points
+<span class="lineNum">     121 </span><span class="lineCov">      39834 :   if (codePoint &gt; 0x10FFFF)</span>
+<span class="lineNum">     122 </span><span class="lineCov">       5614 :     codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     123 </span><span class="lineCov">      34220 :   else if (codePoint &gt;= 0xD800 &amp;&amp; codePoint &lt;= 0xDFFF)</span>
+<span class="lineNum">     124 </span><span class="lineCov">        193 :     codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     125 </span><span class="lineCov">      34027 :   else if ((codePoint &amp; 0xFFFE) == 0xFFFE)</span>
+<span class="lineNum">     126 </span><span class="lineCov">        233 :     codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     127 </span><span class="lineCov">      33794 :   else if (codePoint &gt;= 0xFDD0 &amp;&amp; codePoint &lt;= 0xFDEF)</span>
+<span class="lineNum">     128 </span><span class="lineCov">         24 :     codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     129 </span><span class="lineCov">      39834 :   return true;</span>
+<a name="130"><span class="lineNum">     130 </span>            : }</a>
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span><span class="lineCov">     144187 : void WriteCodePoint(ostream_wrapper&amp; out, int codePoint) {</span>
+<span class="lineNum">     133 </span><span class="lineCov">     144187 :   if (codePoint &lt; 0 || codePoint &gt; 0x10FFFF) {</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :     codePoint = REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     135 </span>            :   }
+<span class="lineNum">     136 </span><span class="lineCov">     144187 :   if (codePoint &lt; 0x7F) {</span>
+<span class="lineNum">     137 </span><span class="lineCov">     100586 :     out &lt;&lt; static_cast&lt;char&gt;(codePoint);</span>
+<span class="lineNum">     138 </span><span class="lineCov">      43601 :   } else if (codePoint &lt; 0x7FF) {</span>
+<span class="lineNum">     139 </span><span class="lineCov">       1769 :     out &lt;&lt; static_cast&lt;char&gt;(0xC0 | (codePoint &gt;&gt; 6))</span>
+<span class="lineNum">     140 </span><span class="lineCov">       3538 :         &lt;&lt; static_cast&lt;char&gt;(0x80 | (codePoint &amp; 0x3F));</span>
+<span class="lineNum">     141 </span><span class="lineCov">      41832 :   } else if (codePoint &lt; 0xFFFF) {</span>
+<span class="lineNum">     142 </span><span class="lineCov">      19994 :     out &lt;&lt; static_cast&lt;char&gt;(0xE0 | (codePoint &gt;&gt; 12))</span>
+<span class="lineNum">     143 </span><span class="lineCov">      39988 :         &lt;&lt; static_cast&lt;char&gt;(0x80 | ((codePoint &gt;&gt; 6) &amp; 0x3F))</span>
+<span class="lineNum">     144 </span><span class="lineCov">      39988 :         &lt;&lt; static_cast&lt;char&gt;(0x80 | (codePoint &amp; 0x3F));</span>
+<span class="lineNum">     145 </span>            :   } else {
+<span class="lineNum">     146 </span><span class="lineCov">      21838 :     out &lt;&lt; static_cast&lt;char&gt;(0xF0 | (codePoint &gt;&gt; 18))</span>
+<span class="lineNum">     147 </span><span class="lineCov">      43676 :         &lt;&lt; static_cast&lt;char&gt;(0x80 | ((codePoint &gt;&gt; 12) &amp; 0x3F))</span>
+<span class="lineNum">     148 </span><span class="lineCov">      43676 :         &lt;&lt; static_cast&lt;char&gt;(0x80 | ((codePoint &gt;&gt; 6) &amp; 0x3F))</span>
+<span class="lineNum">     149 </span><span class="lineCov">      43676 :         &lt;&lt; static_cast&lt;char&gt;(0x80 | (codePoint &amp; 0x3F));</span>
+<span class="lineNum">     150 </span>            :   }
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">     144187 : }</span></a>
+<span class="lineNum">     152 </span>            : 
+<span class="lineNum">     153 </span><span class="lineCov">      12107 : bool IsValidPlainScalar(const std::string&amp; str, FlowType::value flowType,</span>
+<span class="lineNum">     154 </span>            :                         bool allowOnlyAscii) {
+<span class="lineNum">     155 </span><span class="lineCov">      12107 :   if (str.empty()) {</span>
+<span class="lineNum">     156 </span><span class="lineCov">       1492 :     return false;</span>
+<span class="lineNum">     157 </span>            :   }
+<span class="lineNum">     158 </span>            : 
+<span class="lineNum">     159 </span>            :   // check against null
+<span class="lineNum">     160 </span><span class="lineCov">      10615 :   if (str == &quot;null&quot;) {</span>
+<span class="lineNum">     161 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">     162 </span>            :   }
+<span class="lineNum">     163 </span>            : 
+<span class="lineNum">     164 </span>            :   // check the start
+<span class="lineNum">     165 </span>            :   const RegEx&amp; start = (flowType == FlowType::Flow ? Exp::PlainScalarInFlow()
+<span class="lineNum">     166 </span><span class="lineCov">      10615 :                                                    : Exp::PlainScalar());</span>
+<span class="lineNum">     167 </span><span class="lineCov">      10615 :   if (!start.Matches(str)) {</span>
+<span class="lineNum">     168 </span><span class="lineCov">         62 :     return false;</span>
+<span class="lineNum">     169 </span>            :   }
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            :   // and check the end for plain whitespace (which can't be faithfully kept in a
+<span class="lineNum">     172 </span>            :   // plain scalar)
+<span class="lineNum">     173 </span><span class="lineCov">      10553 :   if (!str.empty() &amp;&amp; *str.rbegin() == ' ') {</span>
+<span class="lineNum">     174 </span><span class="lineCov">         49 :     return false;</span>
+<span class="lineNum">     175 </span>            :   }
+<span class="lineNum">     176 </span>            : 
+<span class="lineNum">     177 </span>            :   // then check until something is disallowed
+<span class="lineNum">     178 </span>            :   static const RegEx&amp; disallowed_flow =
+<span class="lineNum">     179 </span><span class="lineCov">       1648 :       Exp::EndScalarInFlow() || (Exp::BlankOrBreak() + Exp::Comment()) ||</span>
+<span class="lineNum">     180 </span><span class="lineCov">       2472 :       Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||</span>
+<span class="lineNum">     181 </span><span class="lineCov">      11328 :       Exp::Tab();</span>
+<span class="lineNum">     182 </span>            :   static const RegEx&amp; disallowed_block =
+<span class="lineNum">     183 </span><span class="lineCov">       1648 :       Exp::EndScalar() || (Exp::BlankOrBreak() + Exp::Comment()) ||</span>
+<span class="lineNum">     184 </span><span class="lineCov">       2472 :       Exp::NotPrintable() || Exp::Utf8_ByteOrderMark() || Exp::Break() ||</span>
+<span class="lineNum">     185 </span><span class="lineCov">      11328 :       Exp::Tab();</span>
+<span class="lineNum">     186 </span>            :   const RegEx&amp; disallowed =
+<span class="lineNum">     187 </span><span class="lineCov">      10504 :       flowType == FlowType::Flow ? disallowed_flow : disallowed_block;</span>
+<span class="lineNum">     188 </span>            : 
+<span class="lineNum">     189 </span><span class="lineCov">      10504 :   StringCharSource buffer(str.c_str(), str.size());</span>
+<span class="lineNum">     190 </span><span class="lineCov">     445328 :   while (buffer) {</span>
+<span class="lineNum">     191 </span><span class="lineCov">     220691 :     if (disallowed.Matches(buffer)) {</span>
+<span class="lineNum">     192 </span><span class="lineCov">       3279 :       return false;</span>
+<span class="lineNum">     193 </span>            :     }
+<span class="lineNum">     194 </span><span class="lineCov">     217412 :     if (allowOnlyAscii &amp;&amp; (0x80 &lt;= static_cast&lt;unsigned char&gt;(buffer[0]))) {</span>
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     196 </span>            :     }
+<span class="lineNum">     197 </span><span class="lineCov">     217412 :     ++buffer;</span>
+<span class="lineNum">     198 </span>            :   }
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span><span class="lineCov">       7225 :   return true;</span>
+<a name="201"><span class="lineNum">     201 </span>            : }</a>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 : bool IsValidSingleQuotedScalar(const std::string&amp; str, bool escapeNonAscii) {</span>
+<span class="lineNum">     204 </span>            :   // TODO: check for non-printable characters?
+<span class="lineNum">     205 </span><span class="lineNoCov">          0 :   for (std::size_t i = 0; i &lt; str.size(); i++) {</span>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :     if (escapeNonAscii &amp;&amp; (0x80 &lt;= static_cast&lt;unsigned char&gt;(str[i]))) {</span>
+<span class="lineNum">     207 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     208 </span>            :     }
+<span class="lineNum">     209 </span><span class="lineNoCov">          0 :     if (str[i] == '\n') {</span>
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     211 </span>            :     }
+<span class="lineNum">     212 </span>            :   }
+<span class="lineNum">     213 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="214"><span class="lineNum">     214 </span>            : }</a>
+<span class="lineNum">     215 </span>            : 
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 : bool IsValidLiteralScalar(const std::string&amp; str, FlowType::value flowType,</span>
+<span class="lineNum">     217 </span>            :                           bool escapeNonAscii) {
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :   if (flowType == FlowType::Flow) {</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">     220 </span>            :   }
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span>            :   // TODO: check for non-printable characters?
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :   for (std::size_t i = 0; i &lt; str.size(); i++) {</span>
+<span class="lineNum">     224 </span><span class="lineNoCov">          0 :     if (escapeNonAscii &amp;&amp; (0x80 &lt;= static_cast&lt;unsigned char&gt;(str[i]))) {</span>
+<span class="lineNum">     225 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     226 </span>            :     }
+<span class="lineNum">     227 </span>            :   }
+<span class="lineNum">     228 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="229"><span class="lineNum">     229 </span>            : }</a>
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span><span class="lineCov">      16438 : void WriteDoubleQuoteEscapeSequence(ostream_wrapper&amp; out, int codePoint) {</span>
+<span class="lineNum">     232 </span>            :   static const char hexDigits[] = &quot;0123456789abcdef&quot;;
+<span class="lineNum">     233 </span>            : 
+<span class="lineNum">     234 </span><span class="lineCov">      16438 :   out &lt;&lt; &quot;\\&quot;;</span>
+<span class="lineNum">     235 </span><span class="lineCov">      16438 :   int digits = 8;</span>
+<span class="lineNum">     236 </span><span class="lineCov">      16438 :   if (codePoint &lt; 0xFF) {</span>
+<span class="lineNum">     237 </span><span class="lineCov">      16372 :     out &lt;&lt; &quot;x&quot;;</span>
+<span class="lineNum">     238 </span><span class="lineCov">      16372 :     digits = 2;</span>
+<span class="lineNum">     239 </span><span class="lineCov">         66 :   } else if (codePoint &lt; 0xFFFF) {</span>
+<span class="lineNum">     240 </span><span class="lineCov">         66 :     out &lt;&lt; &quot;u&quot;;</span>
+<span class="lineNum">     241 </span><span class="lineCov">         66 :     digits = 4;</span>
+<span class="lineNum">     242 </span>            :   } else {
+<span class="lineNum">     243 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;U&quot;;</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :     digits = 8;</span>
+<span class="lineNum">     245 </span>            :   }
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span>            :   // Write digits into the escape sequence
+<span class="lineNum">     248 </span><span class="lineCov">      82454 :   for (; digits &gt; 0; --digits)</span>
+<span class="lineNum">     249 </span><span class="lineCov">      33008 :     out &lt;&lt; hexDigits[(codePoint &gt;&gt; (4 * (digits - 1))) &amp; 0xF];</span>
+<a name="250"><span class="lineNum">     250 </span><span class="lineCov">      16438 : }</span></a>
+<span class="lineNum">     251 </span>            : 
+<span class="lineNum">     252 </span><span class="lineCov">       2617 : bool WriteAliasName(ostream_wrapper&amp; out, const std::string&amp; str) {</span>
+<span class="lineNum">     253 </span>            :   int codePoint;
+<span class="lineNum">     254 </span><span class="lineCov">      13514 :   for (std::string::const_iterator i = str.begin();</span>
+<span class="lineNum">     255 </span><span class="lineCov">       6757 :        GetNextCodePointAndAdvance(codePoint, i, str.end());) {</span>
+<span class="lineNum">     256 </span><span class="lineCov">       4140 :     if (!IsAnchorChar(codePoint)) {</span>
+<span class="lineNum">     257 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     258 </span>            :     }
+<span class="lineNum">     259 </span>            : 
+<span class="lineNum">     260 </span><span class="lineCov">       4140 :     WriteCodePoint(out, codePoint);</span>
+<span class="lineNum">     261 </span>            :   }
+<span class="lineNum">     262 </span><span class="lineCov">       2617 :   return true;</span>
+<span class="lineNum">     263 </span>            : }
+<a name="264"><span class="lineNum">     264 </span>            : }</a>
+<span class="lineNum">     265 </span>            : 
+<span class="lineNum">     266 </span><span class="lineCov">      12107 : StringFormat::value ComputeStringFormat(const std::string&amp; str,</span>
+<span class="lineNum">     267 </span>            :                                         EMITTER_MANIP strFormat,
+<span class="lineNum">     268 </span>            :                                         FlowType::value flowType,
+<span class="lineNum">     269 </span>            :                                         bool escapeNonAscii) {
+<span class="lineNum">     270 </span><span class="lineCov">      12107 :   switch (strFormat) {</span>
+<span class="lineNum">     271 </span>            :     case Auto:
+<span class="lineNum">     272 </span><span class="lineCov">      12107 :       if (IsValidPlainScalar(str, flowType, escapeNonAscii)) {</span>
+<span class="lineNum">     273 </span><span class="lineCov">       7225 :         return StringFormat::Plain;</span>
+<span class="lineNum">     274 </span>            :       }
+<span class="lineNum">     275 </span><span class="lineCov">       4882 :       return StringFormat::DoubleQuoted;</span>
+<span class="lineNum">     276 </span>            :     case SingleQuoted:
+<span class="lineNum">     277 </span><span class="lineNoCov">          0 :       if (IsValidSingleQuotedScalar(str, escapeNonAscii)) {</span>
+<span class="lineNum">     278 </span><span class="lineNoCov">          0 :         return StringFormat::SingleQuoted;</span>
+<span class="lineNum">     279 </span>            :       }
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :       return StringFormat::DoubleQuoted;</span>
+<span class="lineNum">     281 </span>            :     case DoubleQuoted:
+<span class="lineNum">     282 </span><span class="lineNoCov">          0 :       return StringFormat::DoubleQuoted;</span>
+<span class="lineNum">     283 </span>            :     case Literal:
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 :       if (IsValidLiteralScalar(str, flowType, escapeNonAscii)) {</span>
+<span class="lineNum">     285 </span><span class="lineNoCov">          0 :         return StringFormat::Literal;</span>
+<span class="lineNum">     286 </span>            :       }
+<span class="lineNum">     287 </span><span class="lineNoCov">          0 :       return StringFormat::DoubleQuoted;</span>
+<span class="lineNum">     288 </span>            :     default:
+<span class="lineNum">     289 </span><span class="lineNoCov">          0 :       break;</span>
+<span class="lineNum">     290 </span>            :   }
+<span class="lineNum">     291 </span>            : 
+<span class="lineNum">     292 </span><span class="lineNoCov">          0 :   return StringFormat::DoubleQuoted;</span>
+<a name="293"><span class="lineNum">     293 </span>            : }</a>
+<span class="lineNum">     294 </span>            : 
+<span class="lineNum">     295 </span><span class="lineNoCov">          0 : bool WriteSingleQuotedString(ostream_wrapper&amp; out, const std::string&amp; str) {</span>
+<span class="lineNum">     296 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;'&quot;;</span>
+<span class="lineNum">     297 </span>            :   int codePoint;
+<span class="lineNum">     298 </span><span class="lineNoCov">          0 :   for (std::string::const_iterator i = str.begin();</span>
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 :        GetNextCodePointAndAdvance(codePoint, i, str.end());) {</span>
+<span class="lineNum">     300 </span><span class="lineNoCov">          0 :     if (codePoint == '\n') {</span>
+<span class="lineNum">     301 </span><span class="lineNoCov">          0 :       return false;  // We can't handle a new line and the attendant indentation</span>
+<span class="lineNum">     302 </span>            :                      // yet
+<span class="lineNum">     303 </span>            :     }
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span><span class="lineNoCov">          0 :     if (codePoint == '\'') {</span>
+<span class="lineNum">     306 </span><span class="lineNoCov">          0 :       out &lt;&lt; &quot;''&quot;;</span>
+<span class="lineNum">     307 </span>            :     } else {
+<span class="lineNum">     308 </span><span class="lineNoCov">          0 :       WriteCodePoint(out, codePoint);</span>
+<span class="lineNum">     309 </span>            :     }
+<span class="lineNum">     310 </span>            :   }
+<span class="lineNum">     311 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;'&quot;;</span>
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="313"><span class="lineNum">     313 </span>            : }</a>
+<span class="lineNum">     314 </span>            : 
+<span class="lineNum">     315 </span><span class="lineCov">       4882 : bool WriteDoubleQuotedString(ostream_wrapper&amp; out, const std::string&amp; str,</span>
+<span class="lineNum">     316 </span>            :                              bool escapeNonAscii) {
+<span class="lineNum">     317 </span><span class="lineCov">       4882 :   out &lt;&lt; &quot;\&quot;&quot;;</span>
+<span class="lineNum">     318 </span>            :   int codePoint;
+<span class="lineNum">     319 </span><span class="lineCov">     331758 :   for (std::string::const_iterator i = str.begin();</span>
+<span class="lineNum">     320 </span><span class="lineCov">     165879 :        GetNextCodePointAndAdvance(codePoint, i, str.end());) {</span>
+<span class="lineNum">     321 </span><span class="lineCov">     160997 :     switch (codePoint) {</span>
+<span class="lineNum">     322 </span>            :       case '\&quot;':
+<span class="lineNum">     323 </span><span class="lineCov">        586 :         out &lt;&lt; &quot;\\\&quot;&quot;;</span>
+<span class="lineNum">     324 </span><span class="lineCov">        586 :         break;</span>
+<span class="lineNum">     325 </span>            :       case '\\':
+<span class="lineNum">     326 </span><span class="lineCov">        473 :         out &lt;&lt; &quot;\\\\&quot;;</span>
+<span class="lineNum">     327 </span><span class="lineCov">        473 :         break;</span>
+<span class="lineNum">     328 </span>            :       case '\n':
+<span class="lineNum">     329 </span><span class="lineCov">       1328 :         out &lt;&lt; &quot;\\n&quot;;</span>
+<span class="lineNum">     330 </span><span class="lineCov">       1328 :         break;</span>
+<span class="lineNum">     331 </span>            :       case '\t':
+<span class="lineNum">     332 </span><span class="lineCov">        534 :         out &lt;&lt; &quot;\\t&quot;;</span>
+<span class="lineNum">     333 </span><span class="lineCov">        534 :         break;</span>
+<span class="lineNum">     334 </span>            :       case '\r':
+<span class="lineNum">     335 </span><span class="lineCov">        681 :         out &lt;&lt; &quot;\\r&quot;;</span>
+<span class="lineNum">     336 </span><span class="lineCov">        681 :         break;</span>
+<span class="lineNum">     337 </span>            :       case '\b':
+<span class="lineNum">     338 </span><span class="lineCov">        910 :         out &lt;&lt; &quot;\\b&quot;;</span>
+<span class="lineNum">     339 </span><span class="lineCov">        910 :         break;</span>
+<span class="lineNum">     340 </span>            :       default:
+<span class="lineNum">     341 </span><span class="lineCov">     296642 :         if (codePoint &lt; 0x20 ||</span>
+<span class="lineNum">     342 </span><span class="lineCov">     182462 :             (codePoint &gt;= 0x80 &amp;&amp;</span>
+<span class="lineNum">     343 </span><span class="lineCov">      42305 :              codePoint &lt;= 0xA0)) {  // Control characters and non-breaking space</span>
+<span class="lineNum">     344 </span><span class="lineCov">      16372 :           WriteDoubleQuoteEscapeSequence(out, codePoint);</span>
+<span class="lineNum">     345 </span><span class="lineCov">     140113 :         } else if (codePoint == 0xFEFF) {  // Byte order marks (ZWNS) should be</span>
+<span class="lineNum">     346 </span>            :                                            // escaped (YAML 1.2, sec. 5.2)
+<span class="lineNum">     347 </span><span class="lineCov">         66 :           WriteDoubleQuoteEscapeSequence(out, codePoint);</span>
+<span class="lineNum">     348 </span><span class="lineCov">     140047 :         } else if (escapeNonAscii &amp;&amp; codePoint &gt; 0x7E) {</span>
+<span class="lineNum">     349 </span><span class="lineNoCov">          0 :           WriteDoubleQuoteEscapeSequence(out, codePoint);</span>
+<span class="lineNum">     350 </span>            :         } else {
+<span class="lineNum">     351 </span><span class="lineCov">     140047 :           WriteCodePoint(out, codePoint);</span>
+<span class="lineNum">     352 </span>            :         }
+<span class="lineNum">     353 </span>            :     }
+<span class="lineNum">     354 </span>            :   }
+<span class="lineNum">     355 </span><span class="lineCov">       4882 :   out &lt;&lt; &quot;\&quot;&quot;;</span>
+<span class="lineNum">     356 </span><span class="lineCov">       4882 :   return true;</span>
+<a name="357"><span class="lineNum">     357 </span>            : }</a>
+<span class="lineNum">     358 </span>            : 
+<span class="lineNum">     359 </span><span class="lineNoCov">          0 : bool WriteLiteralString(ostream_wrapper&amp; out, const std::string&amp; str,</span>
+<span class="lineNum">     360 </span>            :                         int indent) {
+<span class="lineNum">     361 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;|\n&quot;;</span>
+<span class="lineNum">     362 </span><span class="lineNoCov">          0 :   out &lt;&lt; IndentTo(indent);</span>
+<span class="lineNum">     363 </span>            :   int codePoint;
+<span class="lineNum">     364 </span><span class="lineNoCov">          0 :   for (std::string::const_iterator i = str.begin();</span>
+<span class="lineNum">     365 </span><span class="lineNoCov">          0 :        GetNextCodePointAndAdvance(codePoint, i, str.end());) {</span>
+<span class="lineNum">     366 </span><span class="lineNoCov">          0 :     if (codePoint == '\n') {</span>
+<span class="lineNum">     367 </span><span class="lineNoCov">          0 :       out &lt;&lt; &quot;\n&quot; &lt;&lt; IndentTo(indent);</span>
+<span class="lineNum">     368 </span>            :     } else {
+<span class="lineNum">     369 </span><span class="lineNoCov">          0 :       WriteCodePoint(out, codePoint);</span>
+<span class="lineNum">     370 </span>            :     }
+<span class="lineNum">     371 </span>            :   }
+<span class="lineNum">     372 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="373"><span class="lineNum">     373 </span>            : }</a>
+<span class="lineNum">     374 </span>            : 
+<span class="lineNum">     375 </span><span class="lineNoCov">          0 : bool WriteChar(ostream_wrapper&amp; out, char ch) {</span>
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :   if (('a' &lt;= ch &amp;&amp; ch &lt;= 'z') || ('A' &lt;= ch &amp;&amp; ch &lt;= 'Z')) {</span>
+<span class="lineNum">     377 </span><span class="lineNoCov">          0 :     out &lt;&lt; ch;</span>
+<span class="lineNum">     378 </span><span class="lineNoCov">          0 :   } else if (ch == '\&quot;') {</span>
+<span class="lineNum">     379 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;\\\&quot;\&quot;&quot;;</span>
+<span class="lineNum">     380 </span><span class="lineNoCov">          0 :   } else if (ch == '\t') {</span>
+<span class="lineNum">     381 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;\\t\&quot;&quot;;</span>
+<span class="lineNum">     382 </span><span class="lineNoCov">          0 :   } else if (ch == '\n') {</span>
+<span class="lineNum">     383 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;\\n\&quot;&quot;;</span>
+<span class="lineNum">     384 </span><span class="lineNoCov">          0 :   } else if (ch == '\b') {</span>
+<span class="lineNum">     385 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;\\b\&quot;&quot;;</span>
+<span class="lineNum">     386 </span><span class="lineNoCov">          0 :   } else if ((0x20 &lt;= ch &amp;&amp; ch &lt;= 0x7e) || ch == ' ') {</span>
+<span class="lineNum">     387 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;&quot; &lt;&lt; ch &lt;&lt; &quot;\&quot;&quot;;</span>
+<span class="lineNum">     388 </span>            :   } else {
+<span class="lineNum">     389 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;&quot;;</span>
+<span class="lineNum">     390 </span><span class="lineNoCov">          0 :     WriteDoubleQuoteEscapeSequence(out, ch);</span>
+<span class="lineNum">     391 </span><span class="lineNoCov">          0 :     out &lt;&lt; &quot;\&quot;&quot;;</span>
+<span class="lineNum">     392 </span>            :   }
+<span class="lineNum">     393 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="394"><span class="lineNum">     394 </span>            : }</a>
+<span class="lineNum">     395 </span>            : 
+<span class="lineNum">     396 </span><span class="lineNoCov">          0 : bool WriteComment(ostream_wrapper&amp; out, const std::string&amp; str,</span>
+<span class="lineNum">     397 </span>            :                   int postCommentIndent) {
+<span class="lineNum">     398 </span><span class="lineNoCov">          0 :   const std::size_t curIndent = out.col();</span>
+<span class="lineNum">     399 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;#&quot; &lt;&lt; Indentation(postCommentIndent);</span>
+<span class="lineNum">     400 </span><span class="lineNoCov">          0 :   out.set_comment();</span>
+<span class="lineNum">     401 </span>            :   int codePoint;
+<span class="lineNum">     402 </span><span class="lineNoCov">          0 :   for (std::string::const_iterator i = str.begin();</span>
+<span class="lineNum">     403 </span><span class="lineNoCov">          0 :        GetNextCodePointAndAdvance(codePoint, i, str.end());) {</span>
+<span class="lineNum">     404 </span><span class="lineNoCov">          0 :     if (codePoint == '\n') {</span>
+<span class="lineNum">     405 </span><span class="lineNoCov">          0 :       out &lt;&lt; &quot;\n&quot; &lt;&lt; IndentTo(curIndent) &lt;&lt; &quot;#&quot;</span>
+<span class="lineNum">     406 </span><span class="lineNoCov">          0 :           &lt;&lt; Indentation(postCommentIndent);</span>
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :       out.set_comment();</span>
+<span class="lineNum">     408 </span>            :     } else {
+<span class="lineNum">     409 </span><span class="lineNoCov">          0 :       WriteCodePoint(out, codePoint);</span>
+<span class="lineNum">     410 </span>            :     }
+<span class="lineNum">     411 </span>            :   }
+<span class="lineNum">     412 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="413"><span class="lineNum">     413 </span>            : }</a>
+<span class="lineNum">     414 </span>            : 
+<span class="lineNum">     415 </span><span class="lineCov">       1658 : bool WriteAlias(ostream_wrapper&amp; out, const std::string&amp; str) {</span>
+<span class="lineNum">     416 </span><span class="lineCov">       1658 :   out &lt;&lt; &quot;*&quot;;</span>
+<span class="lineNum">     417 </span><span class="lineCov">       1658 :   return WriteAliasName(out, str);</span>
+<a name="418"><span class="lineNum">     418 </span>            : }</a>
+<span class="lineNum">     419 </span>            : 
+<span class="lineNum">     420 </span><span class="lineCov">        959 : bool WriteAnchor(ostream_wrapper&amp; out, const std::string&amp; str) {</span>
+<span class="lineNum">     421 </span><span class="lineCov">        959 :   out &lt;&lt; &quot;&amp;&quot;;</span>
+<span class="lineNum">     422 </span><span class="lineCov">        959 :   return WriteAliasName(out, str);</span>
+<a name="423"><span class="lineNum">     423 </span>            : }</a>
+<span class="lineNum">     424 </span>            : 
+<span class="lineNum">     425 </span><span class="lineCov">       3187 : bool WriteTag(ostream_wrapper&amp; out, const std::string&amp; str, bool verbatim) {</span>
+<span class="lineNum">     426 </span><span class="lineCov">       3187 :   out &lt;&lt; (verbatim ? &quot;!&lt;&quot; : &quot;!&quot;);</span>
+<span class="lineNum">     427 </span><span class="lineCov">       3187 :   StringCharSource buffer(str.c_str(), str.size());</span>
+<span class="lineNum">     428 </span><span class="lineCov">       3187 :   const RegEx&amp; reValid = verbatim ? Exp::URI() : Exp::Tag();</span>
+<span class="lineNum">     429 </span><span class="lineCov">      62979 :   while (buffer) {</span>
+<span class="lineNum">     430 </span><span class="lineCov">      29942 :     int n = reValid.Match(buffer);</span>
+<span class="lineNum">     431 </span><span class="lineCov">      29942 :     if (n &lt;= 0) {</span>
+<span class="lineNum">     432 </span><span class="lineCov">         46 :       return false;</span>
+<span class="lineNum">     433 </span>            :     }
+<span class="lineNum">     434 </span>            : 
+<span class="lineNum">     435 </span><span class="lineCov">      30068 :     while (--n &gt;= 0) {</span>
+<span class="lineNum">     436 </span><span class="lineCov">      30068 :       out &lt;&lt; buffer[0];</span>
+<span class="lineNum">     437 </span><span class="lineCov">      30068 :       ++buffer;</span>
+<span class="lineNum">     438 </span>            :     }
+<span class="lineNum">     439 </span>            :   }
+<span class="lineNum">     440 </span><span class="lineCov">       3141 :   if (verbatim) {</span>
+<span class="lineNum">     441 </span><span class="lineCov">       3141 :     out &lt;&lt; &quot;&gt;&quot;;</span>
+<span class="lineNum">     442 </span>            :   }
+<span class="lineNum">     443 </span><span class="lineCov">       3141 :   return true;</span>
+<a name="444"><span class="lineNum">     444 </span>            : }</a>
+<span class="lineNum">     445 </span>            : 
+<span class="lineNum">     446 </span><span class="lineNoCov">          0 : bool WriteTagWithPrefix(ostream_wrapper&amp; out, const std::string&amp; prefix,</span>
+<span class="lineNum">     447 </span>            :                         const std::string&amp; tag) {
+<span class="lineNum">     448 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;!&quot;;</span>
+<span class="lineNum">     449 </span><span class="lineNoCov">          0 :   StringCharSource prefixBuffer(prefix.c_str(), prefix.size());</span>
+<span class="lineNum">     450 </span><span class="lineNoCov">          0 :   while (prefixBuffer) {</span>
+<span class="lineNum">     451 </span><span class="lineNoCov">          0 :     int n = Exp::URI().Match(prefixBuffer);</span>
+<span class="lineNum">     452 </span><span class="lineNoCov">          0 :     if (n &lt;= 0) {</span>
+<span class="lineNum">     453 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     454 </span>            :     }
+<span class="lineNum">     455 </span>            : 
+<span class="lineNum">     456 </span><span class="lineNoCov">          0 :     while (--n &gt;= 0) {</span>
+<span class="lineNum">     457 </span><span class="lineNoCov">          0 :       out &lt;&lt; prefixBuffer[0];</span>
+<span class="lineNum">     458 </span><span class="lineNoCov">          0 :       ++prefixBuffer;</span>
+<span class="lineNum">     459 </span>            :     }
+<span class="lineNum">     460 </span>            :   }
+<span class="lineNum">     461 </span>            : 
+<span class="lineNum">     462 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;!&quot;;</span>
+<span class="lineNum">     463 </span><span class="lineNoCov">          0 :   StringCharSource tagBuffer(tag.c_str(), tag.size());</span>
+<span class="lineNum">     464 </span><span class="lineNoCov">          0 :   while (tagBuffer) {</span>
+<span class="lineNum">     465 </span><span class="lineNoCov">          0 :     int n = Exp::Tag().Match(tagBuffer);</span>
+<span class="lineNum">     466 </span><span class="lineNoCov">          0 :     if (n &lt;= 0) {</span>
+<span class="lineNum">     467 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     468 </span>            :     }
+<span class="lineNum">     469 </span>            : 
+<span class="lineNum">     470 </span><span class="lineNoCov">          0 :     while (--n &gt;= 0) {</span>
+<span class="lineNum">     471 </span><span class="lineNoCov">          0 :       out &lt;&lt; tagBuffer[0];</span>
+<span class="lineNum">     472 </span><span class="lineNoCov">          0 :       ++tagBuffer;</span>
+<span class="lineNum">     473 </span>            :     }
+<span class="lineNum">     474 </span>            :   }
+<span class="lineNum">     475 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="476"><span class="lineNum">     476 </span>            : }</a>
+<span class="lineNum">     477 </span>            : 
+<span class="lineNum">     478 </span><span class="lineNoCov">          0 : bool WriteBinary(ostream_wrapper&amp; out, const Binary&amp; binary) {</span>
+<span class="lineNum">     479 </span><span class="lineNoCov">          0 :   WriteDoubleQuotedString(out, EncodeBase64(binary.data(), binary.size()),</span>
+<span class="lineNum">     480 </span><span class="lineNoCov">          0 :                           false);</span>
+<span class="lineNum">     481 </span><span class="lineNoCov">          0 :   return true;</span>
+<a name="482"><span class="lineNum">     482 </span>            : }</a>
+<span class="lineNum">     483 </span>            : }
+<span class="lineNum">     484 </span><span class="lineCov">       6108 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

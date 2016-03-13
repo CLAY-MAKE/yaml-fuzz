@@ -1,0 +1,95 @@
+diff fuzzer2/id:000014,orig:id:000071,src:000001,op:flip1,pos:36,+cov.min -> fuzzer2/id:000015,orig:id:000141,src:000001,op:havoc,rep:16,+cov.min
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'line' coverage: 204
+  New 'line' coverage: 207
+Src file: /root/yaml-cpp/src/scanscalar.cpp
+  New 'line' coverage: 115
+  New 'line' coverage: 125
+  New 'line' coverage: 129
+  New 'line' coverage: 132
+  New 'line' coverage: 189
+  New 'line' coverage: 211
+  New 'line' coverage: 68
+  New 'line' coverage: 69
+  New 'line' coverage: 70
+  New 'line' coverage: 71
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'line' coverage: 208
+Src file: /root/yaml-cpp/src/simplekey.cpp
+  New 'line' coverage: 47
+  New 'line' coverage: 48
+  New 'line' coverage: 98
+Src file: /root/yaml-cpp/src/emitter.cpp
+  New 'function' coverage: _ZN4YAML7Emitter22BlockMapPrepareLongKeyENS_15EmitterNodeType5valueE()
+  New 'function' coverage: _ZN4YAML7Emitter27BlockMapPrepareLongKeyValueENS_15EmitterNodeType5valueE()
+  New 'line' coverage: 322
+  New 'line' coverage: 518
+  New 'line' coverage: 521
+  New 'line' coverage: 526
+  New 'line' coverage: 532
+  New 'line' coverage: 533
+  New 'line' coverage: 534
+  New 'line' coverage: 536
+  New 'line' coverage: 539
+  New 'line' coverage: 540
+  New 'line' coverage: 543
+  New 'line' coverage: 546
+  New 'line' coverage: 547
+  New 'line' coverage: 550
+  New 'line' coverage: 561
+  New 'line' coverage: 565
+  New 'line' coverage: 566
+  New 'line' coverage: 568
+  New 'line' coverage: 571
+  New 'line' coverage: 572
+  New 'line' coverage: 573
+  New 'line' coverage: 574
+  New 'line' coverage: 577
+  New 'line' coverage: 586
+  New 'line' coverage: 587
+Src file: /root/yaml-cpp/src/exp.cpp
+  New 'function' coverage: _ZN4YAML3Exp6EscapeB5cxx11ERNS_6StreamE()
+  New 'line' coverage: 107
+  New 'line' coverage: 115
+  New 'line' coverage: 73
+  New 'line' coverage: 75
+  New 'line' coverage: 78
+  New 'line' coverage: 81
+  New 'line' coverage: 86
+  New 'line' coverage: 88
+Src file: /root/yaml-cpp/src/emitterstate.cpp
+  New 'function' coverage: _ZN4YAML12EmitterState10SetLongKeyEv()
+  New 'line' coverage: 54
+  New 'line' coverage: 55
+  New 'line' coverage: 56
+  New 'line' coverage: 59
+  New 'line' coverage: 60
+Src file: /root/yaml-cpp/src/emitterutils.cpp
+  New 'function' coverage: _ZN4YAML5Utils12_GLOBAL__N_130WriteDoubleQuoteEscapeSequenceERNS_15ostream_wrapperEi()
+  New 'line' coverage: 138
+  New 'line' coverage: 141
+  New 'line' coverage: 142
+  New 'line' coverage: 143
+  New 'line' coverage: 144
+  New 'line' coverage: 192
+  New 'line' coverage: 231
+  New 'line' coverage: 234
+  New 'line' coverage: 235
+  New 'line' coverage: 236
+  New 'line' coverage: 237
+  New 'line' coverage: 238
+  New 'line' coverage: 248
+  New 'line' coverage: 249
+  New 'line' coverage: 250
+  New 'line' coverage: 321
+  New 'line' coverage: 341
+  New 'line' coverage: 342
+  New 'line' coverage: 343
+  New 'line' coverage: 344
+  New 'line' coverage: 345
+  New 'line' coverage: 348
+  New 'line' coverage: 351
+  New 'line' coverage: 82
+  New 'line' coverage: 97
+  New 'line' coverage: 98
+  New 'line' coverage: 99

@@ -1,0 +1,11 @@
+diff fuzzer2/id:000063,orig:id:000465,src:000001,op:havoc,rep:128.min -> fuzzer2/id:000064,orig:id:000468,src:000001,op:havoc,rep:16.min
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'line' coverage: 276
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'line' coverage: 259
+Src file: /root/yaml-cpp/src/tag.cpp
+  New 'line' coverage: 25
+  New 'line' coverage: 43
+Src file: /root/yaml-cpp/src/emitter.cpp
+  New 'line' coverage: 638
+  New 'line' coverage: 639

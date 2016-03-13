@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/nodebuilder.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - nodebuilder.cpp<span style="font-size: 80%;"> (source / <a href="nodebuilder.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">81</td>
+            <td class="headerCovTableEntry">83</td>
+            <td class="headerCovTableEntryHi">97.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntryHi">94.1 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;assert.h&gt;</a>
+<span class="lineNum">       2 </span>            : #include &lt;cassert&gt;
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;nodebuilder.h&quot;
+<span class="lineNum">       5 </span>            : #include &quot;yaml-cpp/node/detail/node.h&quot;
+<span class="lineNum">       6 </span>            : #include &quot;yaml-cpp/node/impl.h&quot;
+<span class="lineNum">       7 </span>            : #include &quot;yaml-cpp/node/node.h&quot;
+<span class="lineNum">       8 </span>            : #include &quot;yaml-cpp/node/type.h&quot;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : namespace YAML {
+<a name="11"><span class="lineNum">      11 </span>            : struct Mark;</a>
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span><span class="lineCov">       2036 : NodeBuilder::NodeBuilder()</span>
+<span class="lineNum">      14 </span><span class="lineCov">       2036 :     : m_pMemory(new detail::memory_holder), m_pRoot(0), m_mapDepth(0) {</span>
+<span class="lineNum">      15 </span><span class="lineCov">       2036 :   m_anchors.push_back(0);  // since the anchors start at 1</span>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">       2036 : }</span></a>
+<span class="lineNum">      17 </span>            : 
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">       2036 : NodeBuilder::~NodeBuilder() {}</span></a>
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span><span class="lineCov">        945 : Node NodeBuilder::Root() {</span>
+<span class="lineNum">      21 </span><span class="lineCov">        945 :   if (!m_pRoot)</span>
+<span class="lineNum">      22 </span><span class="lineNoCov">          0 :     return Node();</span>
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span><span class="lineCov">        945 :   return Node(*m_pRoot, m_pMemory);</span>
+<a name="25"><span class="lineNum">      25 </span>            : }</a>
+<span class="lineNum">      26 </span>            : 
+<a name="27"><span class="lineNum">      27 </span><span class="lineCov">       1621 : void NodeBuilder::OnDocumentStart(const Mark&amp;) {}</span></a>
+<span class="lineNum">      28 </span>            : 
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">        971 : void NodeBuilder::OnDocumentEnd() {}</span></a>
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span><span class="lineCov">      49821 : void NodeBuilder::OnNull(const Mark&amp; mark, anchor_t anchor) {</span>
+<span class="lineNum">      32 </span><span class="lineCov">      49821 :   detail::node&amp; node = Push(mark, anchor);</span>
+<span class="lineNum">      33 </span><span class="lineCov">      49821 :   node.set_null();</span>
+<span class="lineNum">      34 </span><span class="lineCov">      49821 :   Pop();</span>
+<a name="35"><span class="lineNum">      35 </span><span class="lineCov">      49821 : }</span></a>
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span><span class="lineCov">       2389 : void NodeBuilder::OnAlias(const Mark&amp; /* mark */, anchor_t anchor) {</span>
+<span class="lineNum">      38 </span><span class="lineCov">       2389 :   detail::node&amp; node = *m_anchors[anchor];</span>
+<span class="lineNum">      39 </span><span class="lineCov">       2389 :   Push(node);</span>
+<span class="lineNum">      40 </span><span class="lineCov">       2389 :   Pop();</span>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">       2389 : }</span></a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineCov">      22378 : void NodeBuilder::OnScalar(const Mark&amp; mark, const std::string&amp; tag,</span>
+<span class="lineNum">      44 </span>            :                            anchor_t anchor, const std::string&amp; value) {
+<span class="lineNum">      45 </span><span class="lineCov">      22378 :   detail::node&amp; node = Push(mark, anchor);</span>
+<span class="lineNum">      46 </span><span class="lineCov">      22378 :   node.set_scalar(value);</span>
+<span class="lineNum">      47 </span><span class="lineCov">      22378 :   node.set_tag(tag);</span>
+<span class="lineNum">      48 </span><span class="lineCov">      22378 :   Pop();</span>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">      22378 : }</span></a>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span><span class="lineCov">      25707 : void NodeBuilder::OnSequenceStart(const Mark&amp; mark,</span>
+<span class="lineNum">      52 </span>            :                                   const std::string&amp; tag, anchor_t anchor,
+<span class="lineNum">      53 </span>            :                                   EmitterStyle::value style) {
+<span class="lineNum">      54 </span><span class="lineCov">      25707 :   detail::node&amp; node = Push(mark, anchor);</span>
+<span class="lineNum">      55 </span><span class="lineCov">      25707 :   node.set_tag(tag);</span>
+<span class="lineNum">      56 </span><span class="lineCov">      25707 :   node.set_type(NodeType::Sequence);</span>
+<span class="lineNum">      57 </span><span class="lineCov">      25707 :   node.set_style(style);</span>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">      25707 : }</span></a>
+<span class="lineNum">      59 </span>            : 
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">       9136 : void NodeBuilder::OnSequenceEnd() { Pop(); }</span></a>
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span><span class="lineCov">      38289 : void NodeBuilder::OnMapStart(const Mark&amp; mark, const std::string&amp; tag,</span>
+<span class="lineNum">      63 </span>            :                              anchor_t anchor, EmitterStyle::value style) {
+<span class="lineNum">      64 </span><span class="lineCov">      38289 :   detail::node&amp; node = Push(mark, anchor);</span>
+<span class="lineNum">      65 </span><span class="lineCov">      38289 :   node.set_type(NodeType::Map);</span>
+<span class="lineNum">      66 </span><span class="lineCov">      38289 :   node.set_tag(tag);</span>
+<span class="lineNum">      67 </span><span class="lineCov">      38289 :   node.set_style(style);</span>
+<span class="lineNum">      68 </span><span class="lineCov">      38289 :   m_mapDepth++;</span>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">      38289 : }</span></a>
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span><span class="lineCov">      11740 : void NodeBuilder::OnMapEnd() {</span>
+<span class="lineNum">      72 </span><span class="lineCov">      11740 :   assert(m_mapDepth &gt; 0);</span>
+<span class="lineNum">      73 </span><span class="lineCov">      11740 :   m_mapDepth--;</span>
+<span class="lineNum">      74 </span><span class="lineCov">      11740 :   Pop();</span>
+<a name="75"><span class="lineNum">      75 </span><span class="lineCov">      11740 : }</span></a>
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span><span class="lineCov">     136195 : detail::node&amp; NodeBuilder::Push(const Mark&amp; mark, anchor_t anchor) {</span>
+<span class="lineNum">      78 </span><span class="lineCov">     136195 :   detail::node&amp; node = m_pMemory-&gt;create_node();</span>
+<span class="lineNum">      79 </span><span class="lineCov">     136195 :   node.set_mark(mark);</span>
+<span class="lineNum">      80 </span><span class="lineCov">     136195 :   RegisterAnchor(anchor, node);</span>
+<span class="lineNum">      81 </span><span class="lineCov">     136195 :   Push(node);</span>
+<span class="lineNum">      82 </span><span class="lineCov">     136195 :   return node;</span>
+<a name="83"><span class="lineNum">      83 </span>            : }</a>
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span><span class="lineCov">     138584 : void NodeBuilder::Push(detail::node&amp; node) {</span>
+<span class="lineNum">      86 </span>            :   const bool needsKey =
+<span class="lineNum">      87 </span><span class="lineCov">     234331 :       (!m_stack.empty() &amp;&amp; m_stack.back()-&gt;type() == NodeType::Map &amp;&amp;</span>
+<span class="lineNum">      88 </span><span class="lineCov">     234331 :        m_keys.size() &lt; m_mapDepth);</span>
+<span class="lineNum">      89 </span>            : 
+<span class="lineNum">      90 </span><span class="lineCov">     138584 :   m_stack.push_back(&amp;node);</span>
+<span class="lineNum">      91 </span><span class="lineCov">     138584 :   if (needsKey)</span>
+<span class="lineNum">      92 </span><span class="lineCov">      60085 :     m_keys.push_back(PushedKey(&amp;node, false));</span>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">     138584 : }</span></a>
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span><span class="lineCov">      95464 : void NodeBuilder::Pop() {</span>
+<span class="lineNum">      96 </span><span class="lineCov">      95464 :   assert(!m_stack.empty());</span>
+<span class="lineNum">      97 </span><span class="lineCov">      95464 :   if (m_stack.size() == 1) {</span>
+<span class="lineNum">      98 </span><span class="lineCov">        971 :     m_pRoot = m_stack[0];</span>
+<span class="lineNum">      99 </span><span class="lineCov">        971 :     m_stack.pop_back();</span>
+<span class="lineNum">     100 </span><span class="lineCov">        971 :     return;</span>
+<span class="lineNum">     101 </span>            :   }
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span><span class="lineCov">      94493 :   detail::node&amp; node = *m_stack.back();</span>
+<span class="lineNum">     104 </span><span class="lineCov">      94493 :   m_stack.pop_back();</span>
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span><span class="lineCov">      94493 :   detail::node&amp; collection = *m_stack.back();</span>
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span><span class="lineCov">      94493 :   if (collection.type() == NodeType::Sequence) {</span>
+<span class="lineNum">     109 </span><span class="lineCov">      24906 :     collection.push_back(node, m_pMemory);</span>
+<span class="lineNum">     110 </span><span class="lineCov">      69587 :   } else if (collection.type() == NodeType::Map) {</span>
+<span class="lineNum">     111 </span><span class="lineCov">      69587 :     assert(!m_keys.empty());</span>
+<span class="lineNum">     112 </span><span class="lineCov">      69587 :     PushedKey&amp; key = m_keys.back();</span>
+<span class="lineNum">     113 </span><span class="lineCov">      69587 :     if (key.second) {</span>
+<span class="lineNum">     114 </span><span class="lineCov">      33796 :       collection.insert(*key.first, node, m_pMemory);</span>
+<span class="lineNum">     115 </span><span class="lineCov">      33796 :       m_keys.pop_back();</span>
+<span class="lineNum">     116 </span>            :     } else {
+<span class="lineNum">     117 </span><span class="lineCov">      35791 :       key.second = true;</span>
+<span class="lineNum">     118 </span>            :     }
+<span class="lineNum">     119 </span>            :   } else {
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :     assert(false);</span>
+<span class="lineNum">     121 </span>            :     m_stack.clear();
+<span class="lineNum">     122 </span>            :   }
+<a name="123"><span class="lineNum">     123 </span>            : }</a>
+<span class="lineNum">     124 </span>            : 
+<span class="lineNum">     125 </span><span class="lineCov">     136195 : void NodeBuilder::RegisterAnchor(anchor_t anchor, detail::node&amp; node) {</span>
+<span class="lineNum">     126 </span><span class="lineCov">     136195 :   if (anchor) {</span>
+<span class="lineNum">     127 </span><span class="lineCov">       2911 :     assert(anchor == m_anchors.size());</span>
+<span class="lineNum">     128 </span><span class="lineCov">       2911 :     m_anchors.push_back(&amp;node);</span>
+<span class="lineNum">     129 </span>            :   }
+<span class="lineNum">     130 </span><span class="lineCov">     136195 : }</span>
+<span class="lineNum">     131 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

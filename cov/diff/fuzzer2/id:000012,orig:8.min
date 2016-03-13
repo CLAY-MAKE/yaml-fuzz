@@ -1,0 +1,26 @@
+diff fuzzer2/id:000011,orig:74.min.min -> fuzzer2/id:000012,orig:8.min
+Src file: /root/yaml-cpp/src/regeximpl.h
+  New 'function' coverage: _ZNK4YAML5RegEx12MatchOpEmptyINS_16StringCharSourceEEEiRKT_()
+  New 'line' coverage: 107
+  New 'line' coverage: 109
+  New 'line' coverage: 111
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'function' coverage: _ZN4YAML7Scanner10ScanDocEndEv()
+  New 'line' coverage: 74
+  New 'line' coverage: 75
+  New 'line' coverage: 76
+  New 'line' coverage: 77
+  New 'line' coverage: 78
+  New 'line' coverage: 81
+  New 'line' coverage: 82
+  New 'line' coverage: 83
+  New 'line' coverage: 84
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'line' coverage: 44
+Src file: /root/yaml-cpp/src/emitter.cpp
+  New 'line' coverage: 600
+Src file: /root/yaml-cpp/src/stringsource.h
+  New 'function' coverage: _ZNK4YAML16StringCharSourcentEv()
+  New 'line' coverage: 20
+Src file: /root/yaml-cpp/src/scanner.cpp
+  New 'line' coverage: 118

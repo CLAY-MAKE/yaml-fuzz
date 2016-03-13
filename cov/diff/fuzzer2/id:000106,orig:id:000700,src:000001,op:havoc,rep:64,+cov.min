@@ -1,0 +1,12 @@
+diff fuzzer2/id:000105,orig:id:000699,src:000001,op:havoc,rep:128,+cov.min -> fuzzer2/id:000106,orig:id:000700,src:000001,op:havoc,rep:64,+cov.min
+Src file: /root/yaml-cpp/src/regeximpl.h
+  New 'function' coverage: _ZNK4YAML5RegEx7MatchesEc()
+  New 'line' coverage: 16
+  New 'line' coverage: 17
+  New 'line' coverage: 18
+  New 'line' coverage: 19
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'line' coverage: 393
+  New 'line' coverage: 396
+  New 'line' coverage: 397
+  New 'line' coverage: 398

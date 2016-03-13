@@ -1,0 +1,8 @@
+diff fuzzer2/id:000079,orig:id:000580,src:000001,op:havoc,rep:32.min -> fuzzer2/id:000080,orig:id:000581,src:000001,op:havoc,rep:16.min
+Src file: /root/yaml-cpp/src/simplekey.cpp
+  New 'line' coverage: 113
+  New 'line' coverage: 119
+Src file: /root/yaml-cpp/src/exp.cpp
+  New 'line' coverage: 97
+Src file: /root/yaml-cpp/src/emitterutils.cpp
+  New 'line' coverage: 168

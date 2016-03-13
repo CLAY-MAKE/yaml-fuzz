@@ -1,0 +1,3 @@
+diff fuzzer2/id:000082,orig:id:000582,src:000001,op:havoc,rep:32.min -> fuzzer2/id:000083,orig:id:000590,src:000001,op:havoc,rep:64.min
+Src file: /root/yaml-cpp/src/exp.cpp
+  New 'line' coverage: 123

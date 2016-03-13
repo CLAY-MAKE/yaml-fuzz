@@ -1,0 +1,19 @@
+diff fuzzer2/id:000072,orig:id:000538,src:000001,op:havoc,rep:128.min -> fuzzer2/id:000073,orig:id:000544,src:000001,op:havoc,rep:128.min
+Src file: /root/yaml-cpp/src/exp.cpp
+  New 'function' coverage: _ZN4YAML3Exp6EscapeB5cxx11ERNS_6StreamEi()
+  New 'function' coverage: _ZN4YAML3Exp8ParseHexERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_4MarkE()
+  New 'line' coverage: 125
+  New 'line' coverage: 13
+  New 'line' coverage: 14
+  New 'line' coverage: 15
+  New 'line' coverage: 16
+  New 'line' coverage: 17
+  New 'line' coverage: 18
+  New 'line' coverage: 20
+  New 'line' coverage: 22
+  New 'line' coverage: 25
+  New 'line' coverage: 39
+  New 'line' coverage: 41
+  New 'line' coverage: 42
+  New 'line' coverage: 43
+  New 'line' coverage: 46

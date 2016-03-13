@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/scanscalar.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - scanscalar.h<span style="font-size: 80%;"> (source / <a href="scanscalar.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef SCANSCALAR_H_62B23520_7C8E_11DE_8A39_0800200C9A66</a>
+<span class="lineNum">       2 </span>            : #define SCANSCALAR_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #if defined(_MSC_VER) ||                                            \
+<span class="lineNum">       5 </span>            :     (defined(__GNUC__) &amp;&amp; (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ &gt;= 4) || \
+<span class="lineNum">       6 </span>            :      (__GNUC__ &gt;= 4))  // GCC supports &quot;pragma once&quot; correctly since 3.4
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : #endif
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : #include &lt;string&gt;
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #include &quot;regex_yaml.h&quot;
+<span class="lineNum">      13 </span>            : #include &quot;stream.h&quot;
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span>            : namespace YAML {
+<span class="lineNum">      16 </span>            : enum CHOMP { STRIP = -1, CLIP, KEEP };
+<span class="lineNum">      17 </span>            : enum ACTION { NONE, BREAK, THROW };
+<span class="lineNum">      18 </span>            : enum FOLD { DONT_FOLD, FOLD_BLOCK, FOLD_FLOW };
+<a name="19"><span class="lineNum">      19 </span>            : </a>
+<span class="lineNum">      20 </span>            : struct ScanScalarParams {
+<span class="lineNum">      21 </span><span class="lineCov">      33064 :   ScanScalarParams()</span>
+<span class="lineNum">      22 </span>            :       : end(nullptr),
+<span class="lineNum">      23 </span>            :         eatEnd(false),
+<span class="lineNum">      24 </span>            :         indent(0),
+<span class="lineNum">      25 </span>            :         detectIndent(false),
+<span class="lineNum">      26 </span>            :         eatLeadingWhitespace(0),
+<span class="lineNum">      27 </span>            :         escape(0),
+<span class="lineNum">      28 </span>            :         fold(DONT_FOLD),
+<span class="lineNum">      29 </span>            :         trimTrailingSpaces(0),
+<span class="lineNum">      30 </span>            :         chomp(CLIP),
+<span class="lineNum">      31 </span>            :         onDocIndicator(NONE),
+<span class="lineNum">      32 </span>            :         onTabInIndentation(NONE),
+<span class="lineNum">      33 </span><span class="lineCov">      33064 :         leadingSpaces(false) {}</span>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            :   // input:
+<span class="lineNum">      36 </span>            :   const RegEx* end;   // what condition ends this scalar?
+<span class="lineNum">      37 </span>            :                       // unowned.
+<span class="lineNum">      38 </span>            :   bool eatEnd;        // should we eat that condition when we see it?
+<span class="lineNum">      39 </span>            :   int indent;         // what level of indentation should be eaten and ignored?
+<span class="lineNum">      40 </span>            :   bool detectIndent;  // should we try to autodetect the indent?
+<span class="lineNum">      41 </span>            :   bool eatLeadingWhitespace;  // should we continue eating this delicious
+<span class="lineNum">      42 </span>            :                               // indentation after 'indent' spaces?
+<span class="lineNum">      43 </span>            :   char escape;  // what character do we escape on (i.e., slash or single quote)
+<span class="lineNum">      44 </span>            :                 // (0 for none)
+<span class="lineNum">      45 </span>            :   FOLD fold;    // how do we fold line ends?
+<span class="lineNum">      46 </span>            :   bool trimTrailingSpaces;  // do we remove all trailing spaces (at the very
+<span class="lineNum">      47 </span>            :                             // end)
+<span class="lineNum">      48 </span>            :   CHOMP chomp;  // do we strip, clip, or keep trailing newlines (at the very
+<span class="lineNum">      49 </span>            :                 // end)
+<span class="lineNum">      50 </span>            :   //   Note: strip means kill all, clip means keep at most one, keep means keep
+<span class="lineNum">      51 </span>            :   // all
+<span class="lineNum">      52 </span>            :   ACTION onDocIndicator;      // what do we do if we see a document indicator?
+<span class="lineNum">      53 </span>            :   ACTION onTabInIndentation;  // what do we do if we see a tab where we should
+<span class="lineNum">      54 </span>            :                               // be seeing indentation spaces
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            :   // output:
+<span class="lineNum">      57 </span>            :   bool leadingSpaces;
+<span class="lineNum">      58 </span>            : };
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span>            : std::string ScanScalar(Stream&amp; INPUT, ScanScalarParams&amp; info);
+<span class="lineNum">      61 </span>            : }
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span>            : #endif  // SCANSCALAR_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

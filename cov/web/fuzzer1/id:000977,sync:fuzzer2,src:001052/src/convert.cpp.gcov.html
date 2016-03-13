@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/convert.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - convert.cpp<span style="font-size: 80%;"> (source / <a href="convert.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">35</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;algorithm&gt;</a>
+<span class="lineNum">       2 </span>            : 
+<span class="lineNum">       3 </span>            : #include &quot;yaml-cpp/node/convert.h&quot;
+<span class="lineNum">       4 </span>            : 
+<a name="5"><span class="lineNum">       5 </span>            : namespace {</a>
+<a name="6"><span class="lineNum">       6 </span>            : // we're not gonna mess with the mess that is all the isupper/etc. functions</a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineNoCov">          0 : bool IsLower(char ch) { return 'a' &lt;= ch &amp;&amp; ch &lt;= 'z'; }</span></a>
+<span class="lineNum">       8 </span><span class="lineNoCov">          0 : bool IsUpper(char ch) { return 'A' &lt;= ch &amp;&amp; ch &lt;= 'Z'; }</span>
+<a name="9"><span class="lineNum">       9 </span><span class="lineNoCov">          0 : char ToLower(char ch) { return IsUpper(ch) ? ch + 'a' - 'A' : ch; }</span></a>
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span><span class="lineNoCov">          0 : std::string tolower(const std::string&amp; str) {</span>
+<span class="lineNum">      12 </span><span class="lineNoCov">          0 :   std::string s(str);</span>
+<span class="lineNum">      13 </span><span class="lineNoCov">          0 :   std::transform(s.begin(), s.end(), s.begin(), ToLower);</span>
+<span class="lineNum">      14 </span><span class="lineNoCov">          0 :   return s;</span>
+<span class="lineNum">      15 </span>            : }
+<a name="16"><span class="lineNum">      16 </span>            : </a>
+<span class="lineNum">      17 </span>            : template &lt;typename T&gt;
+<span class="lineNum">      18 </span><span class="lineNoCov">          0 : bool IsEntirely(const std::string&amp; str, T func) {</span>
+<span class="lineNum">      19 </span><span class="lineNoCov">          0 :   for (std::size_t i = 0; i &lt; str.size(); i++)</span>
+<span class="lineNum">      20 </span><span class="lineNoCov">          0 :     if (!func(str[i]))</span>
+<span class="lineNum">      21 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span><span class="lineNoCov">          0 :   return true;</span>
+<span class="lineNum">      24 </span>            : }
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : // IsFlexibleCase
+<span class="lineNum">      27 </span>            : // . Returns true if 'str' is:
+<span class="lineNum">      28 </span>            : //   . UPPERCASE
+<a name="29"><span class="lineNum">      29 </span>            : //   . lowercase</a>
+<span class="lineNum">      30 </span>            : //   . Capitalized
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 : bool IsFlexibleCase(const std::string&amp; str) {</span>
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :   if (str.empty())</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :     return true;</span>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :   if (IsEntirely(str, IsLower))</span>
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :     return true;</span>
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span><span class="lineNoCov">          0 :   bool firstcaps = IsUpper(str[0]);</span>
+<span class="lineNum">      39 </span><span class="lineNoCov">          0 :   std::string rest = str.substr(1);</span>
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 :   return firstcaps &amp;&amp; (IsEntirely(rest, IsLower) || IsEntirely(rest, IsUpper));</span>
+<span class="lineNum">      41 </span>            : }
+<span class="lineNum">      42 </span>            : }
+<a name="43"><span class="lineNum">      43 </span>            : </a>
+<span class="lineNum">      44 </span>            : namespace YAML {
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 : bool convert&lt;bool&gt;::decode(const Node&amp; node, bool&amp; rhs) {</span>
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :   if (!node.IsScalar())</span>
+<span class="lineNum">      47 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            :   // we can't use iostream bool extraction operators as they don't
+<a name="50"><span class="lineNum">      50 </span>            :   // recognize all possible values in the table below (taken from</a>
+<span class="lineNum">      51 </span>            :   // http://yaml.org/type/bool.html)
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :   static const struct {</span>
+<span class="lineNum">      53 </span>            :     std::string truename, falsename;
+<a name="54"><span class="lineNum">      54 </span>            :   } names[] = {</a>
+<span class="lineNum">      55 </span>            :       {&quot;y&quot;, &quot;n&quot;}, {&quot;yes&quot;, &quot;no&quot;}, {&quot;true&quot;, &quot;false&quot;}, {&quot;on&quot;, &quot;off&quot;},
+<span class="lineNum">      56 </span><span class="lineNoCov">          0 :   };</span>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 :   if (!IsFlexibleCase(node.Scalar()))</span>
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :     return false;</span>
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :   for (unsigned i = 0; i &lt; sizeof(names) / sizeof(names[0]); i++) {</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :     if (names[i].truename == tolower(node.Scalar())) {</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :       rhs = true;</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">      65 </span>            :     }
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :     if (names[i].falsename == tolower(node.Scalar())) {</span>
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :       rhs = false;</span>
+<span class="lineNum">      69 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">      70 </span>            :     }
+<span class="lineNum">      71 </span>            :   }
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :   return false;</span>
+<span class="lineNum">      74 </span>            : }
+<span class="lineNum">      75 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+diff fuzzer2/id:000003,orig:625.min.min -> fuzzer2/id:000004,orig:627b.min
+Src file: /root/yaml-cpp/src/parser.cpp
+  New 'function' coverage: _ZN4YAML6Parser18HandleTagDirectiveERKNS_5TokenE()
+  New 'line' coverage: 104
+  New 'line' coverage: 105
+  New 'line' coverage: 108
+  New 'line' coverage: 109
+  New 'line' coverage: 110
+  New 'line' coverage: 113
+  New 'line' coverage: 114
+  New 'line' coverage: 73
+  New 'line' coverage: 74
+Src file: /root/yaml-cpp/src/regeximpl.h
+  New 'line' coverage: 127
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'function' coverage: _ZN4YAML7Scanner12ScanDocStartEv()
+  New 'line' coverage: 274
+  New 'line' coverage: 275
+  New 'line' coverage: 277
+  New 'line' coverage: 280
+  New 'line' coverage: 283
+  New 'line' coverage: 285
+  New 'line' coverage: 286
+  New 'line' coverage: 287
+  New 'line' coverage: 61
+  New 'line' coverage: 62
+  New 'line' coverage: 63
+  New 'line' coverage: 64
+  New 'line' coverage: 65
+  New 'line' coverage: 68
+  New 'line' coverage: 69
+  New 'line' coverage: 70
+  New 'line' coverage: 71
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'line' coverage: 35
+Src file: /root/yaml-cpp/src/tag.cpp
+  New 'line' coverage: 21
+  New 'line' coverage: 22
+  New 'line' coverage: 23
+  New 'line' coverage: 40
+Src file: /root/yaml-cpp/src/scantag.cpp
+  New 'function' coverage: _ZN4YAML13ScanTagHandleB5cxx11ERNS_6StreamERb()
+  New 'function' coverage: _ZN4YAML13ScanTagSuffixB5cxx11ERNS_6StreamE()
+  New 'line' coverage: 32
+  New 'line' coverage: 33
+  New 'line' coverage: 34
+  New 'line' coverage: 35
+  New 'line' coverage: 37
+  New 'line' coverage: 38
+  New 'line' coverage: 39
+  New 'line' coverage: 41
+  New 'line' coverage: 44
+  New 'line' coverage: 45
+  New 'line' coverage: 46
+  New 'line' coverage: 47
+  New 'line' coverage: 53
+  New 'line' coverage: 56
+  New 'line' coverage: 59
+  New 'line' coverage: 62
+  New 'line' coverage: 65
+  New 'line' coverage: 66
+  New 'line' coverage: 68
+  New 'line' coverage: 69
+  New 'line' coverage: 70
+  New 'line' coverage: 71
+  New 'line' coverage: 73
+  New 'line' coverage: 76
+  New 'line' coverage: 79
+Src file: /root/yaml-cpp/src/exp.h
+  New 'function' coverage: _ZN4YAML3Exp3TagEv()
+  New 'line' coverage: 137
+  New 'line' coverage: 138
+  New 'line' coverage: 139
+  New 'line' coverage: 140
+Src file: /root/yaml-cpp/src/scanner.cpp
+  New 'line' coverage: 115
+Src file: /root/yaml-cpp/src/directives.cpp
+  New 'function' coverage: _ZNK4YAML10Directives18TranslateTagHandleERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE()
+  New 'line' coverage: 11
+  New 'line' coverage: 13
+  New 'line' coverage: 14
+  New 'line' coverage: 15
+  New 'line' coverage: 17

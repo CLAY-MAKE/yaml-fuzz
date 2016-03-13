@@ -1,0 +1,59 @@
+diff fuzzer2/id:000025,orig:id:000264,src:000001,op:havoc,rep:32,+cov.min -> fuzzer2/id:000026,orig:id:000270,src:000001,op:havoc,rep:128.min
+Src file: /root/yaml-cpp/src/stream.cpp
+  New 'function' coverage: _ZN4YAML10Utf8AdjustEmhh()
+  New 'function' coverage: _ZN4YAML21QueueUnicodeCodepointERSt5dequeIcSaIcEEm()
+  New 'function' coverage: _ZNK4YAML6Stream13StreamInUtf16Ev()
+  New 'line' coverage: 161
+  New 'line' coverage: 163
+  New 'line' coverage: 164
+  New 'line' coverage: 166
+  New 'line' coverage: 169
+  New 'line' coverage: 172
+  New 'line' coverage: 176
+  New 'line' coverage: 177
+  New 'line' coverage: 178
+  New 'line' coverage: 179
+  New 'line' coverage: 180
+  New 'line' coverage: 181
+  New 'line' coverage: 182
+  New 'line' coverage: 183
+  New 'line' coverage: 184
+  New 'line' coverage: 191
+  New 'line' coverage: 229
+  New 'line' coverage: 230
+  New 'line' coverage: 311
+  New 'line' coverage: 312
+  New 'line' coverage: 339
+  New 'line' coverage: 340
+  New 'line' coverage: 342
+  New 'line' coverage: 344
+  New 'line' coverage: 345
+  New 'line' coverage: 346
+  New 'line' coverage: 347
+  New 'line' coverage: 349
+  New 'line' coverage: 350
+  New 'line' coverage: 352
+  New 'line' coverage: 356
+  New 'line' coverage: 362
+  New 'line' coverage: 363
+  New 'line' coverage: 364
+  New 'line' coverage: 365
+  New 'line' coverage: 369
+  New 'line' coverage: 370
+  New 'line' coverage: 371
+  New 'line' coverage: 374
+  New 'line' coverage: 377
+  New 'line' coverage: 379
+  New 'line' coverage: 380
+  New 'line' coverage: 383
+  New 'line' coverage: 384
+  New 'line' coverage: 401
+Src file: /root/yaml-cpp/src/scanscalar.cpp
+  New 'line' coverage: 43
+  New 'line' coverage: 83
+  New 'line' coverage: 85
+Src file: /root/yaml-cpp/src/stream.h
+  New 'function' coverage: _ZN4YAML6Stream11ResetColumnEv()
+  New 'line' coverage: 41
+Src file: /root/yaml-cpp/src/scanner.cpp
+  New 'line' coverage: 246

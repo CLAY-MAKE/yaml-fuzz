@@ -1,0 +1,3 @@
+afl_cov_pid     : 5637
+afl_cov_version : 0.5
+command_line    : afl-cov/afl-cov -d syncdir/ --coverage-cmd ./parse_cov AFL_FILE --code-dir yaml-cpp/ --overwrite

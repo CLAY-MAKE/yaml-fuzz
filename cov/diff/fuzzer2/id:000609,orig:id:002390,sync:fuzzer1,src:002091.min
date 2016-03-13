@@ -1,0 +1,3 @@
+diff fuzzer2/id:000608,orig:id:002385,src:002353,op:havoc,rep:2.min -> fuzzer2/id:000609,orig:id:002390,sync:fuzzer1,src:002091.min
+Src file: /root/yaml-cpp/src/parser.cpp
+  New 'line' coverage: 111

@@ -1,0 +1,11 @@
+diff fuzzer2/id:000019,orig:id:000203,src:000001,op:havoc,rep:128,+cov.min -> fuzzer2/id:000020,orig:id:000215,src:000001,op:havoc,rep:8,+cov.min
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'line' coverage: 189
+Src file: /root/yaml-cpp/src/simplekey.cpp
+  New 'line' coverage: 126
+Src file: /root/yaml-cpp/src/scanner.cpp
+  New 'function' coverage: _ZNK4YAML7Scanner4markEv()
+  New 'line' coverage: 179
+  New 'line' coverage: 180
+  New 'line' coverage: 338
+  New 'line' coverage: 54

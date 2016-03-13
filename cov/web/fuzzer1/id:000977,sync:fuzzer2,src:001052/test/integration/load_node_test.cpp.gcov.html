@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - test/integration/load_node_test.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">test/integration</a> - load_node_test.cpp<span style="font-size: 80%;"> (source / <a href="load_node_test.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">143</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">66</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;yaml-cpp/yaml.h&quot;  // IWYU pragma: keep</a>
+<span class="lineNum">       2 </span>            : 
+<span class="lineNum">       3 </span>            : #include &quot;gtest/gtest.h&quot;
+<span class="lineNum">       4 </span>            : 
+<a name="5"><span class="lineNum">       5 </span>            : namespace YAML {</a>
+<span class="lineNum">       6 </span>            : namespace {
+<span class="lineNum">       7 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, Reassign) {</span>
+<span class="lineNum">       8 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;foo&quot;);</span>
+<span class="lineNum">       9 </span><span class="lineNoCov">          0 :   node = Node();</span>
+<a name="10"><span class="lineNum">      10 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, FallbackValues) {</span>
+<span class="lineNum">      13 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;foo: bar\nx: 2&quot;);</span>
+<span class="lineNum">      14 </span><span class="lineNoCov">          0 :   EXPECT_EQ(&quot;bar&quot;, node[&quot;foo&quot;].as&lt;std::string&gt;());</span>
+<span class="lineNum">      15 </span><span class="lineNoCov">          0 :   EXPECT_EQ(&quot;bar&quot;, node[&quot;foo&quot;].as&lt;std::string&gt;(&quot;hello&quot;));</span>
+<span class="lineNum">      16 </span><span class="lineNoCov">          0 :   EXPECT_EQ(&quot;hello&quot;, node[&quot;baz&quot;].as&lt;std::string&gt;(&quot;hello&quot;));</span>
+<span class="lineNum">      17 </span><span class="lineNoCov">          0 :   EXPECT_EQ(2, node[&quot;x&quot;].as&lt;int&gt;());</span>
+<span class="lineNum">      18 </span><span class="lineNoCov">          0 :   EXPECT_EQ(2, node[&quot;x&quot;].as&lt;int&gt;(5));</span>
+<span class="lineNum">      19 </span><span class="lineNoCov">          0 :   EXPECT_EQ(5, node[&quot;y&quot;].as&lt;int&gt;(5));</span>
+<a name="20"><span class="lineNum">      20 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, NumericConversion) {</span>
+<span class="lineNum">      23 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;[1.5, 1, .nan, .inf, -.inf, 0x15, 015]&quot;);</span>
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 :   EXPECT_EQ(1.5f, node[0].as&lt;float&gt;());</span>
+<span class="lineNum">      25 </span><span class="lineNoCov">          0 :   EXPECT_EQ(1.5, node[0].as&lt;double&gt;());</span>
+<span class="lineNum">      26 </span><span class="lineNoCov">          0 :   EXPECT_THROW(node[0].as&lt;int&gt;(), TypedBadConversion&lt;int&gt;);</span>
+<span class="lineNum">      27 </span><span class="lineNoCov">          0 :   EXPECT_EQ(1, node[1].as&lt;int&gt;());</span>
+<span class="lineNum">      28 </span><span class="lineNoCov">          0 :   EXPECT_EQ(1.0f, node[1].as&lt;float&gt;());</span>
+<span class="lineNum">      29 </span><span class="lineNoCov">          0 :   EXPECT_NE(node[2].as&lt;float&gt;(), node[2].as&lt;float&gt;());</span>
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 :   EXPECT_EQ(std::numeric_limits&lt;float&gt;::infinity(), node[3].as&lt;float&gt;());</span>
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 :   EXPECT_EQ(-std::numeric_limits&lt;float&gt;::infinity(), node[4].as&lt;float&gt;());</span>
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :   EXPECT_EQ(21, node[5].as&lt;int&gt;());</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :   EXPECT_EQ(13, node[6].as&lt;int&gt;());</span>
+<a name="34"><span class="lineNum">      34 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, Binary) {</span>
+<span class="lineNum">      37 </span>            :   Node node = Load(
+<span class="lineNum">      38 </span>            :       &quot;[!!binary \&quot;SGVsbG8sIFdvcmxkIQ==\&quot;, !!binary &quot;
+<span class="lineNum">      39 </span>            :       &quot;\&quot;TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieS&quot;
+<span class="lineNum">      40 </span>            :       &quot;B0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIG&quot;
+<span class="lineNum">      41 </span>            :       &quot;x1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbi&quot;
+<span class="lineNum">      42 </span>            :       &quot;B0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZG&quot;
+<span class="lineNum">      43 </span>            :       &quot;dlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS&quot;
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 :       &quot;4K\&quot;]&quot;);</span>
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :   EXPECT_EQ(Binary(reinterpret_cast&lt;const unsigned char*&gt;(&quot;Hello, World!&quot;), 13),</span>
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :             node[0].as&lt;Binary&gt;());</span>
+<span class="lineNum">      47 </span><span class="lineNoCov">          0 :   EXPECT_EQ(Binary(reinterpret_cast&lt;const unsigned char*&gt;(</span>
+<span class="lineNum">      48 </span>            :                        &quot;Man is distinguished, not only by his reason, &quot;
+<span class="lineNum">      49 </span>            :                        &quot;but by this singular passion from other &quot;
+<span class="lineNum">      50 </span>            :                        &quot;animals, which is a lust of the mind, that by &quot;
+<span class="lineNum">      51 </span>            :                        &quot;a perseverance of delight in the continued and &quot;
+<span class="lineNum">      52 </span>            :                        &quot;indefatigable generation of knowledge, exceeds &quot;
+<span class="lineNum">      53 </span>            :                        &quot;the short vehemence of any carnal pleasure.\n&quot;),
+<span class="lineNum">      54 </span>            :                    270),
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :             node[1].as&lt;Binary&gt;());</span>
+<a name="56"><span class="lineNum">      56 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, IterateSequence) {</span>
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;[1, 3, 5, 7]&quot;);</span>
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :   int seq[] = {1, 3, 5, 7};</span>
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :   int i = 0;</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :   for (const_iterator it = node.begin(); it != node.end(); ++it) {</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :     EXPECT_TRUE(i &lt; 4);</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :     int x = seq[i++];</span>
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 :     EXPECT_EQ(x, it-&gt;as&lt;int&gt;());</span>
+<span class="lineNum">      66 </span>            :   }
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :   EXPECT_EQ(4, i);</span>
+<a name="68"><span class="lineNum">      68 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, IterateMap) {</span>
+<span class="lineNum">      71 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;{a: A, b: B, c: C}&quot;);</span>
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :   int i = 0;</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :   for (const_iterator it = node.begin(); it != node.end(); ++it) {</span>
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :     EXPECT_TRUE(i &lt; 3);</span>
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :     i++;</span>
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :     EXPECT_EQ(it-&gt;second.as&lt;char&gt;(), it-&gt;first.as&lt;char&gt;() + 'A' - 'a');</span>
+<span class="lineNum">      77 </span>            :   }
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :   EXPECT_EQ(3, i);</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span>            : #ifdef BOOST_FOREACH
+<span class="lineNum">      82 </span>            : TEST(LoadNodeTest, ForEach) {
+<span class="lineNum">      83 </span>            :   Node node = Load(&quot;[1, 3, 5, 7]&quot;);
+<span class="lineNum">      84 </span>            :   int seq[] = {1, 3, 5, 7};
+<span class="lineNum">      85 </span>            :   int i = 0;
+<span class="lineNum">      86 </span>            :   BOOST_FOREACH (const Node&amp; item, node) {
+<span class="lineNum">      87 </span>            :     int x = seq[i++];
+<span class="lineNum">      88 </span>            :     EXPECT_EQ(x, item.as&lt;int&gt;());
+<span class="lineNum">      89 </span>            :   }
+<span class="lineNum">      90 </span>            : }
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            : TEST(LoadNodeTest, ForEachMap) {
+<span class="lineNum">      93 </span>            :   Node node = Load(&quot;{a: A, b: B, c: C}&quot;);
+<span class="lineNum">      94 </span>            :   BOOST_FOREACH (const const_iterator::value_type&amp; p, node) {
+<span class="lineNum">      95 </span>            :     EXPECT_EQ(p.second.as&lt;char&gt;(), p.first.as&lt;char&gt;() + 'A' - 'a');
+<span class="lineNum">      96 </span>            :   }
+<span class="lineNum">      97 </span>            : }
+<a name="98"><span class="lineNum">      98 </span>            : #endif</a>
+<span class="lineNum">      99 </span>            : 
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, CloneScalar) {</span>
+<span class="lineNum">     101 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;!foo monkey&quot;);</span>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :   Node clone = Clone(node);</span>
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :   EXPECT_FALSE(clone == node);</span>
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone.as&lt;std::string&gt;(), node.as&lt;std::string&gt;());</span>
+<span class="lineNum">     105 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone.Tag(), node.Tag());</span>
+<a name="106"><span class="lineNum">     106 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, CloneSeq) {</span>
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;[1, 3, 5, 7]&quot;);</span>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :   Node clone = Clone(node);</span>
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :   EXPECT_FALSE(clone == node);</span>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 :   EXPECT_EQ(NodeType::Sequence, clone.Type());</span>
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone.size(), node.size());</span>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :   for (std::size_t i = 0; i &lt; node.size(); i++) {</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :     EXPECT_EQ(clone[i].as&lt;int&gt;(), node[i].as&lt;int&gt;());</span>
+<span class="lineNum">     116 </span>            :   }
+<a name="117"><span class="lineNum">     117 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, CloneMap) {</span>
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;{foo: bar}&quot;);</span>
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :   Node clone = Clone(node);</span>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :   EXPECT_FALSE(clone == node);</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :   EXPECT_EQ(NodeType::Map, clone.Type());</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone.size(), node.size());</span>
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone[&quot;foo&quot;].as&lt;std::string&gt;(), node[&quot;foo&quot;].as&lt;std::string&gt;());</span>
+<a name="126"><span class="lineNum">     126 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     127 </span>            : 
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, CloneAlias) {</span>
+<span class="lineNum">     129 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;&amp;foo [*foo]&quot;);</span>
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :   Node clone = Clone(node);</span>
+<span class="lineNum">     131 </span><span class="lineNoCov">          0 :   EXPECT_FALSE(clone == node);</span>
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 :   EXPECT_EQ(NodeType::Sequence, clone.Type());</span>
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone.size(), node.size());</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :   EXPECT_EQ(clone[0], clone);</span>
+<a name="135"><span class="lineNum">     135 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     136 </span>            : 
+<span class="lineNum">     137 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, ForceInsertIntoMap) {</span>
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :   Node node;</span>
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :   node[&quot;a&quot;] = &quot;b&quot;;</span>
+<span class="lineNum">     140 </span><span class="lineNoCov">          0 :   node.force_insert(&quot;x&quot;, &quot;y&quot;);</span>
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :   node.force_insert(&quot;a&quot;, 5);</span>
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :   EXPECT_EQ(3, node.size());</span>
+<span class="lineNum">     143 </span><span class="lineNoCov">          0 :   EXPECT_EQ(NodeType::Map, node.Type());</span>
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 :   bool ab = false;</span>
+<span class="lineNum">     145 </span><span class="lineNoCov">          0 :   bool a5 = false;</span>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :   bool xy = false;</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :   for (const_iterator it = node.begin(); it != node.end(); ++it) {</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :     if (it-&gt;first.as&lt;std::string&gt;() == &quot;a&quot;) {</span>
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :       if (it-&gt;second.as&lt;std::string&gt;() == &quot;b&quot;)</span>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :         ab = true;</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :       else if (it-&gt;second.as&lt;std::string&gt;() == &quot;5&quot;)</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :         a5 = true;</span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :     } else if (it-&gt;first.as&lt;std::string&gt;() == &quot;x&quot; &amp;&amp;</span>
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :                it-&gt;second.as&lt;std::string&gt;() == &quot;y&quot;)</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :       xy = true;</span>
+<span class="lineNum">     156 </span>            :   }
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(ab);</span>
+<span class="lineNum">     158 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(a5);</span>
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(xy);</span>
+<a name="160"><span class="lineNum">     160 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, ResetNode) {</span>
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;[1, 2, 3]&quot;);</span>
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(!node.IsNull());</span>
+<span class="lineNum">     165 </span><span class="lineNoCov">          0 :   Node other = node;</span>
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :   node.reset();</span>
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(node.IsNull());</span>
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(!other.IsNull());</span>
+<span class="lineNum">     169 </span><span class="lineNoCov">          0 :   node.reset(other);</span>
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(!node.IsNull());</span>
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :   EXPECT_EQ(node, other);</span>
+<a name="172"><span class="lineNum">     172 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     173 </span>            : 
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, EmptyString) {</span>
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;\&quot;\&quot;&quot;);</span>
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :   EXPECT_TRUE(!node.IsNull());</span>
+<a name="177"><span class="lineNum">     177 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 : TEST(LoadNodeTest, DereferenceIteratorError) {</span>
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 :   Node node = Load(&quot;[{a: b}, 1, 2]&quot;);</span>
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :   EXPECT_THROW(node.begin()-&gt;first.as&lt;int&gt;(), InvalidNode);</span>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :   EXPECT_EQ(true, (*node.begin()).IsMap());</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :   EXPECT_EQ(true, node.begin()-&gt;IsMap());</span>
+<span class="lineNum">     184 </span><span class="lineNoCov">          0 :   EXPECT_THROW((*node.begin()-&gt;begin()).Type(), InvalidNode);</span>
+<span class="lineNum">     185 </span><span class="lineNoCov">          0 :   EXPECT_THROW(node.begin()-&gt;begin()-&gt;Type(), InvalidNode);</span>
+<a name="186"><span class="lineNum">     186 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 : TEST(NodeTest, EmitEmptyNode) {</span>
+<span class="lineNum">     189 </span><span class="lineNoCov">          0 :   Node node;</span>
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :   Emitter emitter;</span>
+<span class="lineNum">     191 </span><span class="lineNoCov">          0 :   emitter &lt;&lt; node;</span>
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :   EXPECT_EQ(&quot;&quot;, std::string(emitter.c_str()));</span>
+<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 : TEST(NodeTest, ParseNodeStyle) {</span>
+<span class="lineNum">     196 </span><span class="lineNoCov">          0 :   EXPECT_EQ(EmitterStyle::Flow, Load(&quot;[1, 2, 3]&quot;).Style());</span>
+<span class="lineNum">     197 </span><span class="lineNoCov">          0 :   EXPECT_EQ(EmitterStyle::Flow, Load(&quot;{foo: bar}&quot;).Style());</span>
+<span class="lineNum">     198 </span><span class="lineNoCov">          0 :   EXPECT_EQ(EmitterStyle::Block, Load(&quot;- foo\n- bar&quot;).Style());</span>
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :   EXPECT_EQ(EmitterStyle::Block, Load(&quot;foo: bar&quot;).Style());</span>
+<a name="200"><span class="lineNum">     200 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     201 </span>            : }
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

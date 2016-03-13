@@ -1,0 +1,1100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - test/integration/emitter_test.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">test/integration</a> - emitter_test.cpp<span style="font-size: 80%;"> (source / <a href="emitter_test.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">786</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">365</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;yaml-cpp/emitterstyle.h&quot;</a>
+<span class="lineNum">       2 </span>            : #include &quot;yaml-cpp/eventhandler.h&quot;
+<span class="lineNum">       3 </span>            : #include &quot;yaml-cpp/yaml.h&quot;  // IWYU pragma: keep
+<span class="lineNum">       4 </span>            : #include &quot;gtest/gtest.h&quot;
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : namespace YAML {
+<a name="7"><span class="lineNum">       7 </span>            : namespace {</a>
+<a name="8"><span class="lineNum">       8 </span>            : </a>
+<a name="9"><span class="lineNum">       9 </span><span class="lineNoCov">          0 : class NullEventHandler : public EventHandler {</span></a>
+<span class="lineNum">      10 </span><span class="lineNoCov">          0 :   virtual void OnDocumentStart(const Mark&amp;) {}</span>
+<a name="11"><span class="lineNum">      11 </span><span class="lineNoCov">          0 :   virtual void OnDocumentEnd() {}</span></a>
+<a name="12"><span class="lineNum">      12 </span>            : </a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineNoCov">          0 :   virtual void OnNull(const Mark&amp;, anchor_t) {}</span></a>
+<span class="lineNum">      14 </span><span class="lineNoCov">          0 :   virtual void OnAlias(const Mark&amp;, anchor_t) {}</span>
+<span class="lineNum">      15 </span><span class="lineNoCov">          0 :   virtual void OnScalar(const Mark&amp;, const std::string&amp;, anchor_t,</span>
+<a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 :                         const std::string&amp;) {}</span></a>
+<span class="lineNum">      17 </span>            : 
+<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :   virtual void OnSequenceStart(const Mark&amp;, const std::string&amp;, anchor_t,</span></a>
+<span class="lineNum">      19 </span><span class="lineNoCov">          0 :                                EmitterStyle::value /* style */) {}</span>
+<a name="20"><span class="lineNum">      20 </span><span class="lineNoCov">          0 :   virtual void OnSequenceEnd() {}</span></a>
+<span class="lineNum">      21 </span>            : 
+<a name="22"><span class="lineNum">      22 </span><span class="lineNoCov">          0 :   virtual void OnMapStart(const Mark&amp;, const std::string&amp;, anchor_t,</span></a>
+<span class="lineNum">      23 </span><span class="lineNoCov">          0 :                           EmitterStyle::value /* style */) {}</span>
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 :   virtual void OnMapEnd() {}</span>
+<a name="25"><span class="lineNum">      25 </span>            : };</a>
+<span class="lineNum">      26 </span>            : 
+<a name="27"><span class="lineNum">      27 </span><span class="lineNoCov">          0 : class EmitterTest : public ::testing::Test {</span></a>
+<span class="lineNum">      28 </span>            :  protected:
+<span class="lineNum">      29 </span><span class="lineNoCov">          0 :   void ExpectEmit(const std::string&amp; expected) {</span>
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 :     EXPECT_EQ(expected, out.c_str());</span>
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 :     EXPECT_TRUE(out.good()) &lt;&lt; &quot;Emitter raised: &quot; &lt;&lt; out.GetLastError();</span>
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :     if (expected == out.c_str()) {</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :       std::stringstream stream(expected);</span>
+<span class="lineNum">      34 </span><span class="lineNoCov">          0 :       Parser parser;</span>
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :       NullEventHandler handler;</span>
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :       parser.HandleNextDocument(handler);</span>
+<span class="lineNum">      37 </span>            :     }
+<span class="lineNum">      38 </span><span class="lineNoCov">          0 :   }</span>
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            :   Emitter out;
+<a name="41"><span class="lineNum">      41 </span>            : };</a>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleScalar) {</span>
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Hello, World!&quot;;</span>
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;Hello, World!&quot;);</span>
+<a name="47"><span class="lineNum">      47 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleSeq) {</span>
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">      51 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;eggs&quot;;</span>
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;bread&quot;;</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;milk&quot;;</span>
+<span class="lineNum">      54 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- eggs\n- bread\n- milk&quot;);</span>
+<a name="57"><span class="lineNum">      57 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleFlowSeq) {</span>
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow;</span>
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Larry&quot;;</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Curly&quot;;</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Moe&quot;;</span>
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[Larry, Curly, Moe]&quot;);</span>
+<a name="68"><span class="lineNum">      68 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, EmptyFlowSeq) {</span>
+<span class="lineNum">      71 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow;</span>
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[]&quot;);</span>
+<a name="76"><span class="lineNum">      76 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NestedBlockSeq) {</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;item 1&quot;;</span>
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq &lt;&lt; &quot;subitem 1&quot;</span>
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;subitem 2&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- item 1\n-\n  - subitem 1\n  - subitem 2&quot;);</span>
+<a name="86"><span class="lineNum">      86 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NestedFlowSeq) {</span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;one&quot;;</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq &lt;&lt; &quot;two&quot;</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;three&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- one\n- [two, three]&quot;);</span>
+<a name="96"><span class="lineNum">      96 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleMap) {</span>
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot;;</span>
+<span class="lineNum">     101 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Ryan Braun&quot;;</span>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;position&quot;;</span>
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;3B&quot;;</span>
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;name: Ryan Braun\nposition: 3B&quot;);</span>
+<a name="107"><span class="lineNum">     107 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleFlowMap) {</span>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow;</span>
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;shape&quot;;</span>
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;square&quot;;</span>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;color&quot;;</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;blue&quot;;</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{shape: square, color: blue}&quot;);</span>
+<a name="119"><span class="lineNum">     119 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, MapAndList) {</span>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot;;</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Barack Obama&quot;;</span>
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;children&quot;;</span>
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; BeginSeq &lt;&lt; &quot;Sasha&quot;</span>
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;Malia&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     129 </span>            : 
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;name: Barack Obama\nchildren:\n  - Sasha\n  - Malia&quot;);</span>
+<a name="131"><span class="lineNum">     131 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     132 </span>            : 
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ListAndMap) {</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;item 1&quot;;</span>
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     137 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;pens&quot; &lt;&lt; Value &lt;&lt; 8;</span>
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;pencils&quot; &lt;&lt; Value &lt;&lt; 14;</span>
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     140 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;item 2&quot;;</span>
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- item 1\n- pens: 8\n  pencils: 14\n- item 2&quot;);</span>
+<a name="144"><span class="lineNum">     144 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     145 </span>            : 
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NestedBlockMap) {</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot;;</span>
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Fred&quot;;</span>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;grades&quot;;</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value;</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;algebra&quot; &lt;&lt; Value &lt;&lt; &quot;A&quot;;</span>
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;physics&quot; &lt;&lt; Value &lt;&lt; &quot;C+&quot;;</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;literature&quot; &lt;&lt; Value &lt;&lt; &quot;B&quot;;</span>
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     158 </span>            : 
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :       &quot;name: Fred\ngrades:\n  algebra: A\n  physics: C+\n  literature: B&quot;);</span>
+<a name="161"><span class="lineNum">     161 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NestedFlowMap) {</span>
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow;</span>
+<span class="lineNum">     165 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot;;</span>
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Fred&quot;;</span>
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;grades&quot;;</span>
+<span class="lineNum">     169 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value;</span>
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;algebra&quot; &lt;&lt; Value &lt;&lt; &quot;A&quot;;</span>
+<span class="lineNum">     172 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;physics&quot; &lt;&lt; Value &lt;&lt; &quot;C+&quot;;</span>
+<span class="lineNum">     173 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;literature&quot; &lt;&lt; Value &lt;&lt; &quot;B&quot;;</span>
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     176 </span>            : 
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{name: Fred, grades: {algebra: A, physics: C+, literature: B}}&quot;);</span>
+<a name="178"><span class="lineNum">     178 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, MapListMix) {</span>
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot;;</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Bob&quot;;</span>
+<span class="lineNum">     184 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;position&quot;;</span>
+<span class="lineNum">     185 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value;</span>
+<span class="lineNum">     186 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq &lt;&lt; 2 &lt;&lt; 4 &lt;&lt; EndSeq;</span>
+<span class="lineNum">     187 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;invincible&quot; &lt;&lt; Value &lt;&lt; OnOffBool &lt;&lt; false;</span>
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     189 </span>            : 
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;name: Bob\nposition: [2, 4]\ninvincible: off&quot;);</span>
+<a name="191"><span class="lineNum">     191 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     192 </span>            : 
+<span class="lineNum">     193 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleLongKey) {</span>
+<span class="lineNum">     194 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey;</span>
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     196 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;height&quot;;</span>
+<span class="lineNum">     197 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;5'9\&quot;&quot;;</span>
+<span class="lineNum">     198 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;weight&quot;;</span>
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; 145;</span>
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     201 </span>            : 
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;? height\n: 5'9\&quot;\n? weight\n: 145&quot;);</span>
+<a name="203"><span class="lineNum">     203 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     204 </span>            : 
+<span class="lineNum">     205 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SingleLongKey) {</span>
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     207 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;age&quot;;</span>
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;24&quot;;</span>
+<span class="lineNum">     209 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey &lt;&lt; Key &lt;&lt; &quot;height&quot;;</span>
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;5'9\&quot;&quot;;</span>
+<span class="lineNum">     211 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;weight&quot;;</span>
+<span class="lineNum">     212 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; 145;</span>
+<span class="lineNum">     213 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;age: 24\n? height\n: 5'9\&quot;\nweight: 145&quot;);</span>
+<a name="216"><span class="lineNum">     216 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     217 </span>            : 
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ComplexLongKey) {</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey;</span>
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     221 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; BeginSeq &lt;&lt; 1 &lt;&lt; 3 &lt;&lt; EndSeq;</span>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;monster&quot;;</span>
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; Flow &lt;&lt; BeginSeq &lt;&lt; 2 &lt;&lt; 0 &lt;&lt; EndSeq;</span>
+<span class="lineNum">     224 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;demon&quot;;</span>
+<span class="lineNum">     225 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     226 </span>            : 
+<span class="lineNum">     227 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;? - 1\n  - 3\n: monster\n? [2, 0]\n: demon&quot;);</span>
+<a name="228"><span class="lineNum">     228 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     229 </span>            : 
+<span class="lineNum">     230 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, AutoLongKey) {</span>
+<span class="lineNum">     231 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     232 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; BeginSeq &lt;&lt; 1 &lt;&lt; 3 &lt;&lt; EndSeq;</span>
+<span class="lineNum">     233 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;monster&quot;;</span>
+<span class="lineNum">     234 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; Flow &lt;&lt; BeginSeq &lt;&lt; 2 &lt;&lt; 0 &lt;&lt; EndSeq;</span>
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;demon&quot;;</span>
+<span class="lineNum">     236 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;the origin&quot;;</span>
+<span class="lineNum">     237 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;angel&quot;;</span>
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;? - 1\n  - 3\n: monster\n[2, 0]: demon\nthe origin: angel&quot;);</span>
+<a name="241"><span class="lineNum">     241 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     242 </span>            : 
+<span class="lineNum">     243 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ScalarFormat) {</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     245 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;simple scalar&quot;;</span>
+<span class="lineNum">     246 </span><span class="lineNoCov">          0 :   out &lt;&lt; SingleQuoted &lt;&lt; &quot;explicit single-quoted scalar&quot;;</span>
+<span class="lineNum">     247 </span><span class="lineNoCov">          0 :   out &lt;&lt; DoubleQuoted &lt;&lt; &quot;explicit double-quoted scalar&quot;;</span>
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;auto-detected\ndouble-quoted scalar&quot;;</span>
+<span class="lineNum">     249 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;a non-\&quot;auto-detected\&quot; double-quoted scalar&quot;;</span>
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 :   out &lt;&lt; Literal &lt;&lt; &quot;literal scalar\nthat may span\nmany, many\nlines &quot;</span>
+<span class="lineNum">     251 </span><span class="lineNoCov">          0 :                     &quot;and have \&quot;whatever\&quot; crazy\tsymbols that we like&quot;;</span>
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     253 </span>            : 
+<span class="lineNum">     254 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     255 </span>            :       &quot;- simple scalar\n- 'explicit single-quoted scalar'\n- \&quot;explicit &quot;
+<span class="lineNum">     256 </span>            :       &quot;double-quoted scalar\&quot;\n- \&quot;auto-detected\\ndouble-quoted &quot;
+<span class="lineNum">     257 </span>            :       &quot;scalar\&quot;\n- a &quot;
+<span class="lineNum">     258 </span>            :       &quot;non-\&quot;auto-detected\&quot; double-quoted scalar\n- |\n  literal scalar\n &quot;
+<span class="lineNum">     259 </span>            :       &quot; &quot;
+<span class="lineNum">     260 </span>            :       &quot;that may span\n  many, many\n  lines and have \&quot;whatever\&quot; &quot;
+<span class="lineNum">     261 </span><span class="lineNoCov">          0 :       &quot;crazy\tsymbols that we like&quot;);</span>
+<a name="262"><span class="lineNum">     262 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     263 </span>            : 
+<span class="lineNum">     264 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, AutoLongKeyScalar) {</span>
+<span class="lineNum">     265 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     266 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; Literal &lt;&lt; &quot;multi-line\nscalar&quot;;</span>
+<span class="lineNum">     267 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;and its value&quot;;</span>
+<span class="lineNum">     268 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     269 </span>            : 
+<span class="lineNum">     270 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;? |\n  multi-line\n  scalar\n: and its value&quot;);</span>
+<a name="271"><span class="lineNum">     271 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     272 </span>            : 
+<span class="lineNum">     273 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, LongKeyFlowMap) {</span>
+<span class="lineNum">     274 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow;</span>
+<span class="lineNum">     275 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     276 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;simple key&quot;;</span>
+<span class="lineNum">     277 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;and value&quot;;</span>
+<span class="lineNum">     278 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey &lt;&lt; Key &lt;&lt; &quot;long key&quot;;</span>
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;and its value&quot;;</span>
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     281 </span>            : 
+<span class="lineNum">     282 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{simple key: and value, ? long key: and its value}&quot;);</span>
+<a name="283"><span class="lineNum">     283 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     284 </span>            : 
+<span class="lineNum">     285 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, BlockMapAsKey) {</span>
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     287 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key;</span>
+<span class="lineNum">     288 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     289 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key&quot; &lt;&lt; Value &lt;&lt; &quot;value&quot;;</span>
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;next key&quot; &lt;&lt; Value &lt;&lt; &quot;next value&quot;;</span>
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     292 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value;</span>
+<span class="lineNum">     293 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;total value&quot;;</span>
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;? key: value\n  next key: next value\n: total value&quot;);</span>
+<a name="297"><span class="lineNum">     297 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, AliasAndAnchor) {</span>
+<span class="lineNum">     300 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     301 </span><span class="lineNoCov">          0 :   out &lt;&lt; Anchor(&quot;fred&quot;);</span>
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     303 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot; &lt;&lt; Value &lt;&lt; &quot;Fred&quot;;</span>
+<span class="lineNum">     304 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;age&quot; &lt;&lt; Value &lt;&lt; 42;</span>
+<span class="lineNum">     305 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     306 </span><span class="lineNoCov">          0 :   out &lt;&lt; Alias(&quot;fred&quot;);</span>
+<span class="lineNum">     307 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     308 </span>            : 
+<span class="lineNum">     309 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- &amp;fred\n  name: Fred\n  age: 42\n- *fred&quot;);</span>
+<a name="310"><span class="lineNum">     310 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     311 </span>            : 
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, AliasAndAnchorWithNull) {</span>
+<span class="lineNum">     313 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 :   out &lt;&lt; Anchor(&quot;fred&quot;) &lt;&lt; Null;</span>
+<span class="lineNum">     315 </span><span class="lineNoCov">          0 :   out &lt;&lt; Alias(&quot;fred&quot;);</span>
+<span class="lineNum">     316 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     317 </span>            : 
+<span class="lineNum">     318 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- &amp;fred ~\n- *fred&quot;);</span>
+<a name="319"><span class="lineNum">     319 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     320 </span>            : 
+<span class="lineNum">     321 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, AliasAndAnchorInFlow) {</span>
+<span class="lineNum">     322 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     323 </span><span class="lineNoCov">          0 :   out &lt;&lt; Anchor(&quot;fred&quot;);</span>
+<span class="lineNum">     324 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     325 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;name&quot; &lt;&lt; Value &lt;&lt; &quot;Fred&quot;;</span>
+<span class="lineNum">     326 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;age&quot; &lt;&lt; Value &lt;&lt; 42;</span>
+<span class="lineNum">     327 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     328 </span><span class="lineNoCov">          0 :   out &lt;&lt; Alias(&quot;fred&quot;);</span>
+<span class="lineNum">     329 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     330 </span>            : 
+<span class="lineNum">     331 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[&amp;fred {name: Fred, age: 42}, *fred]&quot;);</span>
+<a name="332"><span class="lineNum">     332 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     333 </span>            : 
+<span class="lineNum">     334 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleVerbatimTag) {</span>
+<span class="lineNum">     335 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     336 </span>            : 
+<span class="lineNum">     337 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!&lt;!foo&gt; bar&quot;);</span>
+<a name="338"><span class="lineNum">     338 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     339 </span>            : 
+<span class="lineNum">     340 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagInBlockSeq) {</span>
+<span class="lineNum">     341 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     342 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     343 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;baz&quot;;</span>
+<span class="lineNum">     344 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     345 </span>            : 
+<span class="lineNum">     346 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- !&lt;!foo&gt; bar\n- baz&quot;);</span>
+<a name="347"><span class="lineNum">     347 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagInFlowSeq) {</span>
+<span class="lineNum">     350 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     351 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     352 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;baz&quot;;</span>
+<span class="lineNum">     353 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     354 </span>            : 
+<span class="lineNum">     355 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[!&lt;!foo&gt; bar, baz]&quot;);</span>
+<a name="356"><span class="lineNum">     356 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     357 </span>            : 
+<span class="lineNum">     358 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagInFlowSeqWithNull) {</span>
+<span class="lineNum">     359 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     360 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; Null;</span>
+<span class="lineNum">     361 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;baz&quot;;</span>
+<span class="lineNum">     362 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     363 </span>            : 
+<span class="lineNum">     364 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[!&lt;!foo&gt; ~, baz]&quot;);</span>
+<a name="365"><span class="lineNum">     365 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     366 </span>            : 
+<span class="lineNum">     367 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagInBlockMap) {</span>
+<span class="lineNum">     368 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     369 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     370 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; VerbatimTag(&quot;!waz&quot;) &lt;&lt; &quot;baz&quot;;</span>
+<span class="lineNum">     371 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     372 </span>            : 
+<span class="lineNum">     373 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!&lt;!foo&gt; bar: !&lt;!waz&gt; baz&quot;);</span>
+<a name="374"><span class="lineNum">     374 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     375 </span>            : 
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagInFlowMap) {</span>
+<span class="lineNum">     377 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginMap;</span>
+<span class="lineNum">     378 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     379 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;baz&quot;;</span>
+<span class="lineNum">     380 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     381 </span>            : 
+<span class="lineNum">     382 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{!&lt;!foo&gt; bar: baz}&quot;);</span>
+<a name="383"><span class="lineNum">     383 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     384 </span>            : 
+<span class="lineNum">     385 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagInFlowMapWithNull) {</span>
+<span class="lineNum">     386 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginMap;</span>
+<span class="lineNum">     387 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; Null;</span>
+<span class="lineNum">     388 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;baz&quot;;</span>
+<span class="lineNum">     389 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     390 </span>            : 
+<span class="lineNum">     391 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{!&lt;!foo&gt; ~: baz}&quot;);</span>
+<a name="392"><span class="lineNum">     392 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     393 </span>            : 
+<span class="lineNum">     394 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagWithEmptySeq) {</span>
+<span class="lineNum">     395 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; BeginSeq &lt;&lt; EndSeq;</span>
+<span class="lineNum">     396 </span>            : 
+<span class="lineNum">     397 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!&lt;!foo&gt;\n[]&quot;);</span>
+<a name="398"><span class="lineNum">     398 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     399 </span>            : 
+<span class="lineNum">     400 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagWithEmptyMap) {</span>
+<span class="lineNum">     401 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!bar&quot;) &lt;&lt; BeginMap &lt;&lt; EndMap;</span>
+<span class="lineNum">     402 </span>            : 
+<span class="lineNum">     403 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!&lt;!bar&gt;\n{}&quot;);</span>
+<a name="404"><span class="lineNum">     404 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     405 </span>            : 
+<span class="lineNum">     406 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, VerbatimTagWithEmptySeqAndMap) {</span>
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!foo&quot;) &lt;&lt; BeginSeq &lt;&lt; EndSeq;</span>
+<span class="lineNum">     409 </span><span class="lineNoCov">          0 :   out &lt;&lt; VerbatimTag(&quot;!bar&quot;) &lt;&lt; BeginMap &lt;&lt; EndMap;</span>
+<span class="lineNum">     410 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     411 </span>            : 
+<span class="lineNum">     412 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- !&lt;!foo&gt;\n  []\n- !&lt;!bar&gt;\n  {}&quot;);</span>
+<a name="413"><span class="lineNum">     413 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     414 </span>            : 
+<span class="lineNum">     415 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ByKindTagWithScalar) {</span>
+<span class="lineNum">     416 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     417 </span><span class="lineNoCov">          0 :   out &lt;&lt; DoubleQuoted &lt;&lt; &quot;12&quot;;</span>
+<span class="lineNum">     418 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;12&quot;;</span>
+<span class="lineNum">     419 </span><span class="lineNoCov">          0 :   out &lt;&lt; TagByKind &lt;&lt; &quot;12&quot;;</span>
+<span class="lineNum">     420 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     421 </span>            : 
+<span class="lineNum">     422 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- \&quot;12\&quot;\n- 12\n- ! 12&quot;);</span>
+<a name="423"><span class="lineNum">     423 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     424 </span>            : 
+<span class="lineNum">     425 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, LocalTagWithScalar) {</span>
+<span class="lineNum">     426 </span><span class="lineNoCov">          0 :   out &lt;&lt; LocalTag(&quot;foo&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     427 </span>            : 
+<span class="lineNum">     428 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!foo bar&quot;);</span>
+<a name="429"><span class="lineNum">     429 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     430 </span>            : 
+<span class="lineNum">     431 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ComplexDoc) {</span>
+<span class="lineNum">     432 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     433 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;receipt&quot;;</span>
+<span class="lineNum">     434 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Oz-Ware Purchase Invoice&quot;;</span>
+<span class="lineNum">     435 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;date&quot;;</span>
+<span class="lineNum">     436 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;2007-08-06&quot;;</span>
+<span class="lineNum">     437 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;customer&quot;;</span>
+<span class="lineNum">     438 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value;</span>
+<span class="lineNum">     439 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     440 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;given&quot;;</span>
+<span class="lineNum">     441 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Dorothy&quot;;</span>
+<span class="lineNum">     442 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;family&quot;;</span>
+<span class="lineNum">     443 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Gale&quot;;</span>
+<span class="lineNum">     444 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     445 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;items&quot;;</span>
+<span class="lineNum">     446 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value;</span>
+<span class="lineNum">     447 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     448 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     449 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;part_no&quot;;</span>
+<span class="lineNum">     450 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;A4786&quot;;</span>
+<span class="lineNum">     451 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;descrip&quot;;</span>
+<span class="lineNum">     452 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;Water Bucket (Filled)&quot;;</span>
+<span class="lineNum">     453 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;price&quot;;</span>
+<span class="lineNum">     454 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; 1.47;</span>
+<span class="lineNum">     455 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;quantity&quot;;</span>
+<span class="lineNum">     456 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; 4;</span>
+<span class="lineNum">     457 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     458 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     459 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;part_no&quot;;</span>
+<span class="lineNum">     460 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;E1628&quot;;</span>
+<span class="lineNum">     461 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;descrip&quot;;</span>
+<span class="lineNum">     462 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;High Heeled \&quot;Ruby\&quot; Slippers&quot;;</span>
+<span class="lineNum">     463 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;price&quot;;</span>
+<span class="lineNum">     464 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; 100.27;</span>
+<span class="lineNum">     465 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;quantity&quot;;</span>
+<span class="lineNum">     466 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; 1;</span>
+<span class="lineNum">     467 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     468 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     469 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;bill-to&quot;;</span>
+<span class="lineNum">     470 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; Anchor(&quot;id001&quot;);</span>
+<span class="lineNum">     471 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     472 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;street&quot;;</span>
+<span class="lineNum">     473 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; Literal &lt;&lt; &quot;123 Tornado Alley\nSuite 16&quot;;</span>
+<span class="lineNum">     474 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;city&quot;;</span>
+<span class="lineNum">     475 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;East Westville&quot;;</span>
+<span class="lineNum">     476 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;state&quot;;</span>
+<span class="lineNum">     477 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;KS&quot;;</span>
+<span class="lineNum">     478 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     479 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;ship-to&quot;;</span>
+<span class="lineNum">     480 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; Alias(&quot;id001&quot;);</span>
+<span class="lineNum">     481 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     482 </span>            : 
+<span class="lineNum">     483 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     484 </span>            :       &quot;receipt: Oz-Ware Purchase Invoice\ndate: 2007-08-06\ncustomer:\n  &quot;
+<span class="lineNum">     485 </span>            :       &quot;given: Dorothy\n  family: Gale\nitems:\n  - part_no: A4786\n    &quot;
+<span class="lineNum">     486 </span>            :       &quot;descrip: Water Bucket (Filled)\n    price: 1.47\n    quantity: 4\n  - &quot;
+<span class="lineNum">     487 </span>            :       &quot;part_no: E1628\n    descrip: High Heeled \&quot;Ruby\&quot; Slippers\n    price: &quot;
+<span class="lineNum">     488 </span>            :       &quot;100.27\n    quantity: 1\nbill-to: &amp;id001\n  street: |\n    123 Tornado &quot;
+<span class="lineNum">     489 </span>            :       &quot;Alley\n    Suite 16\n  city: East Westville\n  state: KS\nship-to: &quot;
+<span class="lineNum">     490 </span><span class="lineNoCov">          0 :       &quot;*id001&quot;);</span>
+<a name="491"><span class="lineNum">     491 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     492 </span>            : 
+<span class="lineNum">     493 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, STLContainers) {</span>
+<span class="lineNum">     494 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     495 </span><span class="lineNoCov">          0 :   std::vector&lt;int&gt; primes;</span>
+<span class="lineNum">     496 </span><span class="lineNoCov">          0 :   primes.push_back(2);</span>
+<span class="lineNum">     497 </span><span class="lineNoCov">          0 :   primes.push_back(3);</span>
+<span class="lineNum">     498 </span><span class="lineNoCov">          0 :   primes.push_back(5);</span>
+<span class="lineNum">     499 </span><span class="lineNoCov">          0 :   primes.push_back(7);</span>
+<span class="lineNum">     500 </span><span class="lineNoCov">          0 :   primes.push_back(11);</span>
+<span class="lineNum">     501 </span><span class="lineNoCov">          0 :   primes.push_back(13);</span>
+<span class="lineNum">     502 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; primes;</span>
+<span class="lineNum">     503 </span><span class="lineNoCov">          0 :   std::map&lt;std::string, int&gt; ages;</span>
+<span class="lineNum">     504 </span><span class="lineNoCov">          0 :   ages[&quot;Daniel&quot;] = 26;</span>
+<span class="lineNum">     505 </span><span class="lineNoCov">          0 :   ages[&quot;Jesse&quot;] = 24;</span>
+<span class="lineNum">     506 </span><span class="lineNoCov">          0 :   out &lt;&lt; ages;</span>
+<span class="lineNum">     507 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     508 </span>            : 
+<span class="lineNum">     509 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- [2, 3, 5, 7, 11, 13]\n- Daniel: 26\n  Jesse: 24&quot;);</span>
+<a name="510"><span class="lineNum">     510 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     511 </span>            : 
+<span class="lineNum">     512 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleComment) {</span>
+<span class="lineNum">     513 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     514 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;method&quot;;</span>
+<span class="lineNum">     515 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;least squares&quot; &lt;&lt; Comment(&quot;should we change this method?&quot;);</span>
+<span class="lineNum">     516 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     517 </span>            : 
+<span class="lineNum">     518 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;method: least squares  # should we change this method?&quot;);</span>
+<a name="519"><span class="lineNum">     519 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     520 </span>            : 
+<span class="lineNum">     521 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, MultiLineComment) {</span>
+<span class="lineNum">     522 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     523 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;item 1&quot; &lt;&lt; Comment(</span>
+<span class="lineNum">     524 </span>            :                          &quot;really really long\ncomment that couldn't &quot;
+<span class="lineNum">     525 </span><span class="lineNoCov">          0 :                          &quot;possibly\nfit on one line&quot;);</span>
+<span class="lineNum">     526 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;item 2&quot;;</span>
+<span class="lineNum">     527 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     528 </span>            : 
+<span class="lineNum">     529 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     530 </span>            :       &quot;- item 1  # really really long\n          # comment that couldn't &quot;
+<span class="lineNum">     531 </span><span class="lineNoCov">          0 :       &quot;possibly\n          # fit on one line\n- item 2&quot;);</span>
+<a name="532"><span class="lineNum">     532 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     533 </span>            : 
+<span class="lineNum">     534 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ComplexComments) {</span>
+<span class="lineNum">     535 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     536 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey &lt;&lt; Key &lt;&lt; &quot;long key&quot; &lt;&lt; Comment(&quot;long key&quot;);</span>
+<span class="lineNum">     537 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; &quot;value&quot;;</span>
+<span class="lineNum">     538 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     539 </span>            : 
+<span class="lineNum">     540 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;? long key  # long key\n: value&quot;);</span>
+<a name="541"><span class="lineNum">     541 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     542 </span>            : 
+<span class="lineNum">     543 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, InitialComment) {</span>
+<span class="lineNum">     544 </span><span class="lineNoCov">          0 :   out &lt;&lt; Comment(&quot;A comment describing the purpose of the file.&quot;);</span>
+<span class="lineNum">     545 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap &lt;&lt; Key &lt;&lt; &quot;key&quot; &lt;&lt; Value &lt;&lt; &quot;value&quot; &lt;&lt; EndMap;</span>
+<span class="lineNum">     546 </span>            : 
+<span class="lineNum">     547 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;# A comment describing the purpose of the file.\nkey: value&quot;);</span>
+<a name="548"><span class="lineNum">     548 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     549 </span>            : 
+<span class="lineNum">     550 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, InitialCommentWithDocIndicator) {</span>
+<span class="lineNum">     551 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginDoc &lt;&lt; Comment(&quot;A comment describing the purpose of the file.&quot;);</span>
+<span class="lineNum">     552 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap &lt;&lt; Key &lt;&lt; &quot;key&quot; &lt;&lt; Value &lt;&lt; &quot;value&quot; &lt;&lt; EndMap;</span>
+<span class="lineNum">     553 </span>            : 
+<span class="lineNum">     554 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     555 </span><span class="lineNoCov">          0 :       &quot;---\n# A comment describing the purpose of the file.\nkey: value&quot;);</span>
+<a name="556"><span class="lineNum">     556 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     557 </span>            : 
+<span class="lineNum">     558 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, CommentInFlowSeq) {</span>
+<span class="lineNum">     559 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq &lt;&lt; &quot;foo&quot; &lt;&lt; Comment(&quot;foo!&quot;) &lt;&lt; &quot;bar&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">     560 </span>            : 
+<span class="lineNum">     561 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[foo,  # foo!\nbar]&quot;);</span>
+<a name="562"><span class="lineNum">     562 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     563 </span>            : 
+<span class="lineNum">     564 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, CommentInFlowMap) {</span>
+<span class="lineNum">     565 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginMap;</span>
+<span class="lineNum">     566 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;foo&quot; &lt;&lt; Value &lt;&lt; &quot;foo value&quot;;</span>
+<span class="lineNum">     567 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;bar&quot; &lt;&lt; Value &lt;&lt; &quot;bar value&quot; &lt;&lt; Comment(&quot;bar!&quot;);</span>
+<span class="lineNum">     568 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;baz&quot; &lt;&lt; Value &lt;&lt; &quot;baz value&quot; &lt;&lt; Comment(&quot;baz!&quot;);</span>
+<span class="lineNum">     569 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     570 </span>            : 
+<span class="lineNum">     571 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     572 </span><span class="lineNoCov">          0 :       &quot;{foo: foo value, bar: bar value,  # bar!\nbaz: baz value,  # baz!\n}&quot;);</span>
+<a name="573"><span class="lineNum">     573 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     574 </span>            : 
+<span class="lineNum">     575 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, Indentation) {</span>
+<span class="lineNum">     576 </span><span class="lineNoCov">          0 :   out &lt;&lt; Indent(4);</span>
+<span class="lineNum">     577 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     578 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     579 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key 1&quot; &lt;&lt; Value &lt;&lt; &quot;value 1&quot;;</span>
+<span class="lineNum">     580 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key 2&quot; &lt;&lt; Value &lt;&lt; BeginSeq &lt;&lt; &quot;a&quot;</span>
+<span class="lineNum">     581 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;b&quot;</span>
+<span class="lineNum">     582 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;c&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">     583 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     584 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     585 </span>            : 
+<span class="lineNum">     586 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     587 </span>            :       &quot;-   key 1: value 1\n    key 2:\n        -   a\n        -   b\n        - &quot;
+<span class="lineNum">     588 </span><span class="lineNoCov">          0 :       &quot;  c&quot;);</span>
+<a name="589"><span class="lineNum">     589 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     590 </span>            : 
+<span class="lineNum">     591 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SimpleGlobalSettings) {</span>
+<span class="lineNum">     592 </span><span class="lineNoCov">          0 :   out.SetIndent(4);</span>
+<span class="lineNum">     593 </span><span class="lineNoCov">          0 :   out.SetMapFormat(LongKey);</span>
+<span class="lineNum">     594 </span>            : 
+<span class="lineNum">     595 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     596 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     597 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key 1&quot; &lt;&lt; Value &lt;&lt; &quot;value 1&quot;;</span>
+<span class="lineNum">     598 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key 2&quot; &lt;&lt; Value &lt;&lt; Flow &lt;&lt; BeginSeq &lt;&lt; &quot;a&quot;</span>
+<span class="lineNum">     599 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;b&quot;</span>
+<span class="lineNum">     600 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;c&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">     601 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     602 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     603 </span>            : 
+<span class="lineNum">     604 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;-   ? key 1\n    : value 1\n    ? key 2\n    : [a, b, c]&quot;);</span>
+<a name="605"><span class="lineNum">     605 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     606 </span>            : 
+<span class="lineNum">     607 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ComplexGlobalSettings) {</span>
+<span class="lineNum">     608 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     609 </span><span class="lineNoCov">          0 :   out &lt;&lt; Block;</span>
+<span class="lineNum">     610 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     611 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key 1&quot; &lt;&lt; Value &lt;&lt; &quot;value 1&quot;;</span>
+<span class="lineNum">     612 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key 2&quot; &lt;&lt; Value;</span>
+<span class="lineNum">     613 </span><span class="lineNoCov">          0 :   out.SetSeqFormat(Flow);</span>
+<span class="lineNum">     614 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq &lt;&lt; &quot;a&quot;</span>
+<span class="lineNum">     615 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;b&quot;</span>
+<span class="lineNum">     616 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;c&quot; &lt;&lt; EndSeq;</span>
+<span class="lineNum">     617 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     618 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     619 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; BeginSeq &lt;&lt; 1 &lt;&lt; 2 &lt;&lt; EndSeq;</span>
+<span class="lineNum">     620 </span><span class="lineNoCov">          0 :   out &lt;&lt; Value &lt;&lt; BeginMap &lt;&lt; Key &lt;&lt; &quot;a&quot; &lt;&lt; Value &lt;&lt; &quot;b&quot; &lt;&lt; EndMap;</span>
+<span class="lineNum">     621 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     622 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     623 </span>            : 
+<span class="lineNum">     624 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- key 1: value 1\n  key 2: [a, b, c]\n- [1, 2]:\n    a: b&quot;);</span>
+<a name="625"><span class="lineNum">     625 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     626 </span>            : 
+<span class="lineNum">     627 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, Null) {</span>
+<span class="lineNum">     628 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     629 </span><span class="lineNoCov">          0 :   out &lt;&lt; Null;</span>
+<span class="lineNum">     630 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     631 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;null value&quot; &lt;&lt; Value &lt;&lt; Null;</span>
+<span class="lineNum">     632 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; Null &lt;&lt; Value &lt;&lt; &quot;null key&quot;;</span>
+<span class="lineNum">     633 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     634 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     635 </span>            : 
+<span class="lineNum">     636 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- ~\n- null value: ~\n  ~: null key&quot;);</span>
+<a name="637"><span class="lineNum">     637 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     638 </span>            : 
+<span class="lineNum">     639 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, EscapedUnicode) {</span>
+<span class="lineNum">     640 </span><span class="lineNoCov">          0 :   out &lt;&lt; EscapeNonAscii &lt;&lt; &quot;\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2&quot;;</span>
+<span class="lineNum">     641 </span>            : 
+<span class="lineNum">     642 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;\&quot;$ \\xa2 \\u20ac \\U00024b62\&quot;&quot;);</span>
+<a name="643"><span class="lineNum">     643 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     644 </span>            : 
+<span class="lineNum">     645 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, Unicode) {</span>
+<span class="lineNum">     646 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2&quot;;</span>
+<span class="lineNum">     647 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2&quot;);</span>
+<a name="648"><span class="lineNum">     648 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     649 </span>            : 
+<span class="lineNum">     650 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, DoubleQuotedUnicode) {</span>
+<span class="lineNum">     651 </span><span class="lineNoCov">          0 :   out &lt;&lt; DoubleQuoted &lt;&lt; &quot;\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2&quot;;</span>
+<span class="lineNum">     652 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;\&quot;\x24 \xC2\xA2 \xE2\x82\xAC \xF0\xA4\xAD\xA2\&quot;&quot;);</span>
+<a name="653"><span class="lineNum">     653 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     654 </span>            : 
+<a name="655"><span class="lineNum">     655 </span><span class="lineNoCov">          0 : struct Foo {</span></a>
+<span class="lineNum">     656 </span>            :   Foo() : x(0) {}
+<span class="lineNum">     657 </span><span class="lineNoCov">          0 :   Foo(int x_, const std::string&amp; bar_) : x(x_), bar(bar_) {}</span>
+<span class="lineNum">     658 </span>            : 
+<span class="lineNum">     659 </span>            :   int x;
+<span class="lineNum">     660 </span>            :   std::string bar;
+<a name="661"><span class="lineNum">     661 </span>            : };</a>
+<span class="lineNum">     662 </span>            : 
+<span class="lineNum">     663 </span><span class="lineNoCov">          0 : Emitter&amp; operator&lt;&lt;(Emitter&amp; out, const Foo&amp; foo) {</span>
+<span class="lineNum">     664 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     665 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;x&quot; &lt;&lt; Value &lt;&lt; foo.x;</span>
+<span class="lineNum">     666 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;bar&quot; &lt;&lt; Value &lt;&lt; foo.bar;</span>
+<span class="lineNum">     667 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     668 </span><span class="lineNoCov">          0 :   return out;</span>
+<a name="669"><span class="lineNum">     669 </span>            : }</a>
+<span class="lineNum">     670 </span>            : 
+<span class="lineNum">     671 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, UserType) {</span>
+<span class="lineNum">     672 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     673 </span><span class="lineNoCov">          0 :   out &lt;&lt; Foo(5, &quot;hello&quot;);</span>
+<span class="lineNum">     674 </span><span class="lineNoCov">          0 :   out &lt;&lt; Foo(3, &quot;goodbye&quot;);</span>
+<span class="lineNum">     675 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     676 </span>            : 
+<span class="lineNum">     677 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- x: 5\n  bar: hello\n- x: 3\n  bar: goodbye&quot;);</span>
+<a name="678"><span class="lineNum">     678 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     679 </span>            : 
+<span class="lineNum">     680 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, UserTypeInContainer) {</span>
+<span class="lineNum">     681 </span><span class="lineNoCov">          0 :   std::vector&lt;Foo&gt; fv;</span>
+<span class="lineNum">     682 </span><span class="lineNoCov">          0 :   fv.push_back(Foo(5, &quot;hello&quot;));</span>
+<span class="lineNum">     683 </span><span class="lineNoCov">          0 :   fv.push_back(Foo(3, &quot;goodbye&quot;));</span>
+<span class="lineNum">     684 </span><span class="lineNoCov">          0 :   out &lt;&lt; fv;</span>
+<span class="lineNum">     685 </span>            : 
+<span class="lineNum">     686 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- x: 5\n  bar: hello\n- x: 3\n  bar: goodbye&quot;);</span>
+<span class="lineNum">     687 </span><span class="lineNoCov">          0 : }</span>
+<a name="688"><span class="lineNum">     688 </span>            : </a>
+<span class="lineNum">     689 </span>            : template &lt;typename T&gt;
+<span class="lineNum">     690 </span><span class="lineNoCov">          0 : Emitter&amp; operator&lt;&lt;(Emitter&amp; out, const T* v) {</span>
+<span class="lineNum">     691 </span><span class="lineNoCov">          0 :   if (v)</span>
+<span class="lineNum">     692 </span><span class="lineNoCov">          0 :     out &lt;&lt; *v;</span>
+<span class="lineNum">     693 </span>            :   else
+<span class="lineNum">     694 </span><span class="lineNoCov">          0 :     out &lt;&lt; Null;</span>
+<span class="lineNum">     695 </span><span class="lineNoCov">          0 :   return out;</span>
+<a name="696"><span class="lineNum">     696 </span>            : }</a>
+<span class="lineNum">     697 </span>            : 
+<span class="lineNum">     698 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, PointerToInt) {</span>
+<span class="lineNum">     699 </span><span class="lineNoCov">          0 :   int foo = 5;</span>
+<span class="lineNum">     700 </span><span class="lineNoCov">          0 :   int* bar = &amp;foo;</span>
+<span class="lineNum">     701 </span><span class="lineNoCov">          0 :   int* baz = 0;</span>
+<span class="lineNum">     702 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     703 </span><span class="lineNoCov">          0 :   out &lt;&lt; bar &lt;&lt; baz;</span>
+<span class="lineNum">     704 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     705 </span>            : 
+<span class="lineNum">     706 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- 5\n- ~&quot;);</span>
+<a name="707"><span class="lineNum">     707 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     708 </span>            : 
+<span class="lineNum">     709 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, PointerToUserType) {</span>
+<span class="lineNum">     710 </span><span class="lineNoCov">          0 :   Foo foo(5, &quot;hello&quot;);</span>
+<span class="lineNum">     711 </span><span class="lineNoCov">          0 :   Foo* bar = &amp;foo;</span>
+<span class="lineNum">     712 </span><span class="lineNoCov">          0 :   Foo* baz = 0;</span>
+<span class="lineNum">     713 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     714 </span><span class="lineNoCov">          0 :   out &lt;&lt; bar &lt;&lt; baz;</span>
+<span class="lineNum">     715 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     716 </span>            : 
+<span class="lineNum">     717 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- x: 5\n  bar: hello\n- ~&quot;);</span>
+<a name="718"><span class="lineNum">     718 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     719 </span>            : 
+<span class="lineNum">     720 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NewlineAtEnd) {</span>
+<span class="lineNum">     721 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Hello&quot; &lt;&lt; Newline &lt;&lt; Newline;</span>
+<span class="lineNum">     722 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;Hello\n\n&quot;);</span>
+<a name="723"><span class="lineNum">     723 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     724 </span>            : 
+<span class="lineNum">     725 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NewlineInBlockSequence) {</span>
+<span class="lineNum">     726 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     727 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;a&quot; &lt;&lt; Newline &lt;&lt; &quot;b&quot;</span>
+<span class="lineNum">     728 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;c&quot; &lt;&lt; Newline &lt;&lt; &quot;d&quot;;</span>
+<span class="lineNum">     729 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     730 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- a\n\n- b\n- c\n\n- d&quot;);</span>
+<a name="731"><span class="lineNum">     731 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     732 </span>            : 
+<span class="lineNum">     733 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NewlineInFlowSequence) {</span>
+<span class="lineNum">     734 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     735 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;a&quot; &lt;&lt; Newline &lt;&lt; &quot;b&quot;</span>
+<span class="lineNum">     736 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;c&quot; &lt;&lt; Newline &lt;&lt; &quot;d&quot;;</span>
+<span class="lineNum">     737 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     738 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[a,\nb, c,\nd]&quot;);</span>
+<a name="739"><span class="lineNum">     739 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     740 </span>            : 
+<span class="lineNum">     741 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NewlineInBlockMap) {</span>
+<span class="lineNum">     742 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     743 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;a&quot; &lt;&lt; Value &lt;&lt; &quot;foo&quot; &lt;&lt; Newline;</span>
+<span class="lineNum">     744 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;b&quot; &lt;&lt; Newline &lt;&lt; Value &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     745 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey &lt;&lt; Key &lt;&lt; &quot;c&quot; &lt;&lt; Newline &lt;&lt; Value &lt;&lt; &quot;car&quot;;</span>
+<span class="lineNum">     746 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     747 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;a: foo\nb:\n  bar\n? c\n\n: car&quot;);</span>
+<a name="748"><span class="lineNum">     748 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     749 </span>            : 
+<span class="lineNum">     750 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, NewlineInFlowMap) {</span>
+<span class="lineNum">     751 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginMap;</span>
+<span class="lineNum">     752 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;a&quot; &lt;&lt; Value &lt;&lt; &quot;foo&quot; &lt;&lt; Newline;</span>
+<span class="lineNum">     753 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;b&quot; &lt;&lt; Value &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     754 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     755 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{a: foo,\nb: bar}&quot;);</span>
+<a name="756"><span class="lineNum">     756 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     757 </span>            : 
+<span class="lineNum">     758 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, LotsOfNewlines) {</span>
+<span class="lineNum">     759 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     760 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;a&quot; &lt;&lt; Newline;</span>
+<span class="lineNum">     761 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     762 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;b&quot;</span>
+<span class="lineNum">     763 </span><span class="lineNoCov">          0 :       &lt;&lt; &quot;c&quot; &lt;&lt; Newline;</span>
+<span class="lineNum">     764 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     765 </span><span class="lineNoCov">          0 :   out &lt;&lt; Newline;</span>
+<span class="lineNum">     766 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     767 </span><span class="lineNoCov">          0 :   out &lt;&lt; Newline &lt;&lt; Key &lt;&lt; &quot;d&quot; &lt;&lt; Value &lt;&lt; Newline &lt;&lt; &quot;e&quot;;</span>
+<span class="lineNum">     768 </span><span class="lineNoCov">          0 :   out &lt;&lt; LongKey &lt;&lt; Key &lt;&lt; &quot;f&quot; &lt;&lt; Newline &lt;&lt; Value &lt;&lt; &quot;foo&quot;;</span>
+<span class="lineNum">     769 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     770 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     771 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- a\n\n-\n  - b\n  - c\n\n\n-\n  d:\n    e\n  ? f\n\n  : foo&quot;);</span>
+<a name="772"><span class="lineNum">     772 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     773 </span>            : 
+<span class="lineNum">     774 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, Binary) {</span>
+<span class="lineNum">     775 </span><span class="lineNoCov">          0 :   out &lt;&lt; Binary(reinterpret_cast&lt;const unsigned char*&gt;(&quot;Hello, World!&quot;), 13);</span>
+<span class="lineNum">     776 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!!binary \&quot;SGVsbG8sIFdvcmxkIQ==\&quot;&quot;);</span>
+<a name="777"><span class="lineNum">     777 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     778 </span>            : 
+<span class="lineNum">     779 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, LongBinary) {</span>
+<span class="lineNum">     780 </span>            :   out &lt;&lt; Binary(
+<span class="lineNum">     781 </span>            :       reinterpret_cast&lt;const unsigned char*&gt;(
+<span class="lineNum">     782 </span>            :           &quot;Man is distinguished, not only by his reason, but by this &quot;
+<span class="lineNum">     783 </span>            :           &quot;singular passion from other animals, which is a lust of the &quot;
+<span class="lineNum">     784 </span>            :           &quot;mind, that by a perseverance of delight in the continued and &quot;
+<span class="lineNum">     785 </span>            :           &quot;indefatigable generation of knowledge, exceeds the short &quot;
+<span class="lineNum">     786 </span>            :           &quot;vehemence of any carnal pleasure.\n&quot;),
+<span class="lineNum">     787 </span><span class="lineNoCov">          0 :       270);</span>
+<span class="lineNum">     788 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     789 </span>            :       &quot;!!binary &quot;
+<span class="lineNum">     790 </span>            :       &quot;\&quot;TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieS&quot;
+<span class="lineNum">     791 </span>            :       &quot;B0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIG&quot;
+<span class="lineNum">     792 </span>            :       &quot;x1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbi&quot;
+<span class="lineNum">     793 </span>            :       &quot;B0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZG&quot;
+<span class="lineNum">     794 </span>            :       &quot;dlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS&quot;
+<span class="lineNum">     795 </span><span class="lineNoCov">          0 :       &quot;4K\&quot;&quot;);</span>
+<a name="796"><span class="lineNum">     796 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     797 </span>            : 
+<span class="lineNum">     798 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, EmptyBinary) {</span>
+<span class="lineNum">     799 </span><span class="lineNoCov">          0 :   out &lt;&lt; Binary(reinterpret_cast&lt;const unsigned char*&gt;(&quot;&quot;), 0);</span>
+<span class="lineNum">     800 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;!!binary \&quot;\&quot;&quot;);</span>
+<a name="801"><span class="lineNum">     801 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     802 </span>            : 
+<span class="lineNum">     803 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ColonAtEndOfScalar) {</span>
+<span class="lineNum">     804 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;a:&quot;;</span>
+<span class="lineNum">     805 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;\&quot;a:\&quot;&quot;);</span>
+<a name="806"><span class="lineNum">     806 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     807 </span>            : 
+<span class="lineNum">     808 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ColonAsScalar) {</span>
+<span class="lineNum">     809 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     810 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;apple&quot; &lt;&lt; Value &lt;&lt; &quot;:&quot;;</span>
+<span class="lineNum">     811 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;banana&quot; &lt;&lt; Value &lt;&lt; &quot;:&quot;;</span>
+<span class="lineNum">     812 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     813 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;apple: \&quot;:\&quot;\nbanana: \&quot;:\&quot;&quot;);</span>
+<a name="814"><span class="lineNum">     814 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     815 </span>            : 
+<span class="lineNum">     816 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ColonAtEndOfScalarInFlow) {</span>
+<span class="lineNum">     817 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginMap &lt;&lt; Key &lt;&lt; &quot;C:&quot; &lt;&lt; Value &lt;&lt; &quot;C:&quot; &lt;&lt; EndMap;</span>
+<span class="lineNum">     818 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;{\&quot;C:\&quot;: \&quot;C:\&quot;}&quot;);</span>
+<a name="819"><span class="lineNum">     819 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     820 </span>            : 
+<span class="lineNum">     821 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, BoolFormatting) {</span>
+<span class="lineNum">     822 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     823 </span><span class="lineNoCov">          0 :   out &lt;&lt; TrueFalseBool &lt;&lt; UpperCase &lt;&lt; true;</span>
+<span class="lineNum">     824 </span><span class="lineNoCov">          0 :   out &lt;&lt; TrueFalseBool &lt;&lt; CamelCase &lt;&lt; true;</span>
+<span class="lineNum">     825 </span><span class="lineNoCov">          0 :   out &lt;&lt; TrueFalseBool &lt;&lt; LowerCase &lt;&lt; true;</span>
+<span class="lineNum">     826 </span><span class="lineNoCov">          0 :   out &lt;&lt; TrueFalseBool &lt;&lt; UpperCase &lt;&lt; false;</span>
+<span class="lineNum">     827 </span><span class="lineNoCov">          0 :   out &lt;&lt; TrueFalseBool &lt;&lt; CamelCase &lt;&lt; false;</span>
+<span class="lineNum">     828 </span><span class="lineNoCov">          0 :   out &lt;&lt; TrueFalseBool &lt;&lt; LowerCase &lt;&lt; false;</span>
+<span class="lineNum">     829 </span><span class="lineNoCov">          0 :   out &lt;&lt; YesNoBool &lt;&lt; UpperCase &lt;&lt; true;</span>
+<span class="lineNum">     830 </span><span class="lineNoCov">          0 :   out &lt;&lt; YesNoBool &lt;&lt; CamelCase &lt;&lt; true;</span>
+<span class="lineNum">     831 </span><span class="lineNoCov">          0 :   out &lt;&lt; YesNoBool &lt;&lt; LowerCase &lt;&lt; true;</span>
+<span class="lineNum">     832 </span><span class="lineNoCov">          0 :   out &lt;&lt; YesNoBool &lt;&lt; UpperCase &lt;&lt; false;</span>
+<span class="lineNum">     833 </span><span class="lineNoCov">          0 :   out &lt;&lt; YesNoBool &lt;&lt; CamelCase &lt;&lt; false;</span>
+<span class="lineNum">     834 </span><span class="lineNoCov">          0 :   out &lt;&lt; YesNoBool &lt;&lt; LowerCase &lt;&lt; false;</span>
+<span class="lineNum">     835 </span><span class="lineNoCov">          0 :   out &lt;&lt; OnOffBool &lt;&lt; UpperCase &lt;&lt; true;</span>
+<span class="lineNum">     836 </span><span class="lineNoCov">          0 :   out &lt;&lt; OnOffBool &lt;&lt; CamelCase &lt;&lt; true;</span>
+<span class="lineNum">     837 </span><span class="lineNoCov">          0 :   out &lt;&lt; OnOffBool &lt;&lt; LowerCase &lt;&lt; true;</span>
+<span class="lineNum">     838 </span><span class="lineNoCov">          0 :   out &lt;&lt; OnOffBool &lt;&lt; UpperCase &lt;&lt; false;</span>
+<span class="lineNum">     839 </span><span class="lineNoCov">          0 :   out &lt;&lt; OnOffBool &lt;&lt; CamelCase &lt;&lt; false;</span>
+<span class="lineNum">     840 </span><span class="lineNoCov">          0 :   out &lt;&lt; OnOffBool &lt;&lt; LowerCase &lt;&lt; false;</span>
+<span class="lineNum">     841 </span><span class="lineNoCov">          0 :   out &lt;&lt; ShortBool &lt;&lt; UpperCase &lt;&lt; true;</span>
+<span class="lineNum">     842 </span><span class="lineNoCov">          0 :   out &lt;&lt; ShortBool &lt;&lt; CamelCase &lt;&lt; true;</span>
+<span class="lineNum">     843 </span><span class="lineNoCov">          0 :   out &lt;&lt; ShortBool &lt;&lt; LowerCase &lt;&lt; true;</span>
+<span class="lineNum">     844 </span><span class="lineNoCov">          0 :   out &lt;&lt; ShortBool &lt;&lt; UpperCase &lt;&lt; false;</span>
+<span class="lineNum">     845 </span><span class="lineNoCov">          0 :   out &lt;&lt; ShortBool &lt;&lt; CamelCase &lt;&lt; false;</span>
+<span class="lineNum">     846 </span><span class="lineNoCov">          0 :   out &lt;&lt; ShortBool &lt;&lt; LowerCase &lt;&lt; false;</span>
+<span class="lineNum">     847 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     848 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     849 </span>            :       &quot;- TRUE\n- True\n- true\n- FALSE\n- False\n- false\n&quot;
+<span class="lineNum">     850 </span>            :       &quot;- YES\n- Yes\n- yes\n- NO\n- No\n- no\n&quot;
+<span class="lineNum">     851 </span>            :       &quot;- ON\n- On\n- on\n- OFF\n- Off\n- off\n&quot;
+<span class="lineNum">     852 </span><span class="lineNoCov">          0 :       &quot;- Y\n- Y\n- y\n- N\n- N\n- n&quot;);</span>
+<span class="lineNum">     853 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     854 </span>            : 
+<span class="lineNum">     855 </span>            : // TODO: Fix this test.
+<span class="lineNum">     856 </span>            : // TEST_F(EmitterTest, DocStartAndEnd) {
+<span class="lineNum">     857 </span>            : //  out &lt;&lt; BeginDoc;
+<span class="lineNum">     858 </span>            : //  out &lt;&lt; BeginSeq &lt;&lt; 1 &lt;&lt; 2 &lt;&lt; 3 &lt;&lt; EndSeq;
+<span class="lineNum">     859 </span>            : //  out &lt;&lt; BeginDoc;
+<span class="lineNum">     860 </span>            : //  out &lt;&lt; &quot;Hi there!&quot;;
+<span class="lineNum">     861 </span>            : //  out &lt;&lt; EndDoc;
+<span class="lineNum">     862 </span>            : //  out &lt;&lt; EndDoc;
+<span class="lineNum">     863 </span>            : //  out &lt;&lt; EndDoc;
+<span class="lineNum">     864 </span>            : //  out &lt;&lt; BeginDoc;
+<span class="lineNum">     865 </span>            : //  out &lt;&lt; VerbatimTag(&quot;foo&quot;) &lt;&lt; &quot;bar&quot;;
+<span class="lineNum">     866 </span>            : //  ExpectEmit(
+<span class="lineNum">     867 </span>            : //      &quot;---\n- 1\n- 2\n- 3\n---\nHi there!\n...\n...\n...\n---\n!&lt;foo&gt; bar&quot;);
+<a name="868"><span class="lineNum">     868 </span>            : //}</a>
+<span class="lineNum">     869 </span>            : 
+<span class="lineNum">     870 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ImplicitDocStart) {</span>
+<span class="lineNum">     871 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Hi&quot;;</span>
+<span class="lineNum">     872 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Bye&quot;;</span>
+<span class="lineNum">     873 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Oops&quot;;</span>
+<span class="lineNum">     874 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;Hi\n---\nBye\n---\nOops&quot;);</span>
+<a name="875"><span class="lineNum">     875 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     876 </span>            : 
+<span class="lineNum">     877 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, EmptyString) {</span>
+<span class="lineNum">     878 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     879 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key&quot; &lt;&lt; Value &lt;&lt; &quot;&quot;;</span>
+<span class="lineNum">     880 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     881 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;key: \&quot;\&quot;&quot;);</span>
+<a name="882"><span class="lineNum">     882 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     883 </span>            : 
+<span class="lineNum">     884 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SingleChar) {</span>
+<span class="lineNum">     885 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     886 </span><span class="lineNoCov">          0 :   out &lt;&lt; 'a';</span>
+<span class="lineNum">     887 </span><span class="lineNoCov">          0 :   out &lt;&lt; ':';</span>
+<span class="lineNum">     888 </span><span class="lineNoCov">          0 :   out &lt;&lt; (char)0x10;</span>
+<span class="lineNum">     889 </span><span class="lineNoCov">          0 :   out &lt;&lt; '\n';</span>
+<span class="lineNum">     890 </span><span class="lineNoCov">          0 :   out &lt;&lt; ' ';</span>
+<span class="lineNum">     891 </span><span class="lineNoCov">          0 :   out &lt;&lt; '\t';</span>
+<span class="lineNum">     892 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     893 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- a\n- \&quot;:\&quot;\n- \&quot;\\x10\&quot;\n- \&quot;\\n\&quot;\n- \&quot; \&quot;\n- \&quot;\\t\&quot;&quot;);</span>
+<a name="894"><span class="lineNum">     894 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     895 </span>            : 
+<span class="lineNum">     896 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, DefaultPrecision) {</span>
+<span class="lineNum">     897 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     898 </span><span class="lineNoCov">          0 :   out &lt;&lt; 1.234f;</span>
+<span class="lineNum">     899 </span><span class="lineNoCov">          0 :   out &lt;&lt; 3.14159265358979;</span>
+<span class="lineNum">     900 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     901 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- 1.234\n- 3.14159265358979&quot;);</span>
+<a name="902"><span class="lineNum">     902 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     903 </span>            : 
+<span class="lineNum">     904 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, SetPrecision) {</span>
+<span class="lineNum">     905 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     906 </span><span class="lineNoCov">          0 :   out &lt;&lt; FloatPrecision(3) &lt;&lt; 1.234f;</span>
+<span class="lineNum">     907 </span><span class="lineNoCov">          0 :   out &lt;&lt; DoublePrecision(6) &lt;&lt; 3.14159265358979;</span>
+<span class="lineNum">     908 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     909 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;- 1.23\n- 3.14159&quot;);</span>
+<a name="910"><span class="lineNum">     910 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     911 </span>            : 
+<span class="lineNum">     912 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, DashInBlockContext) {</span>
+<span class="lineNum">     913 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     914 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;key&quot; &lt;&lt; Value &lt;&lt; &quot;-&quot;;</span>
+<span class="lineNum">     915 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     916 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;key: \&quot;-\&quot;&quot;);</span>
+<a name="917"><span class="lineNum">     917 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     918 </span>            : 
+<span class="lineNum">     919 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, HexAndOct) {</span>
+<span class="lineNum">     920 </span><span class="lineNoCov">          0 :   out &lt;&lt; Flow &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     921 </span><span class="lineNoCov">          0 :   out &lt;&lt; 31;</span>
+<span class="lineNum">     922 </span><span class="lineNoCov">          0 :   out &lt;&lt; Hex &lt;&lt; 31;</span>
+<span class="lineNum">     923 </span><span class="lineNoCov">          0 :   out &lt;&lt; Oct &lt;&lt; 31;</span>
+<span class="lineNum">     924 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     925 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;[31, 0x1f, 037]&quot;);</span>
+<a name="926"><span class="lineNum">     926 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     927 </span>            : 
+<span class="lineNum">     928 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, CompactMapWithNewline) {</span>
+<span class="lineNum">     929 </span><span class="lineNoCov">          0 :   out &lt;&lt; Comment(&quot;Characteristics&quot;);</span>
+<span class="lineNum">     930 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     931 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     932 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;color&quot; &lt;&lt; Value &lt;&lt; &quot;blue&quot;;</span>
+<span class="lineNum">     933 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;height&quot; &lt;&lt; Value &lt;&lt; 120;</span>
+<span class="lineNum">     934 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     935 </span><span class="lineNoCov">          0 :   out &lt;&lt; Newline &lt;&lt; Newline;</span>
+<span class="lineNum">     936 </span><span class="lineNoCov">          0 :   out &lt;&lt; Comment(&quot;Skills&quot;);</span>
+<span class="lineNum">     937 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">     938 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;attack&quot; &lt;&lt; Value &lt;&lt; 23;</span>
+<span class="lineNum">     939 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;intelligence&quot; &lt;&lt; Value &lt;&lt; 56;</span>
+<span class="lineNum">     940 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">     941 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     942 </span>            : 
+<span class="lineNum">     943 </span><span class="lineNoCov">          0 :   ExpectEmit(</span>
+<span class="lineNum">     944 </span>            :       &quot;# Characteristics\n&quot;
+<span class="lineNum">     945 </span>            :       &quot;- color: blue\n&quot;
+<span class="lineNum">     946 </span>            :       &quot;  height: 120\n&quot;
+<span class="lineNum">     947 </span>            :       &quot;\n&quot;
+<span class="lineNum">     948 </span>            :       &quot;# Skills\n&quot;
+<span class="lineNum">     949 </span>            :       &quot;- attack: 23\n&quot;
+<span class="lineNum">     950 </span><span class="lineNoCov">          0 :       &quot;  intelligence: 56&quot;);</span>
+<a name="951"><span class="lineNum">     951 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     952 </span>            : 
+<span class="lineNum">     953 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ForceSingleQuotedToDouble) {</span>
+<span class="lineNum">     954 </span><span class="lineNoCov">          0 :   out &lt;&lt; SingleQuoted &lt;&lt; &quot;Hello\nWorld&quot;;</span>
+<span class="lineNum">     955 </span>            : 
+<span class="lineNum">     956 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;\&quot;Hello\\nWorld\&quot;&quot;);</span>
+<a name="957"><span class="lineNum">     957 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     958 </span>            : 
+<span class="lineNum">     959 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, QuoteNull) {</span>
+<span class="lineNum">     960 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;null&quot;;</span>
+<span class="lineNum">     961 </span>            : 
+<span class="lineNum">     962 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;\&quot;null\&quot;&quot;);</span>
+<a name="963"><span class="lineNum">     963 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     964 </span>            : 
+<span class="lineNum">     965 </span><span class="lineNoCov">          0 : TEST_F(EmitterTest, ValueOfDoubleQuote) {</span>
+<span class="lineNum">     966 </span><span class="lineNoCov">          0 :   out &lt;&lt; YAML::BeginMap;</span>
+<span class="lineNum">     967 </span><span class="lineNoCov">          0 :   out &lt;&lt; YAML::Key &lt;&lt; &quot;foo&quot; &lt;&lt; YAML::Value &lt;&lt; '&quot;';</span>
+<span class="lineNum">     968 </span><span class="lineNoCov">          0 :   out &lt;&lt; YAML::EndMap;</span>
+<span class="lineNum">     969 </span>            : 
+<span class="lineNum">     970 </span><span class="lineNoCov">          0 :   ExpectEmit(&quot;foo: \&quot;\\\&quot;\&quot;&quot;);</span>
+<a name="971"><span class="lineNum">     971 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     972 </span>            : 
+<a name="973"><span class="lineNum">     973 </span><span class="lineNoCov">          0 : class EmitterErrorTest : public ::testing::Test {</span></a>
+<span class="lineNum">     974 </span>            :  protected:
+<span class="lineNum">     975 </span><span class="lineNoCov">          0 :   void ExpectEmitError(const std::string&amp; expectedError) {</span>
+<span class="lineNum">     976 </span><span class="lineNoCov">          0 :     ASSERT_FALSE(out.good()) &lt;&lt; &quot;Emitter cleanly produced: &quot; &lt;&lt; out.c_str();</span>
+<span class="lineNum">     977 </span><span class="lineNoCov">          0 :     EXPECT_EQ(expectedError, out.GetLastError());</span>
+<span class="lineNum">     978 </span>            :   }
+<span class="lineNum">     979 </span>            : 
+<span class="lineNum">     980 </span>            :   Emitter out;
+<a name="981"><span class="lineNum">     981 </span>            : };</a>
+<span class="lineNum">     982 </span>            : 
+<span class="lineNum">     983 </span><span class="lineNoCov">          0 : TEST_F(EmitterErrorTest, BadLocalTag) {</span>
+<span class="lineNum">     984 </span><span class="lineNoCov">          0 :   out &lt;&lt; LocalTag(&quot;e!far&quot;) &lt;&lt; &quot;bar&quot;;</span>
+<span class="lineNum">     985 </span>            : 
+<span class="lineNum">     986 </span><span class="lineNoCov">          0 :   ExpectEmitError(&quot;invalid tag&quot;);</span>
+<a name="987"><span class="lineNum">     987 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     988 </span>            : 
+<span class="lineNum">     989 </span><span class="lineNoCov">          0 : TEST_F(EmitterErrorTest, ExtraEndSeq) {</span>
+<span class="lineNum">     990 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">     991 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;Hello&quot;;</span>
+<span class="lineNum">     992 </span><span class="lineNoCov">          0 :   out &lt;&lt; &quot;World&quot;;</span>
+<span class="lineNum">     993 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     994 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">     995 </span>            : 
+<span class="lineNum">     996 </span><span class="lineNoCov">          0 :   ExpectEmitError(ErrorMsg::UNEXPECTED_END_SEQ);</span>
+<a name="997"><span class="lineNum">     997 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     998 </span>            : 
+<span class="lineNum">     999 </span><span class="lineNoCov">          0 : TEST_F(EmitterErrorTest, ExtraEndMap) {</span>
+<span class="lineNum">    1000 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginMap;</span>
+<span class="lineNum">    1001 </span><span class="lineNoCov">          0 :   out &lt;&lt; Key &lt;&lt; &quot;Hello&quot; &lt;&lt; Value &lt;&lt; &quot;World&quot;;</span>
+<span class="lineNum">    1002 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">    1003 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndMap;</span>
+<span class="lineNum">    1004 </span>            : 
+<span class="lineNum">    1005 </span><span class="lineNoCov">          0 :   ExpectEmitError(ErrorMsg::UNEXPECTED_END_MAP);</span>
+<a name="1006"><span class="lineNum">    1006 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">    1007 </span>            : 
+<span class="lineNum">    1008 </span><span class="lineNoCov">          0 : TEST_F(EmitterErrorTest, InvalidAnchor) {</span>
+<span class="lineNum">    1009 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">    1010 </span><span class="lineNoCov">          0 :   out &lt;&lt; Anchor(&quot;new\nline&quot;) &lt;&lt; &quot;Test&quot;;</span>
+<span class="lineNum">    1011 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">    1012 </span>            : 
+<span class="lineNum">    1013 </span><span class="lineNoCov">          0 :   ExpectEmitError(ErrorMsg::INVALID_ANCHOR);</span>
+<a name="1014"><span class="lineNum">    1014 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">    1015 </span>            : 
+<span class="lineNum">    1016 </span><span class="lineNoCov">          0 : TEST_F(EmitterErrorTest, InvalidAlias) {</span>
+<span class="lineNum">    1017 </span><span class="lineNoCov">          0 :   out &lt;&lt; BeginSeq;</span>
+<span class="lineNum">    1018 </span><span class="lineNoCov">          0 :   out &lt;&lt; Alias(&quot;new\nline&quot;);</span>
+<span class="lineNum">    1019 </span><span class="lineNoCov">          0 :   out &lt;&lt; EndSeq;</span>
+<span class="lineNum">    1020 </span>            : 
+<span class="lineNum">    1021 </span><span class="lineNoCov">          0 :   ExpectEmitError(ErrorMsg::INVALID_ALIAS);</span>
+<a name="1022"><span class="lineNum">    1022 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">    1023 </span>            : }
+<span class="lineNum">    1024 </span><span class="lineNoCov">          0 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

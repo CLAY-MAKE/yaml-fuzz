@@ -1,0 +1,6 @@
+diff fuzzer2/id:000032,orig:id:000324,src:000001,op:havoc,rep:64,+cov.min -> fuzzer2/id:000033,orig:id:000327,src:000001,op:havoc,rep:128,+cov.min
+Src file: /root/yaml-cpp/src/stream.cpp
+  New 'line' coverage: 232
+  New 'line' coverage: 233
+  New 'line' coverage: 314
+  New 'line' coverage: 315

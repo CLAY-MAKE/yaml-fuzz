@@ -1,0 +1,63 @@
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to the standard locale ("C").
+Reading tracefile syncdir//cov/lcov/fuzzer1/id:000977,sync:fuzzer2,src:001052.lcov_info_tmp
+Removing /usr/include/c++/5/bits/alloc_traits.h
+Removing /usr/include/c++/5/bits/allocator.h
+Removing /usr/include/c++/5/bits/basic_string.h
+Removing /usr/include/c++/5/bits/basic_string.tcc
+Removing /usr/include/c++/5/bits/char_traits.h
+Removing /usr/include/c++/5/bits/deque.tcc
+Removing /usr/include/c++/5/bits/ios_base.h
+Removing /usr/include/c++/5/bits/list.tcc
+Removing /usr/include/c++/5/bits/move.h
+Removing /usr/include/c++/5/bits/postypes.h
+Removing /usr/include/c++/5/bits/predefined_ops.h
+Removing /usr/include/c++/5/bits/shared_ptr.h
+Removing /usr/include/c++/5/bits/shared_ptr_base.h
+Removing /usr/include/c++/5/bits/stl_algo.h
+Removing /usr/include/c++/5/bits/stl_algobase.h
+Removing /usr/include/c++/5/bits/stl_construct.h
+Removing /usr/include/c++/5/bits/stl_deque.h
+Removing /usr/include/c++/5/bits/stl_function.h
+Removing /usr/include/c++/5/bits/stl_iterator.h
+Removing /usr/include/c++/5/bits/stl_iterator_base_funcs.h
+Removing /usr/include/c++/5/bits/stl_iterator_base_types.h
+Removing /usr/include/c++/5/bits/stl_list.h
+Removing /usr/include/c++/5/bits/stl_map.h
+Removing /usr/include/c++/5/bits/stl_pair.h
+Removing /usr/include/c++/5/bits/stl_queue.h
+Removing /usr/include/c++/5/bits/stl_set.h
+Removing /usr/include/c++/5/bits/stl_stack.h
+Removing /usr/include/c++/5/bits/stl_tree.h
+Removing /usr/include/c++/5/bits/stl_uninitialized.h
+Removing /usr/include/c++/5/bits/stl_vector.h
+Removing /usr/include/c++/5/bits/streambuf_iterator.h
+Removing /usr/include/c++/5/bits/unique_ptr.h
+Removing /usr/include/c++/5/bits/vector.tcc
+Removing /usr/include/c++/5/ext/aligned_buffer.h
+Removing /usr/include/c++/5/ext/alloc_traits.h
+Removing /usr/include/c++/5/ext/atomicity.h
+Removing /usr/include/c++/5/ext/new_allocator.h
+Removing /usr/include/c++/5/ext/type_traits.h
+Removing /usr/include/c++/5/iomanip
+Removing /usr/include/c++/5/iostream
+Removing /usr/include/c++/5/limits
+Removing /usr/include/c++/5/new
+Removing /usr/include/c++/5/ostream
+Removing /usr/include/c++/5/sstream
+Removing /usr/include/c++/5/streambuf
+Removing /usr/include/c++/5/tuple
+Removing /usr/include/c++/5/typeinfo
+Removing /usr/include/stdlib.h
+Removing /usr/include/x86_64-linux-gnu/c++/5/bits/gthr-default.h
+Deleted 49 files
+Writing data to syncdir//cov/lcov/fuzzer1/id:000977,sync:fuzzer2,src:001052.lcov_info_final
+Summary coverage rate:
+  lines......: 12.4% (2637 of 21183 lines)
+  functions..: 5.0% (530 of 10595 functions)
+  branches...: no data found

@@ -1,0 +1,4 @@
+diff fuzzer2/id:000093,orig:id:000643,src:000001,op:havoc,rep:64.min -> fuzzer2/id:000094,orig:id:000645,src:000001,op:havoc,rep:8.min
+Src file: /root/yaml-cpp/src/scanner.cpp
+  New 'line' coverage: 172
+  New 'line' coverage: 217

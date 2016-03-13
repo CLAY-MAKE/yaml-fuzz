@@ -1,0 +1,4 @@
+diff fuzzer2/id:000318,orig:id:001474,sync:fuzzer2,src:001434.min -> fuzzer2/id:000319,orig:id:001481,src:000551+001371,op:splice,rep:8,+cov.min
+Src file: /root/yaml-cpp/src/exp.cpp
+  New 'line' coverage: 64
+  New 'line' coverage: 65

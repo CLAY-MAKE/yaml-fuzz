@@ -1,0 +1,4 @@
+diff fuzzer2/id:000200,orig:id:001037,src:000010,op:havoc,rep:16.min -> fuzzer2/id:000201,orig:id:001058,src:000013,op:havoc,rep:64.min
+Src file: /root/yaml-cpp/src/scantag.cpp
+  New 'line' coverage: 24
+  New 'line' coverage: 29

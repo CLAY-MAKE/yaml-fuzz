@@ -1,0 +1,10 @@
+diff fuzzer2/id:000134,orig:id:000771,sync:fuzzer2,src:000553.min -> fuzzer2/id:000135,orig:id:000776,sync:fuzzer2,src:000619.min
+Src file: /root/yaml-cpp/src/emitter.cpp
+  New 'line' coverage: 202
+  New 'line' coverage: 209
+Src file: /root/yaml-cpp/src/emitterstate.cpp
+  New 'function' coverage: _ZN4YAML12EmitterState9ForceFlowEv()
+  New 'line' coverage: 63
+  New 'line' coverage: 64
+  New 'line' coverage: 65
+  New 'line' coverage: 68

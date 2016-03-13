@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - include/yaml-cpp/emittermanip.h</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">include/yaml-cpp</a> - emittermanip.h<span style="font-size: 80%;"> (source / <a href="emittermanip.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntryLo">45.8 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryLo">47.4 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef EMITTERMANIP_H_62B23520_7C8E_11DE_8A39_0800200C9A66</a>
+<span class="lineNum">       2 </span>            : #define EMITTERMANIP_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #if defined(_MSC_VER) ||                                            \
+<span class="lineNum">       5 </span>            :     (defined(__GNUC__) &amp;&amp; (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ &gt;= 4) || \
+<span class="lineNum">       6 </span>            :      (__GNUC__ &gt;= 4))  // GCC supports &quot;pragma once&quot; correctly since 3.4
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : #endif
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : #include &lt;string&gt;
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : namespace YAML {
+<span class="lineNum">      13 </span>            : enum EMITTER_MANIP {
+<span class="lineNum">      14 </span>            :   // general manipulators
+<span class="lineNum">      15 </span>            :   Auto,
+<span class="lineNum">      16 </span>            :   TagByKind,
+<span class="lineNum">      17 </span>            :   Newline,
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            :   // output character set
+<span class="lineNum">      20 </span>            :   EmitNonAscii,
+<span class="lineNum">      21 </span>            :   EscapeNonAscii,
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            :   // string manipulators
+<span class="lineNum">      24 </span>            :   // Auto, // duplicate
+<span class="lineNum">      25 </span>            :   SingleQuoted,
+<span class="lineNum">      26 </span>            :   DoubleQuoted,
+<span class="lineNum">      27 </span>            :   Literal,
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            :   // bool manipulators
+<span class="lineNum">      30 </span>            :   YesNoBool,      // yes, no
+<span class="lineNum">      31 </span>            :   TrueFalseBool,  // true, false
+<span class="lineNum">      32 </span>            :   OnOffBool,      // on, off
+<span class="lineNum">      33 </span>            :   UpperCase,      // TRUE, N
+<span class="lineNum">      34 </span>            :   LowerCase,      // f, yes
+<span class="lineNum">      35 </span>            :   CamelCase,      // No, Off
+<span class="lineNum">      36 </span>            :   LongBool,       // yes, On
+<span class="lineNum">      37 </span>            :   ShortBool,      // y, t
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            :   // int manipulators
+<span class="lineNum">      40 </span>            :   Dec,
+<span class="lineNum">      41 </span>            :   Hex,
+<span class="lineNum">      42 </span>            :   Oct,
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            :   // document manipulators
+<span class="lineNum">      45 </span>            :   BeginDoc,
+<span class="lineNum">      46 </span>            :   EndDoc,
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            :   // sequence manipulators
+<span class="lineNum">      49 </span>            :   BeginSeq,
+<span class="lineNum">      50 </span>            :   EndSeq,
+<span class="lineNum">      51 </span>            :   Flow,
+<span class="lineNum">      52 </span>            :   Block,
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span>            :   // map manipulators
+<span class="lineNum">      55 </span>            :   BeginMap,
+<span class="lineNum">      56 </span>            :   EndMap,
+<span class="lineNum">      57 </span>            :   Key,
+<span class="lineNum">      58 </span>            :   Value,
+<span class="lineNum">      59 </span>            :   // Flow, // duplicate
+<span class="lineNum">      60 </span>            :   // Block, // duplicate
+<span class="lineNum">      61 </span>            :   // Auto, // duplicate
+<span class="lineNum">      62 </span>            :   LongKey
+<span class="lineNum">      63 </span>            : };
+<a name="64"><span class="lineNum">      64 </span>            : </a>
+<span class="lineNum">      65 </span>            : struct _Indent {
+<span class="lineNum">      66 </span><span class="lineNoCov">          0 :   _Indent(int value_) : value(value_) {}</span>
+<span class="lineNum">      67 </span>            :   int value;
+<a name="68"><span class="lineNum">      68 </span>            : };</a>
+<span class="lineNum">      69 </span>            : 
+<a name="70"><span class="lineNum">      70 </span><span class="lineNoCov">          0 : inline _Indent Indent(int value) { return _Indent(value); }</span></a>
+<a name="71"><span class="lineNum">      71 </span>            : </a>
+<span class="lineNum">      72 </span><span class="lineCov">       1990 : struct _Alias {</span>
+<span class="lineNum">      73 </span><span class="lineCov">       1990 :   _Alias(const std::string&amp; content_) : content(content_) {}</span>
+<span class="lineNum">      74 </span>            :   std::string content;
+<a name="75"><span class="lineNum">      75 </span>            : };</a>
+<span class="lineNum">      76 </span>            : 
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">       1990 : inline _Alias Alias(const std::string content) { return _Alias(content); }</span></a>
+<a name="78"><span class="lineNum">      78 </span>            : </a>
+<span class="lineNum">      79 </span><span class="lineCov">       1131 : struct _Anchor {</span>
+<span class="lineNum">      80 </span><span class="lineCov">       1131 :   _Anchor(const std::string&amp; content_) : content(content_) {}</span>
+<span class="lineNum">      81 </span>            :   std::string content;
+<a name="82"><span class="lineNum">      82 </span>            : };</a>
+<span class="lineNum">      83 </span>            : 
+<a name="84"><span class="lineNum">      84 </span><span class="lineCov">       1131 : inline _Anchor Anchor(const std::string content) { return _Anchor(content); }</span></a>
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span><span class="lineCov">       3779 : struct _Tag {</span>
+<span class="lineNum">      87 </span>            :   struct Type {
+<span class="lineNum">      88 </span>            :     enum value { Verbatim, PrimaryHandle, NamedHandle };
+<a name="89"><span class="lineNum">      89 </span>            :   };</a>
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span><span class="lineCov">       3779 :   explicit _Tag(const std::string&amp; prefix_, const std::string&amp; content_,</span>
+<span class="lineNum">      92 </span>            :                 Type::value type_)
+<span class="lineNum">      93 </span><span class="lineCov">       3779 :       : prefix(prefix_), content(content_), type(type_) {}</span>
+<span class="lineNum">      94 </span>            :   std::string prefix;
+<span class="lineNum">      95 </span>            :   std::string content;
+<span class="lineNum">      96 </span>            :   Type::value type;
+<a name="97"><span class="lineNum">      97 </span>            : };</a>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineCov">       3779 : inline _Tag VerbatimTag(const std::string content) {</span>
+<span class="lineNum">     100 </span><span class="lineCov">       3779 :   return _Tag(&quot;&quot;, content, _Tag::Type::Verbatim);</span>
+<a name="101"><span class="lineNum">     101 </span>            : }</a>
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 : inline _Tag LocalTag(const std::string content) {</span>
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :   return _Tag(&quot;&quot;, content, _Tag::Type::PrimaryHandle);</span>
+<span class="lineNum">     105 </span>            : }
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            : inline _Tag LocalTag(const std::string&amp; prefix, const std::string content) {
+<span class="lineNum">     108 </span>            :   return _Tag(prefix, content, _Tag::Type::NamedHandle);
+<a name="109"><span class="lineNum">     109 </span>            : }</a>
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 : inline _Tag SecondaryTag(const std::string content) {</span>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 :   return _Tag(&quot;&quot;, content, _Tag::Type::NamedHandle);</span>
+<a name="113"><span class="lineNum">     113 </span>            : }</a>
+<a name="114"><span class="lineNum">     114 </span>            : </a>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 : struct _Comment {</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :   _Comment(const std::string&amp; content_) : content(content_) {}</span>
+<span class="lineNum">     117 </span>            :   std::string content;
+<a name="118"><span class="lineNum">     118 </span>            : };</a>
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 : inline _Comment Comment(const std::string content) { return _Comment(content); }</span>
+<a name="121"><span class="lineNum">     121 </span>            : </a>
+<span class="lineNum">     122 </span>            : struct _Precision {
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :   _Precision(int floatPrecision_, int doublePrecision_)</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :       : floatPrecision(floatPrecision_), doublePrecision(doublePrecision_) {}</span>
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :   int floatPrecision;
+<span class="lineNum">     127 </span>            :   int doublePrecision;
+<a name="128"><span class="lineNum">     128 </span>            : };</a>
+<span class="lineNum">     129 </span>            : 
+<a name="130"><span class="lineNum">     130 </span><span class="lineNoCov">          0 : inline _Precision FloatPrecision(int n) { return _Precision(n, -1); }</span></a>
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 : inline _Precision DoublePrecision(int n) { return _Precision(-1, n); }</span>
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span>            : inline _Precision Precision(int n) { return _Precision(n, n); }
+<span class="lineNum">     135 </span>            : }
+<span class="lineNum">     136 </span>            : 
+<span class="lineNum">     137 </span>            : #endif  // EMITTERMANIP_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

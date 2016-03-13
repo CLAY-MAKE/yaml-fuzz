@@ -1,0 +1,565 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - build/CMakeFiles/3.2.2/CompilerIdCXX/CMakeCXXCompilerId.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../index.html">top level</a> - <a href="index.html">build/CMakeFiles/3.2.2/CompilerIdCXX</a> - CMakeCXXCompilerId.cpp<span style="font-size: 80%;"> (source / <a href="CMakeCXXCompilerId.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /* This source file must have a .cpp extension so that all C++ compilers</a>
+<span class="lineNum">       2 </span>            :    recognize the extension without flags.  Borland does not know .cxx for
+<span class="lineNum">       3 </span>            :    example.  */
+<span class="lineNum">       4 </span>            : #ifndef __cplusplus
+<span class="lineNum">       5 </span>            : # error &quot;A C compiler has been selected for C++.&quot;
+<span class="lineNum">       6 </span>            : #endif
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : /* Version number components: V=Version, R=Revision, P=Patch
+<span class="lineNum">      10 </span>            :    Version date components:   YYYY=Year, MM=Month,   DD=Day  */
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #if defined(__COMO__)
+<span class="lineNum">      13 </span>            : # define COMPILER_ID &quot;Comeau&quot;
+<span class="lineNum">      14 </span>            :   /* __COMO_VERSION__ = VRR */
+<span class="lineNum">      15 </span>            : # define COMPILER_VERSION_MAJOR DEC(__COMO_VERSION__ / 100)
+<span class="lineNum">      16 </span>            : # define COMPILER_VERSION_MINOR DEC(__COMO_VERSION__ % 100)
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : #elif defined(__INTEL_COMPILER) || defined(__ICC)
+<span class="lineNum">      19 </span>            : # define COMPILER_ID &quot;Intel&quot;
+<span class="lineNum">      20 </span>            : # if defined(_MSC_VER)
+<span class="lineNum">      21 </span>            : #  define SIMULATE_ID &quot;MSVC&quot;
+<span class="lineNum">      22 </span>            : # endif
+<span class="lineNum">      23 </span>            :   /* __INTEL_COMPILER = VRP */
+<span class="lineNum">      24 </span>            : # define COMPILER_VERSION_MAJOR DEC(__INTEL_COMPILER/100)
+<span class="lineNum">      25 </span>            : # define COMPILER_VERSION_MINOR DEC(__INTEL_COMPILER/10 % 10)
+<span class="lineNum">      26 </span>            : # if defined(__INTEL_COMPILER_UPDATE)
+<span class="lineNum">      27 </span>            : #  define COMPILER_VERSION_PATCH DEC(__INTEL_COMPILER_UPDATE)
+<span class="lineNum">      28 </span>            : # else
+<span class="lineNum">      29 </span>            : #  define COMPILER_VERSION_PATCH DEC(__INTEL_COMPILER   % 10)
+<span class="lineNum">      30 </span>            : # endif
+<span class="lineNum">      31 </span>            : # if defined(__INTEL_COMPILER_BUILD_DATE)
+<span class="lineNum">      32 </span>            :   /* __INTEL_COMPILER_BUILD_DATE = YYYYMMDD */
+<span class="lineNum">      33 </span>            : #  define COMPILER_VERSION_TWEAK DEC(__INTEL_COMPILER_BUILD_DATE)
+<span class="lineNum">      34 </span>            : # endif
+<span class="lineNum">      35 </span>            : # if defined(_MSC_VER)
+<span class="lineNum">      36 </span>            :    /* _MSC_VER = VVRR */
+<span class="lineNum">      37 </span>            : #  define SIMULATE_VERSION_MAJOR DEC(_MSC_VER / 100)
+<span class="lineNum">      38 </span>            : #  define SIMULATE_VERSION_MINOR DEC(_MSC_VER % 100)
+<span class="lineNum">      39 </span>            : # endif
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span>            : #elif defined(__PATHCC__)
+<span class="lineNum">      42 </span>            : # define COMPILER_ID &quot;PathScale&quot;
+<span class="lineNum">      43 </span>            : # define COMPILER_VERSION_MAJOR DEC(__PATHCC__)
+<span class="lineNum">      44 </span>            : # define COMPILER_VERSION_MINOR DEC(__PATHCC_MINOR__)
+<span class="lineNum">      45 </span>            : # if defined(__PATHCC_PATCHLEVEL__)
+<span class="lineNum">      46 </span>            : #  define COMPILER_VERSION_PATCH DEC(__PATHCC_PATCHLEVEL__)
+<span class="lineNum">      47 </span>            : # endif
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            : #elif defined(__BORLANDC__) &amp;&amp; defined(__CODEGEARC_VERSION__)
+<span class="lineNum">      50 </span>            : # define COMPILER_ID &quot;Embarcadero&quot;
+<span class="lineNum">      51 </span>            : # define COMPILER_VERSION_MAJOR HEX(__CODEGEARC_VERSION__&gt;&gt;24 &amp; 0x00FF)
+<span class="lineNum">      52 </span>            : # define COMPILER_VERSION_MINOR HEX(__CODEGEARC_VERSION__&gt;&gt;16 &amp; 0x00FF)
+<span class="lineNum">      53 </span>            : # define COMPILER_VERSION_PATCH HEX(__CODEGEARC_VERSION__     &amp; 0xFFFF)
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            : #elif defined(__BORLANDC__)
+<span class="lineNum">      56 </span>            : # define COMPILER_ID &quot;Borland&quot;
+<span class="lineNum">      57 </span>            :   /* __BORLANDC__ = 0xVRR */
+<span class="lineNum">      58 </span>            : # define COMPILER_VERSION_MAJOR HEX(__BORLANDC__&gt;&gt;8)
+<span class="lineNum">      59 </span>            : # define COMPILER_VERSION_MINOR HEX(__BORLANDC__ &amp; 0xFF)
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            : #elif defined(__WATCOMC__) &amp;&amp; __WATCOMC__ &lt; 1200
+<span class="lineNum">      62 </span>            : # define COMPILER_ID &quot;Watcom&quot;
+<span class="lineNum">      63 </span>            :    /* __WATCOMC__ = VVRR */
+<span class="lineNum">      64 </span>            : # define COMPILER_VERSION_MAJOR DEC(__WATCOMC__ / 100)
+<span class="lineNum">      65 </span>            : # define COMPILER_VERSION_MINOR DEC((__WATCOMC__ / 10) % 10)
+<span class="lineNum">      66 </span>            : # if (__WATCOMC__ % 10) &gt; 0
+<span class="lineNum">      67 </span>            : #  define COMPILER_VERSION_PATCH DEC(__WATCOMC__ % 10)
+<span class="lineNum">      68 </span>            : # endif
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            : #elif defined(__WATCOMC__)
+<span class="lineNum">      71 </span>            : # define COMPILER_ID &quot;OpenWatcom&quot;
+<span class="lineNum">      72 </span>            :    /* __WATCOMC__ = VVRP + 1100 */
+<span class="lineNum">      73 </span>            : # define COMPILER_VERSION_MAJOR DEC((__WATCOMC__ - 1100) / 100)
+<span class="lineNum">      74 </span>            : # define COMPILER_VERSION_MINOR DEC((__WATCOMC__ / 10) % 10)
+<span class="lineNum">      75 </span>            : # if (__WATCOMC__ % 10) &gt; 0
+<span class="lineNum">      76 </span>            : #  define COMPILER_VERSION_PATCH DEC(__WATCOMC__ % 10)
+<span class="lineNum">      77 </span>            : # endif
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            : #elif defined(__SUNPRO_CC)
+<span class="lineNum">      80 </span>            : # define COMPILER_ID &quot;SunPro&quot;
+<span class="lineNum">      81 </span>            : # if __SUNPRO_CC &gt;= 0x5100
+<span class="lineNum">      82 </span>            :    /* __SUNPRO_CC = 0xVRRP */
+<span class="lineNum">      83 </span>            : #  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_CC&gt;&gt;12)
+<span class="lineNum">      84 </span>            : #  define COMPILER_VERSION_MINOR HEX(__SUNPRO_CC&gt;&gt;4 &amp; 0xFF)
+<span class="lineNum">      85 </span>            : #  define COMPILER_VERSION_PATCH HEX(__SUNPRO_CC    &amp; 0xF)
+<span class="lineNum">      86 </span>            : # else
+<span class="lineNum">      87 </span>            :    /* __SUNPRO_CC = 0xVRP */
+<span class="lineNum">      88 </span>            : #  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_CC&gt;&gt;8)
+<span class="lineNum">      89 </span>            : #  define COMPILER_VERSION_MINOR HEX(__SUNPRO_CC&gt;&gt;4 &amp; 0xF)
+<span class="lineNum">      90 </span>            : #  define COMPILER_VERSION_PATCH HEX(__SUNPRO_CC    &amp; 0xF)
+<span class="lineNum">      91 </span>            : # endif
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            : #elif defined(__HP_aCC)
+<span class="lineNum">      94 </span>            : # define COMPILER_ID &quot;HP&quot;
+<span class="lineNum">      95 </span>            :   /* __HP_aCC = VVRRPP */
+<span class="lineNum">      96 </span>            : # define COMPILER_VERSION_MAJOR DEC(__HP_aCC/10000)
+<span class="lineNum">      97 </span>            : # define COMPILER_VERSION_MINOR DEC(__HP_aCC/100 % 100)
+<span class="lineNum">      98 </span>            : # define COMPILER_VERSION_PATCH DEC(__HP_aCC     % 100)
+<span class="lineNum">      99 </span>            : 
+<span class="lineNum">     100 </span>            : #elif defined(__DECCXX)
+<span class="lineNum">     101 </span>            : # define COMPILER_ID &quot;Compaq&quot;
+<span class="lineNum">     102 </span>            :   /* __DECCXX_VER = VVRRTPPPP */
+<span class="lineNum">     103 </span>            : # define COMPILER_VERSION_MAJOR DEC(__DECCXX_VER/10000000)
+<span class="lineNum">     104 </span>            : # define COMPILER_VERSION_MINOR DEC(__DECCXX_VER/100000  % 100)
+<span class="lineNum">     105 </span>            : # define COMPILER_VERSION_PATCH DEC(__DECCXX_VER         % 10000)
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            : #elif defined(__IBMCPP__) &amp;&amp; defined(__COMPILER_VER__)
+<span class="lineNum">     108 </span>            : # define COMPILER_ID &quot;zOS&quot;
+<span class="lineNum">     109 </span>            :   /* __IBMCPP__ = VRP */
+<span class="lineNum">     110 </span>            : # define COMPILER_VERSION_MAJOR DEC(__IBMCPP__/100)
+<span class="lineNum">     111 </span>            : # define COMPILER_VERSION_MINOR DEC(__IBMCPP__/10 % 10)
+<span class="lineNum">     112 </span>            : # define COMPILER_VERSION_PATCH DEC(__IBMCPP__    % 10)
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span>            : #elif defined(__IBMCPP__) &amp;&amp; !defined(__COMPILER_VER__) &amp;&amp; __IBMCPP__ &gt;= 800
+<span class="lineNum">     115 </span>            : # define COMPILER_ID &quot;XL&quot;
+<span class="lineNum">     116 </span>            :   /* __IBMCPP__ = VRP */
+<span class="lineNum">     117 </span>            : # define COMPILER_VERSION_MAJOR DEC(__IBMCPP__/100)
+<span class="lineNum">     118 </span>            : # define COMPILER_VERSION_MINOR DEC(__IBMCPP__/10 % 10)
+<span class="lineNum">     119 </span>            : # define COMPILER_VERSION_PATCH DEC(__IBMCPP__    % 10)
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span>            : #elif defined(__IBMCPP__) &amp;&amp; !defined(__COMPILER_VER__) &amp;&amp; __IBMCPP__ &lt; 800
+<span class="lineNum">     122 </span>            : # define COMPILER_ID &quot;VisualAge&quot;
+<span class="lineNum">     123 </span>            :   /* __IBMCPP__ = VRP */
+<span class="lineNum">     124 </span>            : # define COMPILER_VERSION_MAJOR DEC(__IBMCPP__/100)
+<span class="lineNum">     125 </span>            : # define COMPILER_VERSION_MINOR DEC(__IBMCPP__/10 % 10)
+<span class="lineNum">     126 </span>            : # define COMPILER_VERSION_PATCH DEC(__IBMCPP__    % 10)
+<span class="lineNum">     127 </span>            : 
+<span class="lineNum">     128 </span>            : #elif defined(__PGI)
+<span class="lineNum">     129 </span>            : # define COMPILER_ID &quot;PGI&quot;
+<span class="lineNum">     130 </span>            : # define COMPILER_VERSION_MAJOR DEC(__PGIC__)
+<span class="lineNum">     131 </span>            : # define COMPILER_VERSION_MINOR DEC(__PGIC_MINOR__)
+<span class="lineNum">     132 </span>            : # if defined(__PGIC_PATCHLEVEL__)
+<span class="lineNum">     133 </span>            : #  define COMPILER_VERSION_PATCH DEC(__PGIC_PATCHLEVEL__)
+<span class="lineNum">     134 </span>            : # endif
+<span class="lineNum">     135 </span>            : 
+<span class="lineNum">     136 </span>            : #elif defined(_CRAYC)
+<span class="lineNum">     137 </span>            : # define COMPILER_ID &quot;Cray&quot;
+<span class="lineNum">     138 </span>            : # define COMPILER_VERSION_MAJOR DEC(_RELEASE)
+<span class="lineNum">     139 </span>            : # define COMPILER_VERSION_MINOR DEC(_RELEASE_MINOR)
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span>            : #elif defined(__TI_COMPILER_VERSION__)
+<span class="lineNum">     142 </span>            : # define COMPILER_ID &quot;TI&quot;
+<span class="lineNum">     143 </span>            :   /* __TI_COMPILER_VERSION__ = VVVRRRPPP */
+<span class="lineNum">     144 </span>            : # define COMPILER_VERSION_MAJOR DEC(__TI_COMPILER_VERSION__/1000000)
+<span class="lineNum">     145 </span>            : # define COMPILER_VERSION_MINOR DEC(__TI_COMPILER_VERSION__/1000   % 1000)
+<span class="lineNum">     146 </span>            : # define COMPILER_VERSION_PATCH DEC(__TI_COMPILER_VERSION__        % 1000)
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span>            : #elif defined(__FUJITSU) || defined(__FCC_VERSION) || defined(__fcc_version)
+<span class="lineNum">     149 </span>            : # define COMPILER_ID &quot;Fujitsu&quot;
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span>            : #elif defined(__SCO_VERSION__)
+<span class="lineNum">     152 </span>            : # define COMPILER_ID &quot;SCO&quot;
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span>            : #elif defined(__clang__) &amp;&amp; defined(__apple_build_version__)
+<span class="lineNum">     155 </span>            : # define COMPILER_ID &quot;AppleClang&quot;
+<span class="lineNum">     156 </span>            : # if defined(_MSC_VER)
+<span class="lineNum">     157 </span>            : #  define SIMULATE_ID &quot;MSVC&quot;
+<span class="lineNum">     158 </span>            : # endif
+<span class="lineNum">     159 </span>            : # define COMPILER_VERSION_MAJOR DEC(__clang_major__)
+<span class="lineNum">     160 </span>            : # define COMPILER_VERSION_MINOR DEC(__clang_minor__)
+<span class="lineNum">     161 </span>            : # define COMPILER_VERSION_PATCH DEC(__clang_patchlevel__)
+<span class="lineNum">     162 </span>            : # if defined(_MSC_VER)
+<span class="lineNum">     163 </span>            :    /* _MSC_VER = VVRR */
+<span class="lineNum">     164 </span>            : #  define SIMULATE_VERSION_MAJOR DEC(_MSC_VER / 100)
+<span class="lineNum">     165 </span>            : #  define SIMULATE_VERSION_MINOR DEC(_MSC_VER % 100)
+<span class="lineNum">     166 </span>            : # endif
+<span class="lineNum">     167 </span>            : # define COMPILER_VERSION_TWEAK DEC(__apple_build_version__)
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span>            : #elif defined(__clang__)
+<span class="lineNum">     170 </span>            : # define COMPILER_ID &quot;Clang&quot;
+<span class="lineNum">     171 </span>            : # if defined(_MSC_VER)
+<span class="lineNum">     172 </span>            : #  define SIMULATE_ID &quot;MSVC&quot;
+<span class="lineNum">     173 </span>            : # endif
+<span class="lineNum">     174 </span>            : # define COMPILER_VERSION_MAJOR DEC(__clang_major__)
+<span class="lineNum">     175 </span>            : # define COMPILER_VERSION_MINOR DEC(__clang_minor__)
+<span class="lineNum">     176 </span>            : # define COMPILER_VERSION_PATCH DEC(__clang_patchlevel__)
+<span class="lineNum">     177 </span>            : # if defined(_MSC_VER)
+<span class="lineNum">     178 </span>            :    /* _MSC_VER = VVRR */
+<span class="lineNum">     179 </span>            : #  define SIMULATE_VERSION_MAJOR DEC(_MSC_VER / 100)
+<span class="lineNum">     180 </span>            : #  define SIMULATE_VERSION_MINOR DEC(_MSC_VER % 100)
+<span class="lineNum">     181 </span>            : # endif
+<span class="lineNum">     182 </span>            : 
+<span class="lineNum">     183 </span>            : #elif defined(__GNUC__)
+<span class="lineNum">     184 </span>            : # define COMPILER_ID &quot;GNU&quot;
+<span class="lineNum">     185 </span>            : # define COMPILER_VERSION_MAJOR DEC(__GNUC__)
+<span class="lineNum">     186 </span>            : # define COMPILER_VERSION_MINOR DEC(__GNUC_MINOR__)
+<span class="lineNum">     187 </span>            : # if defined(__GNUC_PATCHLEVEL__)
+<span class="lineNum">     188 </span>            : #  define COMPILER_VERSION_PATCH DEC(__GNUC_PATCHLEVEL__)
+<span class="lineNum">     189 </span>            : # endif
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span>            : #elif defined(_MSC_VER)
+<span class="lineNum">     192 </span>            : # define COMPILER_ID &quot;MSVC&quot;
+<span class="lineNum">     193 </span>            :   /* _MSC_VER = VVRR */
+<span class="lineNum">     194 </span>            : # define COMPILER_VERSION_MAJOR DEC(_MSC_VER / 100)
+<span class="lineNum">     195 </span>            : # define COMPILER_VERSION_MINOR DEC(_MSC_VER % 100)
+<span class="lineNum">     196 </span>            : # if defined(_MSC_FULL_VER)
+<span class="lineNum">     197 </span>            : #  if _MSC_VER &gt;= 1400
+<span class="lineNum">     198 </span>            :     /* _MSC_FULL_VER = VVRRPPPPP */
+<span class="lineNum">     199 </span>            : #   define COMPILER_VERSION_PATCH DEC(_MSC_FULL_VER % 100000)
+<span class="lineNum">     200 </span>            : #  else
+<span class="lineNum">     201 </span>            :     /* _MSC_FULL_VER = VVRRPPPP */
+<span class="lineNum">     202 </span>            : #   define COMPILER_VERSION_PATCH DEC(_MSC_FULL_VER % 10000)
+<span class="lineNum">     203 </span>            : #  endif
+<span class="lineNum">     204 </span>            : # endif
+<span class="lineNum">     205 </span>            : # if defined(_MSC_BUILD)
+<span class="lineNum">     206 </span>            : #  define COMPILER_VERSION_TWEAK DEC(_MSC_BUILD)
+<span class="lineNum">     207 </span>            : # endif
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span>            : #elif defined(__VISUALDSPVERSION__) || defined(__ADSPBLACKFIN__) || defined(__ADSPTS__) || defined(__ADSP21000__)
+<span class="lineNum">     210 </span>            : # define COMPILER_ID &quot;ADSP&quot;
+<span class="lineNum">     211 </span>            : #if defined(__VISUALDSPVERSION__)
+<span class="lineNum">     212 </span>            :   /* __VISUALDSPVERSION__ = 0xVVRRPP00 */
+<span class="lineNum">     213 </span>            : # define COMPILER_VERSION_MAJOR HEX(__VISUALDSPVERSION__&gt;&gt;24)
+<span class="lineNum">     214 </span>            : # define COMPILER_VERSION_MINOR HEX(__VISUALDSPVERSION__&gt;&gt;16 &amp; 0xFF)
+<span class="lineNum">     215 </span>            : # define COMPILER_VERSION_PATCH HEX(__VISUALDSPVERSION__&gt;&gt;8  &amp; 0xFF)
+<span class="lineNum">     216 </span>            : #endif
+<span class="lineNum">     217 </span>            : 
+<span class="lineNum">     218 </span>            : #elif defined(__IAR_SYSTEMS_ICC__ ) || defined(__IAR_SYSTEMS_ICC)
+<span class="lineNum">     219 </span>            : # define COMPILER_ID &quot;IAR&quot;
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span>            : #elif defined(_SGI_COMPILER_VERSION) || defined(_COMPILER_VERSION)
+<span class="lineNum">     222 </span>            : # define COMPILER_ID &quot;MIPSpro&quot;
+<span class="lineNum">     223 </span>            : # if defined(_SGI_COMPILER_VERSION)
+<span class="lineNum">     224 </span>            :   /* _SGI_COMPILER_VERSION = VRP */
+<span class="lineNum">     225 </span>            : #  define COMPILER_VERSION_MAJOR DEC(_SGI_COMPILER_VERSION/100)
+<span class="lineNum">     226 </span>            : #  define COMPILER_VERSION_MINOR DEC(_SGI_COMPILER_VERSION/10 % 10)
+<span class="lineNum">     227 </span>            : #  define COMPILER_VERSION_PATCH DEC(_SGI_COMPILER_VERSION    % 10)
+<span class="lineNum">     228 </span>            : # else
+<span class="lineNum">     229 </span>            :   /* _COMPILER_VERSION = VRP */
+<span class="lineNum">     230 </span>            : #  define COMPILER_VERSION_MAJOR DEC(_COMPILER_VERSION/100)
+<span class="lineNum">     231 </span>            : #  define COMPILER_VERSION_MINOR DEC(_COMPILER_VERSION/10 % 10)
+<span class="lineNum">     232 </span>            : #  define COMPILER_VERSION_PATCH DEC(_COMPILER_VERSION    % 10)
+<span class="lineNum">     233 </span>            : # endif
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span>            : /* These compilers are either not known or too old to define an
+<span class="lineNum">     237 </span>            :   identification macro.  Try to identify the platform and guess that
+<span class="lineNum">     238 </span>            :   it is the native compiler.  */
+<span class="lineNum">     239 </span>            : #elif defined(__sgi)
+<span class="lineNum">     240 </span>            : # define COMPILER_ID &quot;MIPSpro&quot;
+<span class="lineNum">     241 </span>            : 
+<span class="lineNum">     242 </span>            : #elif defined(__hpux) || defined(__hpua)
+<span class="lineNum">     243 </span>            : # define COMPILER_ID &quot;HP&quot;
+<span class="lineNum">     244 </span>            : 
+<span class="lineNum">     245 </span>            : #else /* unknown compiler */
+<span class="lineNum">     246 </span>            : # define COMPILER_ID &quot;&quot;
+<span class="lineNum">     247 </span>            : #endif
+<span class="lineNum">     248 </span>            : 
+<span class="lineNum">     249 </span>            : /* Construct the string literal in pieces to prevent the source from
+<span class="lineNum">     250 </span>            :    getting matched.  Store it in a pointer rather than an array
+<span class="lineNum">     251 </span>            :    because some compilers will just produce instructions to fill the
+<span class="lineNum">     252 </span>            :    array rather than assigning a pointer to a static array.  */
+<span class="lineNum">     253 </span>            : char const* info_compiler = &quot;INFO&quot; &quot;:&quot; &quot;compiler[&quot; COMPILER_ID &quot;]&quot;;
+<span class="lineNum">     254 </span>            : #ifdef SIMULATE_ID
+<span class="lineNum">     255 </span>            : char const* info_simulate = &quot;INFO&quot; &quot;:&quot; &quot;simulate[&quot; SIMULATE_ID &quot;]&quot;;
+<span class="lineNum">     256 </span>            : #endif
+<span class="lineNum">     257 </span>            : 
+<span class="lineNum">     258 </span>            : #ifdef __QNXNTO__
+<span class="lineNum">     259 </span>            : char const* qnxnto = &quot;INFO&quot; &quot;:&quot; &quot;qnxnto[]&quot;;
+<span class="lineNum">     260 </span>            : #endif
+<span class="lineNum">     261 </span>            : 
+<span class="lineNum">     262 </span>            : /* Identify known platforms by name.  */
+<span class="lineNum">     263 </span>            : #if defined(__linux) || defined(__linux__) || defined(linux)
+<span class="lineNum">     264 </span>            : # define PLATFORM_ID &quot;Linux&quot;
+<span class="lineNum">     265 </span>            : 
+<span class="lineNum">     266 </span>            : #elif defined(__CYGWIN__)
+<span class="lineNum">     267 </span>            : # define PLATFORM_ID &quot;Cygwin&quot;
+<span class="lineNum">     268 </span>            : 
+<span class="lineNum">     269 </span>            : #elif defined(__MINGW32__)
+<span class="lineNum">     270 </span>            : # define PLATFORM_ID &quot;MinGW&quot;
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            : #elif defined(__APPLE__)
+<span class="lineNum">     273 </span>            : # define PLATFORM_ID &quot;Darwin&quot;
+<span class="lineNum">     274 </span>            : 
+<span class="lineNum">     275 </span>            : #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+<span class="lineNum">     276 </span>            : # define PLATFORM_ID &quot;Windows&quot;
+<span class="lineNum">     277 </span>            : 
+<span class="lineNum">     278 </span>            : #elif defined(__FreeBSD__) || defined(__FreeBSD)
+<span class="lineNum">     279 </span>            : # define PLATFORM_ID &quot;FreeBSD&quot;
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span>            : #elif defined(__NetBSD__) || defined(__NetBSD)
+<span class="lineNum">     282 </span>            : # define PLATFORM_ID &quot;NetBSD&quot;
+<span class="lineNum">     283 </span>            : 
+<span class="lineNum">     284 </span>            : #elif defined(__OpenBSD__) || defined(__OPENBSD)
+<span class="lineNum">     285 </span>            : # define PLATFORM_ID &quot;OpenBSD&quot;
+<span class="lineNum">     286 </span>            : 
+<span class="lineNum">     287 </span>            : #elif defined(__sun) || defined(sun)
+<span class="lineNum">     288 </span>            : # define PLATFORM_ID &quot;SunOS&quot;
+<span class="lineNum">     289 </span>            : 
+<span class="lineNum">     290 </span>            : #elif defined(_AIX) || defined(__AIX) || defined(__AIX__) || defined(__aix) || defined(__aix__)
+<span class="lineNum">     291 </span>            : # define PLATFORM_ID &quot;AIX&quot;
+<span class="lineNum">     292 </span>            : 
+<span class="lineNum">     293 </span>            : #elif defined(__sgi) || defined(__sgi__) || defined(_SGI)
+<span class="lineNum">     294 </span>            : # define PLATFORM_ID &quot;IRIX&quot;
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span>            : #elif defined(__hpux) || defined(__hpux__)
+<span class="lineNum">     297 </span>            : # define PLATFORM_ID &quot;HP-UX&quot;
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span>            : #elif defined(__HAIKU__)
+<span class="lineNum">     300 </span>            : # define PLATFORM_ID &quot;Haiku&quot;
+<span class="lineNum">     301 </span>            : 
+<span class="lineNum">     302 </span>            : #elif defined(__BeOS) || defined(__BEOS__) || defined(_BEOS)
+<span class="lineNum">     303 </span>            : # define PLATFORM_ID &quot;BeOS&quot;
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span>            : #elif defined(__QNX__) || defined(__QNXNTO__)
+<span class="lineNum">     306 </span>            : # define PLATFORM_ID &quot;QNX&quot;
+<span class="lineNum">     307 </span>            : 
+<span class="lineNum">     308 </span>            : #elif defined(__tru64) || defined(_tru64) || defined(__TRU64__)
+<span class="lineNum">     309 </span>            : # define PLATFORM_ID &quot;Tru64&quot;
+<span class="lineNum">     310 </span>            : 
+<span class="lineNum">     311 </span>            : #elif defined(__riscos) || defined(__riscos__)
+<span class="lineNum">     312 </span>            : # define PLATFORM_ID &quot;RISCos&quot;
+<span class="lineNum">     313 </span>            : 
+<span class="lineNum">     314 </span>            : #elif defined(__sinix) || defined(__sinix__) || defined(__SINIX__)
+<span class="lineNum">     315 </span>            : # define PLATFORM_ID &quot;SINIX&quot;
+<span class="lineNum">     316 </span>            : 
+<span class="lineNum">     317 </span>            : #elif defined(__UNIX_SV__)
+<span class="lineNum">     318 </span>            : # define PLATFORM_ID &quot;UNIX_SV&quot;
+<span class="lineNum">     319 </span>            : 
+<span class="lineNum">     320 </span>            : #elif defined(__bsdos__)
+<span class="lineNum">     321 </span>            : # define PLATFORM_ID &quot;BSDOS&quot;
+<span class="lineNum">     322 </span>            : 
+<span class="lineNum">     323 </span>            : #elif defined(_MPRAS) || defined(MPRAS)
+<span class="lineNum">     324 </span>            : # define PLATFORM_ID &quot;MP-RAS&quot;
+<span class="lineNum">     325 </span>            : 
+<span class="lineNum">     326 </span>            : #elif defined(__osf) || defined(__osf__)
+<span class="lineNum">     327 </span>            : # define PLATFORM_ID &quot;OSF1&quot;
+<span class="lineNum">     328 </span>            : 
+<span class="lineNum">     329 </span>            : #elif defined(_SCO_SV) || defined(SCO_SV) || defined(sco_sv)
+<span class="lineNum">     330 </span>            : # define PLATFORM_ID &quot;SCO_SV&quot;
+<span class="lineNum">     331 </span>            : 
+<span class="lineNum">     332 </span>            : #elif defined(__ultrix) || defined(__ultrix__) || defined(_ULTRIX)
+<span class="lineNum">     333 </span>            : # define PLATFORM_ID &quot;ULTRIX&quot;
+<span class="lineNum">     334 </span>            : 
+<span class="lineNum">     335 </span>            : #elif defined(__XENIX__) || defined(_XENIX) || defined(XENIX)
+<span class="lineNum">     336 </span>            : # define PLATFORM_ID &quot;Xenix&quot;
+<span class="lineNum">     337 </span>            : 
+<span class="lineNum">     338 </span>            : #elif defined(__WATCOMC__)
+<span class="lineNum">     339 </span>            : # if defined(__LINUX__)
+<span class="lineNum">     340 </span>            : #  define PLATFORM_ID &quot;Linux&quot;
+<span class="lineNum">     341 </span>            : 
+<span class="lineNum">     342 </span>            : # elif defined(__DOS__)
+<span class="lineNum">     343 </span>            : #  define PLATFORM_ID &quot;DOS&quot;
+<span class="lineNum">     344 </span>            : 
+<span class="lineNum">     345 </span>            : # elif defined(__OS2__)
+<span class="lineNum">     346 </span>            : #  define PLATFORM_ID &quot;OS2&quot;
+<span class="lineNum">     347 </span>            : 
+<span class="lineNum">     348 </span>            : # elif defined(__WINDOWS__)
+<span class="lineNum">     349 </span>            : #  define PLATFORM_ID &quot;Windows3x&quot;
+<span class="lineNum">     350 </span>            : 
+<span class="lineNum">     351 </span>            : # else /* unknown platform */
+<span class="lineNum">     352 </span>            : #  define PLATFORM_ID &quot;&quot;
+<span class="lineNum">     353 </span>            : # endif
+<span class="lineNum">     354 </span>            : 
+<span class="lineNum">     355 </span>            : #else /* unknown platform */
+<span class="lineNum">     356 </span>            : # define PLATFORM_ID &quot;&quot;
+<span class="lineNum">     357 </span>            : 
+<span class="lineNum">     358 </span>            : #endif
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span>            : /* For windows compilers MSVC and Intel we can determine
+<span class="lineNum">     361 </span>            :    the architecture of the compiler being used.  This is because
+<span class="lineNum">     362 </span>            :    the compilers do not have flags that can change the architecture,
+<span class="lineNum">     363 </span>            :    but rather depend on which compiler is being used
+<span class="lineNum">     364 </span>            : */
+<span class="lineNum">     365 </span>            : #if defined(_WIN32) &amp;&amp; defined(_MSC_VER)
+<span class="lineNum">     366 </span>            : # if defined(_M_IA64)
+<span class="lineNum">     367 </span>            : #  define ARCHITECTURE_ID &quot;IA64&quot;
+<span class="lineNum">     368 </span>            : 
+<span class="lineNum">     369 </span>            : # elif defined(_M_X64) || defined(_M_AMD64)
+<span class="lineNum">     370 </span>            : #  define ARCHITECTURE_ID &quot;x64&quot;
+<span class="lineNum">     371 </span>            : 
+<span class="lineNum">     372 </span>            : # elif defined(_M_IX86)
+<span class="lineNum">     373 </span>            : #  define ARCHITECTURE_ID &quot;X86&quot;
+<span class="lineNum">     374 </span>            : 
+<span class="lineNum">     375 </span>            : # elif defined(_M_ARM)
+<span class="lineNum">     376 </span>            : #  define ARCHITECTURE_ID &quot;ARM&quot;
+<span class="lineNum">     377 </span>            : 
+<span class="lineNum">     378 </span>            : # elif defined(_M_MIPS)
+<span class="lineNum">     379 </span>            : #  define ARCHITECTURE_ID &quot;MIPS&quot;
+<span class="lineNum">     380 </span>            : 
+<span class="lineNum">     381 </span>            : # elif defined(_M_SH)
+<span class="lineNum">     382 </span>            : #  define ARCHITECTURE_ID &quot;SHx&quot;
+<span class="lineNum">     383 </span>            : 
+<span class="lineNum">     384 </span>            : # else /* unknown architecture */
+<span class="lineNum">     385 </span>            : #  define ARCHITECTURE_ID &quot;&quot;
+<span class="lineNum">     386 </span>            : # endif
+<span class="lineNum">     387 </span>            : 
+<span class="lineNum">     388 </span>            : #elif defined(__WATCOMC__)
+<span class="lineNum">     389 </span>            : # if defined(_M_I86)
+<span class="lineNum">     390 </span>            : #  define ARCHITECTURE_ID &quot;I86&quot;
+<span class="lineNum">     391 </span>            : 
+<span class="lineNum">     392 </span>            : # elif defined(_M_IX86)
+<span class="lineNum">     393 </span>            : #  define ARCHITECTURE_ID &quot;X86&quot;
+<span class="lineNum">     394 </span>            : 
+<span class="lineNum">     395 </span>            : # else /* unknown architecture */
+<span class="lineNum">     396 </span>            : #  define ARCHITECTURE_ID &quot;&quot;
+<span class="lineNum">     397 </span>            : # endif
+<span class="lineNum">     398 </span>            : 
+<span class="lineNum">     399 </span>            : #else
+<span class="lineNum">     400 </span>            : #  define ARCHITECTURE_ID &quot;&quot;
+<span class="lineNum">     401 </span>            : #endif
+<span class="lineNum">     402 </span>            : 
+<span class="lineNum">     403 </span>            : /* Convert integer to decimal digit literals.  */
+<span class="lineNum">     404 </span>            : #define DEC(n)                   \
+<span class="lineNum">     405 </span>            :   ('0' + (((n) / 10000000)%10)), \
+<span class="lineNum">     406 </span>            :   ('0' + (((n) / 1000000)%10)),  \
+<span class="lineNum">     407 </span>            :   ('0' + (((n) / 100000)%10)),   \
+<span class="lineNum">     408 </span>            :   ('0' + (((n) / 10000)%10)),    \
+<span class="lineNum">     409 </span>            :   ('0' + (((n) / 1000)%10)),     \
+<span class="lineNum">     410 </span>            :   ('0' + (((n) / 100)%10)),      \
+<span class="lineNum">     411 </span>            :   ('0' + (((n) / 10)%10)),       \
+<span class="lineNum">     412 </span>            :   ('0' +  ((n) % 10))
+<span class="lineNum">     413 </span>            : 
+<span class="lineNum">     414 </span>            : /* Convert integer to hex digit literals.  */
+<span class="lineNum">     415 </span>            : #define HEX(n)             \
+<span class="lineNum">     416 </span>            :   ('0' + ((n)&gt;&gt;28 &amp; 0xF)), \
+<span class="lineNum">     417 </span>            :   ('0' + ((n)&gt;&gt;24 &amp; 0xF)), \
+<span class="lineNum">     418 </span>            :   ('0' + ((n)&gt;&gt;20 &amp; 0xF)), \
+<span class="lineNum">     419 </span>            :   ('0' + ((n)&gt;&gt;16 &amp; 0xF)), \
+<span class="lineNum">     420 </span>            :   ('0' + ((n)&gt;&gt;12 &amp; 0xF)), \
+<span class="lineNum">     421 </span>            :   ('0' + ((n)&gt;&gt;8  &amp; 0xF)), \
+<span class="lineNum">     422 </span>            :   ('0' + ((n)&gt;&gt;4  &amp; 0xF)), \
+<span class="lineNum">     423 </span>            :   ('0' + ((n)     &amp; 0xF))
+<span class="lineNum">     424 </span>            : 
+<span class="lineNum">     425 </span>            : /* Construct a string literal encoding the version number components. */
+<span class="lineNum">     426 </span>            : #ifdef COMPILER_VERSION_MAJOR
+<span class="lineNum">     427 </span>            : char const info_version[] = {
+<span class="lineNum">     428 </span>            :   'I', 'N', 'F', 'O', ':',
+<span class="lineNum">     429 </span>            :   'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
+<span class="lineNum">     430 </span>            :   COMPILER_VERSION_MAJOR,
+<span class="lineNum">     431 </span>            : # ifdef COMPILER_VERSION_MINOR
+<span class="lineNum">     432 </span>            :   '.', COMPILER_VERSION_MINOR,
+<span class="lineNum">     433 </span>            : #  ifdef COMPILER_VERSION_PATCH
+<span class="lineNum">     434 </span>            :    '.', COMPILER_VERSION_PATCH,
+<span class="lineNum">     435 </span>            : #   ifdef COMPILER_VERSION_TWEAK
+<span class="lineNum">     436 </span>            :     '.', COMPILER_VERSION_TWEAK,
+<span class="lineNum">     437 </span>            : #   endif
+<span class="lineNum">     438 </span>            : #  endif
+<span class="lineNum">     439 </span>            : # endif
+<span class="lineNum">     440 </span>            :   ']','\0'};
+<span class="lineNum">     441 </span>            : #endif
+<span class="lineNum">     442 </span>            : 
+<span class="lineNum">     443 </span>            : /* Construct a string literal encoding the version number components. */
+<span class="lineNum">     444 </span>            : #ifdef SIMULATE_VERSION_MAJOR
+<span class="lineNum">     445 </span>            : char const info_simulate_version[] = {
+<span class="lineNum">     446 </span>            :   'I', 'N', 'F', 'O', ':',
+<span class="lineNum">     447 </span>            :   's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
+<span class="lineNum">     448 </span>            :   SIMULATE_VERSION_MAJOR,
+<span class="lineNum">     449 </span>            : # ifdef SIMULATE_VERSION_MINOR
+<span class="lineNum">     450 </span>            :   '.', SIMULATE_VERSION_MINOR,
+<span class="lineNum">     451 </span>            : #  ifdef SIMULATE_VERSION_PATCH
+<span class="lineNum">     452 </span>            :    '.', SIMULATE_VERSION_PATCH,
+<span class="lineNum">     453 </span>            : #   ifdef SIMULATE_VERSION_TWEAK
+<span class="lineNum">     454 </span>            :     '.', SIMULATE_VERSION_TWEAK,
+<span class="lineNum">     455 </span>            : #   endif
+<span class="lineNum">     456 </span>            : #  endif
+<span class="lineNum">     457 </span>            : # endif
+<span class="lineNum">     458 </span>            :   ']','\0'};
+<span class="lineNum">     459 </span>            : #endif
+<span class="lineNum">     460 </span>            : 
+<span class="lineNum">     461 </span>            : /* Construct the string literal in pieces to prevent the source from
+<span class="lineNum">     462 </span>            :    getting matched.  Store it in a pointer rather than an array
+<span class="lineNum">     463 </span>            :    because some compilers will just produce instructions to fill the
+<span class="lineNum">     464 </span>            :    array rather than assigning a pointer to a static array.  */
+<span class="lineNum">     465 </span>            : char const* info_platform = &quot;INFO&quot; &quot;:&quot; &quot;platform[&quot; PLATFORM_ID &quot;]&quot;;
+<span class="lineNum">     466 </span>            : char const* info_arch = &quot;INFO&quot; &quot;:&quot; &quot;arch[&quot; ARCHITECTURE_ID &quot;]&quot;;
+<span class="lineNum">     467 </span>            : 
+<span class="lineNum">     468 </span>            : 
+<span class="lineNum">     469 </span>            : 
+<span class="lineNum">     470 </span>            : 
+<a name="471"><span class="lineNum">     471 </span>            : /*--------------------------------------------------------------------------*/</a>
+<span class="lineNum">     472 </span>            : 
+<span class="lineNum">     473 </span><span class="lineNoCov">          0 : int main(int argc, char* argv[])</span>
+<span class="lineNum">     474 </span>            : {
+<span class="lineNum">     475 </span><span class="lineNoCov">          0 :   int require = 0;</span>
+<span class="lineNum">     476 </span><span class="lineNoCov">          0 :   require += info_compiler[argc];</span>
+<span class="lineNum">     477 </span><span class="lineNoCov">          0 :   require += info_platform[argc];</span>
+<span class="lineNum">     478 </span>            : #ifdef COMPILER_VERSION_MAJOR
+<span class="lineNum">     479 </span><span class="lineNoCov">          0 :   require += info_version[argc];</span>
+<span class="lineNum">     480 </span>            : #endif
+<span class="lineNum">     481 </span>            : #ifdef SIMULATE_ID
+<span class="lineNum">     482 </span>            :   require += info_simulate[argc];
+<span class="lineNum">     483 </span>            : #endif
+<span class="lineNum">     484 </span>            : #ifdef SIMULATE_VERSION_MAJOR
+<span class="lineNum">     485 </span>            :   require += info_simulate_version[argc];
+<span class="lineNum">     486 </span>            : #endif
+<span class="lineNum">     487 </span>            :   (void)argv;
+<span class="lineNum">     488 </span><span class="lineNoCov">          0 :   return require;</span>
+<span class="lineNum">     489 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

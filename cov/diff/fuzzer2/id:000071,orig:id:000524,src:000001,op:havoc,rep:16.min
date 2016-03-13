@@ -1,0 +1,18 @@
+diff fuzzer2/id:000070,orig:id:000512,src:000001,op:havoc,rep:128,+cov.min -> fuzzer2/id:000071,orig:id:000524,src:000001,op:havoc,rep:16.min
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'function' coverage: _ZN4YAML15SingleDocParser25HandleCompactMapWithNoKeyERNS_12EventHandlerE()
+  New 'line' coverage: 228
+  New 'line' coverage: 229
+  New 'line' coverage: 343
+  New 'line' coverage: 344
+  New 'line' coverage: 347
+  New 'line' coverage: 350
+  New 'line' coverage: 351
+  New 'line' coverage: 353
+  New 'line' coverage: 354
+  New 'line' coverage: 59
+  New 'line' coverage: 60
+  New 'line' coverage: 61
+  New 'line' coverage: 62
+Src file: /root/yaml-cpp/src/emitfromevents.cpp
+  New 'line' coverage: 83

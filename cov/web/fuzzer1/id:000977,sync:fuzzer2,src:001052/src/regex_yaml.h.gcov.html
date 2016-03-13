@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/regex_yaml.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - regex_yaml.h<span style="font-size: 80%;"> (source / <a href="regex_yaml.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef REGEX_H_62B23520_7C8E_11DE_8A39_0800200C9A66</a>
+<span class="lineNum">       2 </span>            : #define REGEX_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #if defined(_MSC_VER) ||                                            \
+<span class="lineNum">       5 </span>            :     (defined(__GNUC__) &amp;&amp; (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ &gt;= 4) || \
+<span class="lineNum">       6 </span>            :      (__GNUC__ &gt;= 4))  // GCC supports &quot;pragma once&quot; correctly since 3.4
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : #endif
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : #include &lt;string&gt;
+<span class="lineNum">      11 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : namespace YAML {
+<span class="lineNum">      14 </span>            : class Stream;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : enum REGEX_OP {
+<span class="lineNum">      17 </span>            :   REGEX_EMPTY,
+<span class="lineNum">      18 </span>            :   REGEX_MATCH,
+<span class="lineNum">      19 </span>            :   REGEX_RANGE,
+<span class="lineNum">      20 </span>            :   REGEX_OR,
+<span class="lineNum">      21 </span>            :   REGEX_AND,
+<span class="lineNum">      22 </span>            :   REGEX_NOT,
+<span class="lineNum">      23 </span>            :   REGEX_SEQ
+<span class="lineNum">      24 </span>            : };
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : // simplified regular expressions
+<a name="27"><span class="lineNum">      27 </span>            : // . Only straightforward matches (no repeated characters)</a>
+<span class="lineNum">      28 </span>            : // . Only matches from start of string
+<span class="lineNum">      29 </span><span class="lineCov">    2573683 : class RegEx {</span>
+<span class="lineNum">      30 </span>            :  public:
+<span class="lineNum">      31 </span>            :   RegEx();
+<span class="lineNum">      32 </span>            :   RegEx(char ch);
+<a name="33"><span class="lineNum">      33 </span>            :   RegEx(char a, char z);</a>
+<span class="lineNum">      34 </span>            :   RegEx(const std::string&amp; str, REGEX_OP op = REGEX_SEQ);
+<span class="lineNum">      35 </span><span class="lineCov">    2795204 :   ~RegEx() {}</span>
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :   friend RegEx operator!(const RegEx&amp; ex);
+<span class="lineNum">      38 </span>            :   friend RegEx operator||(const RegEx&amp; ex1, const RegEx&amp; ex2);
+<span class="lineNum">      39 </span>            :   friend RegEx operator&amp;&amp;(const RegEx&amp; ex1, const RegEx&amp; ex2);
+<span class="lineNum">      40 </span>            :   friend RegEx operator+(const RegEx&amp; ex1, const RegEx&amp; ex2);
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            :   bool Matches(char ch) const;
+<span class="lineNum">      43 </span>            :   bool Matches(const std::string&amp; str) const;
+<span class="lineNum">      44 </span>            :   bool Matches(const Stream&amp; in) const;
+<span class="lineNum">      45 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      46 </span>            :   bool Matches(const Source&amp; source) const;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            :   int Match(const std::string&amp; str) const;
+<span class="lineNum">      49 </span>            :   int Match(const Stream&amp; in) const;
+<span class="lineNum">      50 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      51 </span>            :   int Match(const Source&amp; source) const;
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            :  private:
+<span class="lineNum">      54 </span>            :   RegEx(REGEX_OP op);
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      57 </span>            :   bool IsValidSource(const Source&amp; source) const;
+<span class="lineNum">      58 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      59 </span>            :   int MatchUnchecked(const Source&amp; source) const;
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      62 </span>            :   int MatchOpEmpty(const Source&amp; source) const;
+<span class="lineNum">      63 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      64 </span>            :   int MatchOpMatch(const Source&amp; source) const;
+<span class="lineNum">      65 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      66 </span>            :   int MatchOpRange(const Source&amp; source) const;
+<span class="lineNum">      67 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      68 </span>            :   int MatchOpOr(const Source&amp; source) const;
+<span class="lineNum">      69 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      70 </span>            :   int MatchOpAnd(const Source&amp; source) const;
+<span class="lineNum">      71 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      72 </span>            :   int MatchOpNot(const Source&amp; source) const;
+<span class="lineNum">      73 </span>            :   template &lt;typename Source&gt;
+<span class="lineNum">      74 </span>            :   int MatchOpSeq(const Source&amp; source) const;
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            :  private:
+<span class="lineNum">      77 </span>            :   REGEX_OP m_op;
+<span class="lineNum">      78 </span>            :   char m_a, m_z;
+<span class="lineNum">      79 </span>            :   std::vector&lt;RegEx&gt; m_params;
+<span class="lineNum">      80 </span>            : };
+<span class="lineNum">      81 </span>            : }
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            : #include &quot;regeximpl.h&quot;
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span>            : #endif  // REGEX_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

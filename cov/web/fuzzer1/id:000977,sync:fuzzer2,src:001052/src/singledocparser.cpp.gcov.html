@@ -1,0 +1,489 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/singledocparser.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - singledocparser.cpp<span style="font-size: 80%;"> (source / <a href="singledocparser.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">225</td>
+            <td class="headerCovTableEntry">234</td>
+            <td class="headerCovTableEntryHi">96.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;algorithm&gt;</a>
+<span class="lineNum">       2 </span>            : #include &lt;cstdio&gt;
+<span class="lineNum">       3 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            : #include &quot;collectionstack.h&quot;  // IWYU pragma: keep
+<span class="lineNum">       6 </span>            : #include &quot;scanner.h&quot;
+<span class="lineNum">       7 </span>            : #include &quot;singledocparser.h&quot;
+<span class="lineNum">       8 </span>            : #include &quot;tag.h&quot;
+<span class="lineNum">       9 </span>            : #include &quot;token.h&quot;
+<span class="lineNum">      10 </span>            : #include &quot;yaml-cpp/emitterstyle.h&quot;
+<span class="lineNum">      11 </span>            : #include &quot;yaml-cpp/eventhandler.h&quot;
+<span class="lineNum">      12 </span>            : #include &quot;yaml-cpp/exceptions.h&quot;  // IWYU pragma: keep
+<span class="lineNum">      13 </span>            : #include &quot;yaml-cpp/mark.h&quot;
+<a name="14"><span class="lineNum">      14 </span>            : </a>
+<span class="lineNum">      15 </span>            : namespace YAML {
+<span class="lineNum">      16 </span><span class="lineCov">       1621 : SingleDocParser::SingleDocParser(Scanner&amp; scanner, const Directives&amp; directives)</span>
+<span class="lineNum">      17 </span>            :     : m_scanner(scanner),
+<span class="lineNum">      18 </span>            :       m_directives(directives),
+<span class="lineNum">      19 </span><span class="lineCov">       1621 :       m_pCollectionStack(new CollectionStack),</span>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">       3242 :       m_curAnchor(0) {}</span></a>
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span><span class="lineCov">       1621 : SingleDocParser::~SingleDocParser() {}</span>
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span>            : // HandleDocument
+<a name="25"><span class="lineNum">      25 </span>            : // . Handles the next document</a>
+<span class="lineNum">      26 </span>            : // . Throws a ParserException on error.
+<span class="lineNum">      27 </span><span class="lineCov">       1621 : void SingleDocParser::HandleDocument(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">      28 </span><span class="lineCov">       1621 :   assert(!m_scanner.empty());  // guaranteed that there are tokens</span>
+<span class="lineNum">      29 </span><span class="lineCov">       1621 :   assert(!m_curAnchor);</span>
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span><span class="lineCov">       1621 :   eventHandler.OnDocumentStart(m_scanner.peek().mark);</span>
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            :   // eat doc start
+<span class="lineNum">      34 </span><span class="lineCov">       1621 :   if (m_scanner.peek().type == Token::DOC_START)</span>
+<span class="lineNum">      35 </span><span class="lineCov">        145 :     m_scanner.pop();</span>
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :   // recurse!
+<span class="lineNum">      38 </span><span class="lineCov">       1621 :   HandleNode(eventHandler);</span>
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span><span class="lineCov">        971 :   eventHandler.OnDocumentEnd();</span>
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            :   // and finally eat any doc ends we see
+<span class="lineNum">      43 </span><span class="lineCov">       1047 :   while (!m_scanner.empty() &amp;&amp; m_scanner.peek().type == Token::DOC_END)</span>
+<span class="lineNum">      44 </span><span class="lineCov">         38 :     m_scanner.pop();</span>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">        945 : }</span></a>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span><span class="lineCov">      97988 : void SingleDocParser::HandleNode(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">      48 </span>            :   // an empty node *is* a possibility
+<span class="lineNum">      49 </span><span class="lineCov">      97988 :   if (m_scanner.empty()) {</span>
+<span class="lineNum">      50 </span><span class="lineCov">          3 :     eventHandler.OnNull(m_scanner.mark(), NullAnchor);</span>
+<span class="lineNum">      51 </span><span class="lineCov">      42046 :     return;</span>
+<span class="lineNum">      52 </span>            :   }
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span>            :   // save location
+<span class="lineNum">      55 </span><span class="lineCov">      97872 :   Mark mark = m_scanner.peek().mark;</span>
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :   // special case: a value node by itself must be a map, with no header
+<span class="lineNum">      58 </span><span class="lineCov">      97872 :   if (m_scanner.peek().type == Token::VALUE) {</span>
+<span class="lineNum">      59 </span><span class="lineCov">        158 :     eventHandler.OnMapStart(mark, &quot;?&quot;, NullAnchor, EmitterStyle::Default);</span>
+<span class="lineNum">      60 </span><span class="lineCov">        158 :     HandleMap(eventHandler);</span>
+<span class="lineNum">      61 </span><span class="lineCov">        158 :     eventHandler.OnMapEnd();</span>
+<span class="lineNum">      62 </span><span class="lineCov">        158 :     return;</span>
+<span class="lineNum">      63 </span>            :   }
+<span class="lineNum">      64 </span>            : 
+<span class="lineNum">      65 </span>            :   // special case: an alias node
+<span class="lineNum">      66 </span><span class="lineCov">      97714 :   if (m_scanner.peek().type == Token::ALIAS) {</span>
+<span class="lineNum">      67 </span><span class="lineCov">       2416 :     eventHandler.OnAlias(mark, LookupAnchor(mark, m_scanner.peek().value));</span>
+<span class="lineNum">      68 </span><span class="lineCov">       2389 :     m_scanner.pop();</span>
+<span class="lineNum">      69 </span><span class="lineCov">       2389 :     return;</span>
+<span class="lineNum">      70 </span>            :   }
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span><span class="lineCov">     151103 :   std::string tag;</span>
+<span class="lineNum">      73 </span>            :   anchor_t anchor;
+<span class="lineNum">      74 </span><span class="lineCov">      95298 :   ParseProperties(tag, anchor);</span>
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span><span class="lineCov">      95253 :   const Token&amp; token = m_scanner.peek();</span>
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span><span class="lineCov">      95253 :   if (token.type == Token::PLAIN_SCALAR &amp;&amp; token.value == &quot;null&quot;) {</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :     eventHandler.OnNull(mark, anchor);</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :     m_scanner.pop();</span>
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :     return;</span>
+<span class="lineNum">      82 </span>            :   }
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span>            :   // add non-specific tags
+<span class="lineNum">      85 </span><span class="lineCov">      95253 :   if (tag.empty())</span>
+<span class="lineNum">      86 </span><span class="lineCov">      89564 :     tag = (token.type == Token::NON_PLAIN_SCALAR ? &quot;!&quot; : &quot;?&quot;);</span>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span>            :   // now split based on what kind of node we should be
+<span class="lineNum">      89 </span><span class="lineCov">      95253 :   switch (token.type) {</span>
+<span class="lineNum">      90 </span>            :     case Token::PLAIN_SCALAR:
+<span class="lineNum">      91 </span>            :     case Token::NON_PLAIN_SCALAR:
+<span class="lineNum">      92 </span><span class="lineCov">      18775 :       eventHandler.OnScalar(mark, tag, anchor, token.value);</span>
+<span class="lineNum">      93 </span><span class="lineCov">      18775 :       m_scanner.pop();</span>
+<span class="lineNum">      94 </span><span class="lineCov">      18775 :       return;</span>
+<span class="lineNum">      95 </span>            :     case Token::FLOW_SEQ_START:
+<span class="lineNum">      96 </span><span class="lineCov">      16380 :       eventHandler.OnSequenceStart(mark, tag, anchor, EmitterStyle::Flow);</span>
+<span class="lineNum">      97 </span><span class="lineCov">      16380 :       HandleSequence(eventHandler);</span>
+<span class="lineNum">      98 </span><span class="lineCov">       2625 :       eventHandler.OnSequenceEnd();</span>
+<span class="lineNum">      99 </span><span class="lineCov">       2625 :       return;</span>
+<span class="lineNum">     100 </span>            :     case Token::BLOCK_SEQ_START:
+<span class="lineNum">     101 </span><span class="lineCov">       9327 :       eventHandler.OnSequenceStart(mark, tag, anchor, EmitterStyle::Block);</span>
+<span class="lineNum">     102 </span><span class="lineCov">       9327 :       HandleSequence(eventHandler);</span>
+<span class="lineNum">     103 </span><span class="lineCov">       6511 :       eventHandler.OnSequenceEnd();</span>
+<span class="lineNum">     104 </span><span class="lineCov">       6511 :       return;</span>
+<span class="lineNum">     105 </span>            :     case Token::FLOW_MAP_START:
+<span class="lineNum">     106 </span><span class="lineCov">       7739 :       eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Flow);</span>
+<span class="lineNum">     107 </span><span class="lineCov">       7739 :       HandleMap(eventHandler);</span>
+<span class="lineNum">     108 </span><span class="lineCov">        466 :       eventHandler.OnMapEnd();</span>
+<span class="lineNum">     109 </span><span class="lineCov">        466 :       return;</span>
+<span class="lineNum">     110 </span>            :     case Token::BLOCK_MAP_START:
+<span class="lineNum">     111 </span><span class="lineCov">      16664 :       eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Block);</span>
+<span class="lineNum">     112 </span><span class="lineCov">      16664 :       HandleMap(eventHandler);</span>
+<span class="lineNum">     113 </span><span class="lineCov">      10927 :       eventHandler.OnMapEnd();</span>
+<span class="lineNum">     114 </span><span class="lineCov">      10927 :       return;</span>
+<span class="lineNum">     115 </span>            :     case Token::KEY:
+<span class="lineNum">     116 </span>            :       // compact maps can only go in a flow sequence
+<span class="lineNum">     117 </span><span class="lineCov">      15469 :       if (m_pCollectionStack-&gt;GetCurCollectionType() ==</span>
+<span class="lineNum">     118 </span>            :           CollectionType::FlowSeq) {
+<span class="lineNum">     119 </span><span class="lineCov">      13728 :         eventHandler.OnMapStart(mark, tag, anchor, EmitterStyle::Flow);</span>
+<span class="lineNum">     120 </span><span class="lineCov">      13728 :         HandleMap(eventHandler);</span>
+<span class="lineNum">     121 </span><span class="lineCov">        189 :         eventHandler.OnMapEnd();</span>
+<span class="lineNum">     122 </span><span class="lineCov">        189 :         return;</span>
+<span class="lineNum">     123 </span>            :       }
+<span class="lineNum">     124 </span><span class="lineCov">       1741 :       break;</span>
+<span class="lineNum">     125 </span>            :     default:
+<span class="lineNum">     126 </span><span class="lineCov">      10899 :       break;</span>
+<span class="lineNum">     127 </span>            :   }
+<span class="lineNum">     128 </span>            : 
+<span class="lineNum">     129 </span><span class="lineCov">      12640 :   if (tag == &quot;?&quot;)</span>
+<span class="lineNum">     130 </span><span class="lineCov">       9037 :     eventHandler.OnNull(mark, anchor);</span>
+<span class="lineNum">     131 </span>            :   else
+<span class="lineNum">     132 </span><span class="lineCov">       3603 :     eventHandler.OnScalar(mark, tag, anchor, &quot;&quot;);</span>
+<a name="133"><span class="lineNum">     133 </span>            : }</a>
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span><span class="lineCov">      25707 : void SingleDocParser::HandleSequence(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     136 </span>            :   // split based on start token
+<span class="lineNum">     137 </span><span class="lineCov">      25707 :   switch (m_scanner.peek().type) {</span>
+<span class="lineNum">     138 </span>            :     case Token::BLOCK_SEQ_START:
+<span class="lineNum">     139 </span><span class="lineCov">       9327 :       HandleBlockSequence(eventHandler);</span>
+<span class="lineNum">     140 </span><span class="lineCov">       6511 :       break;</span>
+<span class="lineNum">     141 </span>            :     case Token::FLOW_SEQ_START:
+<span class="lineNum">     142 </span><span class="lineCov">      16380 :       HandleFlowSequence(eventHandler);</span>
+<span class="lineNum">     143 </span><span class="lineCov">       2625 :       break;</span>
+<span class="lineNum">     144 </span>            :     default:
+<span class="lineNum">     145 </span><span class="lineNoCov">          0 :       break;</span>
+<span class="lineNum">     146 </span>            :   }
+<a name="147"><span class="lineNum">     147 </span><span class="lineCov">       9136 : }</span></a>
+<span class="lineNum">     148 </span>            : 
+<span class="lineNum">     149 </span><span class="lineCov">       9327 : void SingleDocParser::HandleBlockSequence(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     150 </span>            :   // eat start token
+<span class="lineNum">     151 </span><span class="lineCov">       9327 :   m_scanner.pop();</span>
+<span class="lineNum">     152 </span><span class="lineCov">       9327 :   m_pCollectionStack-&gt;PushCollectionType(CollectionType::BlockSeq);</span>
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineCov">      16545 :   while (1) {</span>
+<span class="lineNum">     155 </span><span class="lineCov">      25872 :     if (m_scanner.empty())</span>
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ);</span>
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span><span class="lineCov">      40708 :     Token token = m_scanner.peek();</span>
+<span class="lineNum">     159 </span><span class="lineCov">      25872 :     if (token.type != Token::BLOCK_ENTRY &amp;&amp; token.type != Token::BLOCK_SEQ_END)</span>
+<span class="lineNum">     160 </span><span class="lineCov">         10 :       throw ParserException(token.mark, ErrorMsg::END_OF_SEQ);</span>
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span><span class="lineCov">      25862 :     m_scanner.pop();</span>
+<span class="lineNum">     163 </span><span class="lineCov">      25862 :     if (token.type == Token::BLOCK_SEQ_END)</span>
+<span class="lineNum">     164 </span><span class="lineCov">       6511 :       break;</span>
+<span class="lineNum">     165 </span>            : 
+<span class="lineNum">     166 </span>            :     // check for null
+<span class="lineNum">     167 </span><span class="lineCov">      19351 :     if (!m_scanner.empty()) {</span>
+<span class="lineNum">     168 </span><span class="lineCov">      19273 :       const Token&amp; token = m_scanner.peek();</span>
+<span class="lineNum">     169 </span><span class="lineCov">      34173 :       if (token.type == Token::BLOCK_ENTRY ||</span>
+<span class="lineNum">     170 </span><span class="lineCov">      14900 :           token.type == Token::BLOCK_SEQ_END) {</span>
+<span class="lineNum">     171 </span><span class="lineCov">       4525 :         eventHandler.OnNull(token.mark, NullAnchor);</span>
+<span class="lineNum">     172 </span><span class="lineCov">       4525 :         continue;</span>
+<span class="lineNum">     173 </span>            :       }
+<span class="lineNum">     174 </span>            :     }
+<span class="lineNum">     175 </span>            : 
+<span class="lineNum">     176 </span><span class="lineCov">      14748 :     HandleNode(eventHandler);</span>
+<span class="lineNum">     177 </span>            :   }
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineCov">       6511 :   m_pCollectionStack-&gt;PopCollectionType(CollectionType::BlockSeq);</span>
+<a name="180"><span class="lineNum">     180 </span><span class="lineCov">       6511 : }</span></a>
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span><span class="lineCov">      16380 : void SingleDocParser::HandleFlowSequence(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     183 </span>            :   // eat start token
+<span class="lineNum">     184 </span><span class="lineCov">      16380 :   m_scanner.pop();</span>
+<span class="lineNum">     185 </span><span class="lineCov">      16380 :   m_pCollectionStack-&gt;PushCollectionType(CollectionType::FlowSeq);</span>
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span><span class="lineCov">       8251 :   while (1) {</span>
+<span class="lineNum">     188 </span><span class="lineCov">      24631 :     if (m_scanner.empty())</span>
+<span class="lineNum">     189 </span><span class="lineCov">          4 :       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ_FLOW);</span>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span>            :     // first check for end
+<span class="lineNum">     192 </span><span class="lineCov">      24619 :     if (m_scanner.peek().type == Token::FLOW_SEQ_END) {</span>
+<span class="lineNum">     193 </span><span class="lineCov">       2625 :       m_scanner.pop();</span>
+<span class="lineNum">     194 </span><span class="lineCov">       2625 :       break;</span>
+<span class="lineNum">     195 </span>            :     }
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :     // then read the node
+<span class="lineNum">     198 </span><span class="lineCov">      21994 :     HandleNode(eventHandler);</span>
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span><span class="lineCov">       8361 :     if (m_scanner.empty())</span>
+<span class="lineNum">     201 </span><span class="lineCov">         29 :       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_SEQ_FLOW);</span>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span>            :     // now eat the separator (or could be a sequence end, which we ignore - but
+<span class="lineNum">     204 </span>            :     // if it's neither, then it's a bad node)
+<span class="lineNum">     205 </span><span class="lineCov">       8332 :     Token&amp; token = m_scanner.peek();</span>
+<span class="lineNum">     206 </span><span class="lineCov">       8332 :     if (token.type == Token::FLOW_ENTRY)</span>
+<span class="lineNum">     207 </span><span class="lineCov">       5830 :       m_scanner.pop();</span>
+<span class="lineNum">     208 </span><span class="lineCov">       2502 :     else if (token.type != Token::FLOW_SEQ_END)</span>
+<span class="lineNum">     209 </span><span class="lineCov">         81 :       throw ParserException(token.mark, ErrorMsg::END_OF_SEQ_FLOW);</span>
+<span class="lineNum">     210 </span>            :   }
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span><span class="lineCov">       2625 :   m_pCollectionStack-&gt;PopCollectionType(CollectionType::FlowSeq);</span>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">       2625 : }</span></a>
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span><span class="lineCov">      38289 : void SingleDocParser::HandleMap(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     216 </span>            :   // split based on start token
+<span class="lineNum">     217 </span><span class="lineCov">      38289 :   switch (m_scanner.peek().type) {</span>
+<span class="lineNum">     218 </span>            :     case Token::BLOCK_MAP_START:
+<span class="lineNum">     219 </span><span class="lineCov">      16664 :       HandleBlockMap(eventHandler);</span>
+<span class="lineNum">     220 </span><span class="lineCov">      10927 :       break;</span>
+<span class="lineNum">     221 </span>            :     case Token::FLOW_MAP_START:
+<span class="lineNum">     222 </span><span class="lineCov">       7739 :       HandleFlowMap(eventHandler);</span>
+<span class="lineNum">     223 </span><span class="lineCov">        466 :       break;</span>
+<span class="lineNum">     224 </span>            :     case Token::KEY:
+<span class="lineNum">     225 </span><span class="lineCov">      13728 :       HandleCompactMap(eventHandler);</span>
+<span class="lineNum">     226 </span><span class="lineCov">        189 :       break;</span>
+<span class="lineNum">     227 </span>            :     case Token::VALUE:
+<span class="lineNum">     228 </span><span class="lineCov">        158 :       HandleCompactMapWithNoKey(eventHandler);</span>
+<span class="lineNum">     229 </span><span class="lineCov">        158 :       break;</span>
+<span class="lineNum">     230 </span>            :     default:
+<span class="lineNum">     231 </span><span class="lineNoCov">          0 :       break;</span>
+<span class="lineNum">     232 </span>            :   }
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">      11740 : }</span></a>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineCov">      16664 : void SingleDocParser::HandleBlockMap(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     236 </span>            :   // eat start token
+<span class="lineNum">     237 </span><span class="lineCov">      16664 :   m_scanner.pop();</span>
+<span class="lineNum">     238 </span><span class="lineCov">      16664 :   m_pCollectionStack-&gt;PushCollectionType(CollectionType::BlockMap);</span>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">      18616 :   while (1) {</span>
+<span class="lineNum">     241 </span><span class="lineCov">      35280 :     if (m_scanner.empty())</span>
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 :       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_MAP);</span>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span><span class="lineCov">      59527 :     Token token = m_scanner.peek();</span>
+<span class="lineNum">     245 </span><span class="lineCov">      46234 :     if (token.type != Token::KEY &amp;&amp; token.type != Token::VALUE &amp;&amp;</span>
+<span class="lineNum">     246 </span><span class="lineCov">      11007 :         token.type != Token::BLOCK_MAP_END)</span>
+<span class="lineNum">     247 </span><span class="lineCov">         80 :       throw ParserException(token.mark, ErrorMsg::END_OF_MAP);</span>
+<span class="lineNum">     248 </span>            : 
+<span class="lineNum">     249 </span><span class="lineCov">      35147 :     if (token.type == Token::BLOCK_MAP_END) {</span>
+<span class="lineNum">     250 </span><span class="lineCov">      10927 :       m_scanner.pop();</span>
+<span class="lineNum">     251 </span><span class="lineCov">      10927 :       break;</span>
+<span class="lineNum">     252 </span>            :     }
+<span class="lineNum">     253 </span>            : 
+<span class="lineNum">     254 </span>            :     // grab key (if non-null)
+<span class="lineNum">     255 </span><span class="lineCov">      24220 :     if (token.type == Token::KEY) {</span>
+<span class="lineNum">     256 </span><span class="lineCov">      19257 :       m_scanner.pop();</span>
+<span class="lineNum">     257 </span><span class="lineCov">      19257 :       HandleNode(eventHandler);</span>
+<span class="lineNum">     258 </span>            :     } else {
+<span class="lineNum">     259 </span><span class="lineCov">       4963 :       eventHandler.OnNull(token.mark, NullAnchor);</span>
+<span class="lineNum">     260 </span>            :     }
+<span class="lineNum">     261 </span>            : 
+<span class="lineNum">     262 </span>            :     // now grab value (optional)
+<span class="lineNum">     263 </span><span class="lineCov">      20266 :     if (!m_scanner.empty() &amp;&amp; m_scanner.peek().type == Token::VALUE) {</span>
+<span class="lineNum">     264 </span><span class="lineCov">      12279 :       m_scanner.pop();</span>
+<span class="lineNum">     265 </span><span class="lineCov">      12279 :       HandleNode(eventHandler);</span>
+<span class="lineNum">     266 </span>            :     } else {
+<span class="lineNum">     267 </span><span class="lineCov">       7934 :       eventHandler.OnNull(token.mark, NullAnchor);</span>
+<span class="lineNum">     268 </span>            :     }
+<span class="lineNum">     269 </span>            :   }
+<span class="lineNum">     270 </span>            : 
+<span class="lineNum">     271 </span><span class="lineCov">      10927 :   m_pCollectionStack-&gt;PopCollectionType(CollectionType::BlockMap);</span>
+<a name="272"><span class="lineNum">     272 </span><span class="lineCov">      10927 : }</span></a>
+<span class="lineNum">     273 </span>            : 
+<span class="lineNum">     274 </span><span class="lineCov">       7739 : void SingleDocParser::HandleFlowMap(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     275 </span>            :   // eat start token
+<span class="lineNum">     276 </span><span class="lineCov">       7739 :   m_scanner.pop();</span>
+<span class="lineNum">     277 </span><span class="lineCov">       7739 :   m_pCollectionStack-&gt;PushCollectionType(CollectionType::FlowMap);</span>
+<span class="lineNum">     278 </span>            : 
+<span class="lineNum">     279 </span><span class="lineCov">      14778 :   while (1) {</span>
+<span class="lineNum">     280 </span><span class="lineCov">      22517 :     if (m_scanner.empty())</span>
+<span class="lineNum">     281 </span><span class="lineCov">          4 :       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_MAP_FLOW);</span>
+<span class="lineNum">     282 </span>            : 
+<span class="lineNum">     283 </span><span class="lineCov">      22503 :     Token&amp; token = m_scanner.peek();</span>
+<span class="lineNum">     284 </span><span class="lineCov">      22503 :     const Mark mark = token.mark;</span>
+<span class="lineNum">     285 </span>            :     // first check for end
+<span class="lineNum">     286 </span><span class="lineCov">      22503 :     if (token.type == Token::FLOW_MAP_END) {</span>
+<span class="lineNum">     287 </span><span class="lineCov">        466 :       m_scanner.pop();</span>
+<span class="lineNum">     288 </span><span class="lineCov">        466 :       break;</span>
+<span class="lineNum">     289 </span>            :     }
+<span class="lineNum">     290 </span>            : 
+<span class="lineNum">     291 </span>            :     // grab key (if non-null)
+<span class="lineNum">     292 </span><span class="lineCov">      22037 :     if (token.type == Token::KEY) {</span>
+<span class="lineNum">     293 </span><span class="lineCov">      10430 :       m_scanner.pop();</span>
+<span class="lineNum">     294 </span><span class="lineCov">      10430 :       HandleNode(eventHandler);</span>
+<span class="lineNum">     295 </span>            :     } else {
+<span class="lineNum">     296 </span><span class="lineCov">      11607 :       eventHandler.OnNull(mark, NullAnchor);</span>
+<span class="lineNum">     297 </span>            :     }
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span>            :     // now grab value (optional)
+<span class="lineNum">     300 </span><span class="lineCov">      15176 :     if (!m_scanner.empty() &amp;&amp; m_scanner.peek().type == Token::VALUE) {</span>
+<span class="lineNum">     301 </span><span class="lineCov">       3658 :       m_scanner.pop();</span>
+<span class="lineNum">     302 </span><span class="lineCov">       3658 :       HandleNode(eventHandler);</span>
+<span class="lineNum">     303 </span>            :     } else {
+<span class="lineNum">     304 </span><span class="lineCov">      11518 :       eventHandler.OnNull(mark, NullAnchor);</span>
+<span class="lineNum">     305 </span>            :     }
+<span class="lineNum">     306 </span>            : 
+<span class="lineNum">     307 </span><span class="lineCov">      14833 :     if (m_scanner.empty())</span>
+<span class="lineNum">     308 </span><span class="lineCov">          3 :       throw ParserException(m_scanner.mark(), ErrorMsg::END_OF_MAP_FLOW);</span>
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span>            :     // now eat the separator (or could be a map end, which we ignore - but if
+<span class="lineNum">     311 </span>            :     // it's neither, then it's a bad node)
+<span class="lineNum">     312 </span><span class="lineCov">      14830 :     Token&amp; nextToken = m_scanner.peek();</span>
+<span class="lineNum">     313 </span><span class="lineCov">      14830 :     if (nextToken.type == Token::FLOW_ENTRY)</span>
+<span class="lineNum">     314 </span><span class="lineCov">      14552 :       m_scanner.pop();</span>
+<span class="lineNum">     315 </span><span class="lineCov">        278 :     else if (nextToken.type != Token::FLOW_MAP_END)</span>
+<span class="lineNum">     316 </span><span class="lineCov">         52 :       throw ParserException(nextToken.mark, ErrorMsg::END_OF_MAP_FLOW);</span>
+<span class="lineNum">     317 </span>            :   }
+<span class="lineNum">     318 </span>            : 
+<span class="lineNum">     319 </span><span class="lineCov">        466 :   m_pCollectionStack-&gt;PopCollectionType(CollectionType::FlowMap);</span>
+<span class="lineNum">     320 </span><span class="lineCov">        466 : }</span>
+<a name="321"><span class="lineNum">     321 </span>            : </a>
+<span class="lineNum">     322 </span>            : // . Single &quot;key: value&quot; pair in a flow sequence
+<span class="lineNum">     323 </span><span class="lineCov">      13728 : void SingleDocParser::HandleCompactMap(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     324 </span><span class="lineCov">      13728 :   m_pCollectionStack-&gt;PushCollectionType(CollectionType::CompactMap);</span>
+<span class="lineNum">     325 </span>            : 
+<span class="lineNum">     326 </span>            :   // grab key
+<span class="lineNum">     327 </span><span class="lineCov">      13728 :   Mark mark = m_scanner.peek().mark;</span>
+<span class="lineNum">     328 </span><span class="lineCov">      13728 :   m_scanner.pop();</span>
+<span class="lineNum">     329 </span><span class="lineCov">      13728 :   HandleNode(eventHandler);</span>
+<span class="lineNum">     330 </span>            : 
+<span class="lineNum">     331 </span>            :   // now grab value (optional)
+<span class="lineNum">     332 </span><span class="lineCov">        191 :   if (!m_scanner.empty() &amp;&amp; m_scanner.peek().type == Token::VALUE) {</span>
+<span class="lineNum">     333 </span><span class="lineCov">        115 :     m_scanner.pop();</span>
+<span class="lineNum">     334 </span><span class="lineCov">        115 :     HandleNode(eventHandler);</span>
+<span class="lineNum">     335 </span>            :   } else {
+<span class="lineNum">     336 </span><span class="lineCov">         76 :     eventHandler.OnNull(mark, NullAnchor);</span>
+<span class="lineNum">     337 </span>            :   }
+<span class="lineNum">     338 </span>            : 
+<span class="lineNum">     339 </span><span class="lineCov">        189 :   m_pCollectionStack-&gt;PopCollectionType(CollectionType::CompactMap);</span>
+<span class="lineNum">     340 </span><span class="lineCov">        189 : }</span>
+<a name="341"><span class="lineNum">     341 </span>            : </a>
+<span class="lineNum">     342 </span>            : // . Single &quot;: value&quot; pair in a flow sequence
+<span class="lineNum">     343 </span><span class="lineCov">        158 : void SingleDocParser::HandleCompactMapWithNoKey(EventHandler&amp; eventHandler) {</span>
+<span class="lineNum">     344 </span><span class="lineCov">        158 :   m_pCollectionStack-&gt;PushCollectionType(CollectionType::CompactMap);</span>
+<span class="lineNum">     345 </span>            : 
+<span class="lineNum">     346 </span>            :   // null key
+<span class="lineNum">     347 </span><span class="lineCov">        158 :   eventHandler.OnNull(m_scanner.peek().mark, NullAnchor);</span>
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span>            :   // grab value
+<span class="lineNum">     350 </span><span class="lineCov">        158 :   m_scanner.pop();</span>
+<span class="lineNum">     351 </span><span class="lineCov">        158 :   HandleNode(eventHandler);</span>
+<span class="lineNum">     352 </span>            : 
+<span class="lineNum">     353 </span><span class="lineCov">        158 :   m_pCollectionStack-&gt;PopCollectionType(CollectionType::CompactMap);</span>
+<span class="lineNum">     354 </span><span class="lineCov">        158 : }</span>
+<span class="lineNum">     355 </span>            : 
+<a name="356"><span class="lineNum">     356 </span>            : // ParseProperties</a>
+<span class="lineNum">     357 </span>            : // . Grabs any tag or anchor tokens and deals with them.
+<span class="lineNum">     358 </span><span class="lineCov">      95298 : void SingleDocParser::ParseProperties(std::string&amp; tag, anchor_t&amp; anchor) {</span>
+<span class="lineNum">     359 </span><span class="lineCov">      95298 :   tag.clear();</span>
+<span class="lineNum">     360 </span><span class="lineCov">      95298 :   anchor = NullAnchor;</span>
+<span class="lineNum">     361 </span>            : 
+<span class="lineNum">     362 </span><span class="lineCov">       8773 :   while (1) {</span>
+<span class="lineNum">     363 </span><span class="lineCov">     104071 :     if (m_scanner.empty())</span>
+<span class="lineNum">     364 </span><span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     365 </span>            : 
+<span class="lineNum">     366 </span><span class="lineCov">     104046 :     switch (m_scanner.peek().type) {</span>
+<span class="lineNum">     367 </span>            :       case Token::TAG:
+<span class="lineNum">     368 </span><span class="lineCov">       5847 :         ParseTag(tag);</span>
+<span class="lineNum">     369 </span><span class="lineCov">       5839 :         break;</span>
+<span class="lineNum">     370 </span>            :       case Token::ANCHOR:
+<span class="lineNum">     371 </span><span class="lineCov">       2946 :         ParseAnchor(anchor);</span>
+<span class="lineNum">     372 </span><span class="lineCov">       2934 :         break;</span>
+<span class="lineNum">     373 </span>            :       default:
+<span class="lineNum">     374 </span><span class="lineCov">      95253 :         return;</span>
+<span class="lineNum">     375 </span>            :     }
+<span class="lineNum">     376 </span>            :   }
+<a name="377"><span class="lineNum">     377 </span>            : }</a>
+<span class="lineNum">     378 </span>            : 
+<span class="lineNum">     379 </span><span class="lineCov">       5847 : void SingleDocParser::ParseTag(std::string&amp; tag) {</span>
+<span class="lineNum">     380 </span><span class="lineCov">       5847 :   Token&amp; token = m_scanner.peek();</span>
+<span class="lineNum">     381 </span><span class="lineCov">       5847 :   if (!tag.empty())</span>
+<span class="lineNum">     382 </span><span class="lineCov">          8 :     throw ParserException(token.mark, ErrorMsg::MULTIPLE_TAGS);</span>
+<span class="lineNum">     383 </span>            : 
+<span class="lineNum">     384 </span><span class="lineCov">      11678 :   Tag tagInfo(token);</span>
+<span class="lineNum">     385 </span><span class="lineCov">       5839 :   tag = tagInfo.Translate(m_directives);</span>
+<span class="lineNum">     386 </span><span class="lineCov">       5839 :   m_scanner.pop();</span>
+<a name="387"><span class="lineNum">     387 </span><span class="lineCov">       5839 : }</span></a>
+<span class="lineNum">     388 </span>            : 
+<span class="lineNum">     389 </span><span class="lineCov">       2946 : void SingleDocParser::ParseAnchor(anchor_t&amp; anchor) {</span>
+<span class="lineNum">     390 </span><span class="lineCov">       2946 :   Token&amp; token = m_scanner.peek();</span>
+<span class="lineNum">     391 </span><span class="lineCov">       2946 :   if (anchor)</span>
+<span class="lineNum">     392 </span><span class="lineCov">         12 :     throw ParserException(token.mark, ErrorMsg::MULTIPLE_ANCHORS);</span>
+<span class="lineNum">     393 </span>            : 
+<span class="lineNum">     394 </span><span class="lineCov">       2934 :   anchor = RegisterAnchor(token.value);</span>
+<span class="lineNum">     395 </span><span class="lineCov">       2934 :   m_scanner.pop();</span>
+<a name="396"><span class="lineNum">     396 </span><span class="lineCov">       2934 : }</span></a>
+<span class="lineNum">     397 </span>            : 
+<span class="lineNum">     398 </span><span class="lineCov">       2934 : anchor_t SingleDocParser::RegisterAnchor(const std::string&amp; name) {</span>
+<span class="lineNum">     399 </span><span class="lineCov">       2934 :   if (name.empty())</span>
+<span class="lineNum">     400 </span><span class="lineNoCov">          0 :     return NullAnchor;</span>
+<span class="lineNum">     401 </span>            : 
+<span class="lineNum">     402 </span><span class="lineCov">       2934 :   return m_anchors[name] = ++m_curAnchor;</span>
+<a name="403"><span class="lineNum">     403 </span>            : }</a>
+<span class="lineNum">     404 </span>            : 
+<span class="lineNum">     405 </span><span class="lineCov">       2416 : anchor_t SingleDocParser::LookupAnchor(const Mark&amp; mark,</span>
+<span class="lineNum">     406 </span>            :                                        const std::string&amp; name) const {
+<span class="lineNum">     407 </span><span class="lineCov">       2416 :   Anchors::const_iterator it = m_anchors.find(name);</span>
+<span class="lineNum">     408 </span><span class="lineCov">       2416 :   if (it == m_anchors.end())</span>
+<span class="lineNum">     409 </span><span class="lineCov">         27 :     throw ParserException(mark, ErrorMsg::UNKNOWN_ANCHOR);</span>
+<span class="lineNum">     410 </span>            : 
+<a name="411"><span class="lineNum">     411 </span><span class="lineCov">       2389 :   return it-&gt;second;</span></a>
+<span class="lineNum">     412 </span>            : }
+<span class="lineNum">     413 </span><span class="lineCov">       6108 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

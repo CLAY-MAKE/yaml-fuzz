@@ -1,0 +1,4 @@
+diff fuzzer2/id:000129,orig:id:000761,sync:fuzzer2,src:000523.min -> fuzzer2/id:000130,orig:id:000762,sync:fuzzer2,src:000366.min
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'line' coverage: 111
+  New 'line' coverage: 126

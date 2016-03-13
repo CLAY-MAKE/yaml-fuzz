@@ -1,0 +1,6 @@
+diff fuzzer2/id:000046,orig:id:000387,src:000001,op:havoc,rep:64,+cov.min -> fuzzer2/id:000047,orig:id:000390,src:000001,op:havoc,rep:64.min
+Src file: /root/yaml-cpp/src/emitterutils.cpp
+  New 'line' coverage: 139
+  New 'line' coverage: 140
+  New 'line' coverage: 332
+  New 'line' coverage: 333

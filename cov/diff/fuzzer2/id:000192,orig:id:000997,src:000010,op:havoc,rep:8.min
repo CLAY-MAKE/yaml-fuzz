@@ -1,0 +1,17 @@
+diff fuzzer2/id:000191,orig:id:000991,src:000010,op:havoc,rep:128.min -> fuzzer2/id:000192,orig:id:000997,src:000010,op:havoc,rep:8.min
+Src file: /root/yaml-cpp/src/emitterstate.h
+  New 'function' coverage: _ZN4YAML12EmitterState8SetErrorERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE()
+  New 'line' coverage: 39
+  New 'line' coverage: 40
+  New 'line' coverage: 41
+  New 'line' coverage: 42
+Src file: /root/yaml-cpp/src/emitter.cpp
+  New 'line' coverage: 679
+  New 'line' coverage: 799
+  New 'line' coverage: 820
+  New 'line' coverage: 841
+  New 'line' coverage: 859
+  New 'line' coverage: 860
+  New 'line' coverage: 93
+Src file: /root/yaml-cpp/src/emitterutils.cpp
+  New 'line' coverage: 432

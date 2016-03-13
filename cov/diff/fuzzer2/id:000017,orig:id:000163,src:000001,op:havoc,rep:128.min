@@ -1,0 +1,21 @@
+diff fuzzer2/id:000016,orig:id:000152,src:000001,op:havoc,rep:16.min -> fuzzer2/id:000017,orig:id:000163,src:000001,op:havoc,rep:128.min
+Src file: /root/yaml-cpp/include/yaml-cpp/ostream_wrapper.h
+  New 'function' coverage: _ZN4YAMLlsILm3EEERNS_15ostream_wrapperES2_RAT__Kc()
+Src file: /root/yaml-cpp/src/emitterutils.cpp
+  New 'function' coverage: _ZN4YAML5Utils12_GLOBAL__N_114IsTrailingByteEc()
+  New 'line' coverage: 108
+  New 'line' coverage: 109
+  New 'line' coverage: 110
+  New 'line' coverage: 111
+  New 'line' coverage: 112
+  New 'line' coverage: 113
+  New 'line' coverage: 114
+  New 'line' coverage: 121
+  New 'line' coverage: 123
+  New 'line' coverage: 125
+  New 'line' coverage: 127
+  New 'line' coverage: 129
+  New 'line' coverage: 323
+  New 'line' coverage: 324
+  New 'line' coverage: 80
+  New 'line' coverage: 86

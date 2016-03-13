@@ -1,0 +1,15 @@
+diff fuzzer2/id:000029,orig:id:000287,src:000001,op:havoc,rep:64,+cov.min -> fuzzer2/id:000030,orig:id:000306,src:000001,op:havoc,rep:128.min
+Src file: /root/yaml-cpp/src/parser.cpp
+  New 'line' coverage: 39
+  New 'line' coverage: 53
+Src file: /root/yaml-cpp/src/stream.cpp
+  New 'line' coverage: 238
+  New 'line' coverage: 239
+  New 'line' coverage: 320
+  New 'line' coverage: 321
+  New 'line' coverage: 438
+Src file: /root/yaml-cpp/src/parse.cpp
+  New 'line' coverage: 26
+Src file: /root/yaml-cpp/include/yaml-cpp/node/impl.h
+  New 'function' coverage: _ZN4YAML4NodeC2Ev()
+  New 'line' coverage: 18

@@ -1,0 +1,3 @@
+diff fuzzer2/id:000696,orig:id:002609,src:000026+002515,op:splice,rep:16.min -> fuzzer2/id:000697,orig:id:002611,src:000158+001954,op:splice,rep:8.min
+Src file: /root/yaml-cpp/src/stream.cpp
+  New 'line' coverage: 145

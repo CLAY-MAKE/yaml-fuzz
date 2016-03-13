@@ -1,0 +1,30 @@
+diff fuzzer2/id:000096,orig:id:000654,src:000001,op:havoc,rep:4.min -> fuzzer2/id:000097,orig:id:000661,src:000001,op:havoc,rep:4.min
+Src file: /root/yaml-cpp/src/scantoken.cpp
+  New 'line' coverage: 419
+  New 'line' coverage: 420
+  New 'line' coverage: 422
+  New 'line' coverage: 423
+  New 'line' coverage: 424
+  New 'line' coverage: 426
+  New 'line' coverage: 430
+  New 'line' coverage: 431
+  New 'line' coverage: 433
+  New 'line' coverage: 434
+  New 'line' coverage: 435
+  New 'line' coverage: 436
+Src file: /root/yaml-cpp/src/scanscalar.cpp
+  New 'line' coverage: 120
+  New 'line' coverage: 130
+  New 'line' coverage: 149
+  New 'line' coverage: 150
+  New 'line' coverage: 152
+  New 'line' coverage: 155
+  New 'line' coverage: 157
+  New 'line' coverage: 164
+  New 'line' coverage: 206
+  New 'line' coverage: 32
+Src file: /root/yaml-cpp/src/exp.h
+  New 'function' coverage: _ZN4YAML3Exp5EmptyEv()
+  New 'line' coverage: 23
+  New 'line' coverage: 24
+  New 'line' coverage: 25

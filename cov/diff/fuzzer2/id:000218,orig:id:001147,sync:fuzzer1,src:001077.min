@@ -1,0 +1,3 @@
+diff fuzzer2/id:000217,orig:id:001146,sync:fuzzer1,src:001097.min -> fuzzer2/id:000218,orig:id:001147,sync:fuzzer1,src:001077.min
+Src file: /root/yaml-cpp/src/singledocparser.cpp
+  New 'line' coverage: 124

@@ -1,0 +1,524 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/stream.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - stream.cpp<span style="font-size: 80%;"> (source / <a href="stream.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">175</td>
+            <td class="headerCovTableEntry">180</td>
+            <td class="headerCovTableEntryHi">97.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;iostream&gt;</a>
+<span class="lineNum">       2 </span>            : 
+<span class="lineNum">       3 </span>            : #include &quot;stream.h&quot;
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            : #ifndef YAML_PREFETCH_SIZE
+<span class="lineNum">       6 </span>            : #define YAML_PREFETCH_SIZE 2048
+<span class="lineNum">       7 </span>            : #endif
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #define S_ARRAY_SIZE(A) (sizeof(A) / sizeof(*(A)))
+<span class="lineNum">      10 </span>            : #define S_ARRAY_END(A) ((A) + S_ARRAY_SIZE(A))
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #define CP_REPLACEMENT_CHARACTER (0xFFFD)
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            : namespace YAML {
+<span class="lineNum">      15 </span>            : enum UtfIntroState {
+<span class="lineNum">      16 </span>            :   uis_start,
+<span class="lineNum">      17 </span>            :   uis_utfbe_b1,
+<span class="lineNum">      18 </span>            :   uis_utf32be_b2,
+<span class="lineNum">      19 </span>            :   uis_utf32be_bom3,
+<span class="lineNum">      20 </span>            :   uis_utf32be,
+<span class="lineNum">      21 </span>            :   uis_utf16be,
+<span class="lineNum">      22 </span>            :   uis_utf16be_bom1,
+<span class="lineNum">      23 </span>            :   uis_utfle_bom1,
+<span class="lineNum">      24 </span>            :   uis_utf16le_bom2,
+<span class="lineNum">      25 </span>            :   uis_utf32le_bom3,
+<span class="lineNum">      26 </span>            :   uis_utf16le,
+<span class="lineNum">      27 </span>            :   uis_utf32le,
+<span class="lineNum">      28 </span>            :   uis_utf8_imp,
+<span class="lineNum">      29 </span>            :   uis_utf16le_imp,
+<span class="lineNum">      30 </span>            :   uis_utf32le_imp3,
+<span class="lineNum">      31 </span>            :   uis_utf8_bom1,
+<span class="lineNum">      32 </span>            :   uis_utf8_bom2,
+<span class="lineNum">      33 </span>            :   uis_utf8,
+<span class="lineNum">      34 </span>            :   uis_error
+<span class="lineNum">      35 </span>            : };
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            : enum UtfIntroCharType {
+<span class="lineNum">      38 </span>            :   uict00,
+<span class="lineNum">      39 </span>            :   uictBB,
+<span class="lineNum">      40 </span>            :   uictBF,
+<span class="lineNum">      41 </span>            :   uictEF,
+<span class="lineNum">      42 </span>            :   uictFE,
+<span class="lineNum">      43 </span>            :   uictFF,
+<span class="lineNum">      44 </span>            :   uictAscii,
+<span class="lineNum">      45 </span>            :   uictOther,
+<span class="lineNum">      46 </span>            :   uictMax
+<span class="lineNum">      47 </span>            : };
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            : static bool s_introFinalState[] = {
+<span class="lineNum">      50 </span>            :     false,  // uis_start
+<span class="lineNum">      51 </span>            :     false,  // uis_utfbe_b1
+<span class="lineNum">      52 </span>            :     false,  // uis_utf32be_b2
+<span class="lineNum">      53 </span>            :     false,  // uis_utf32be_bom3
+<span class="lineNum">      54 </span>            :     true,   // uis_utf32be
+<span class="lineNum">      55 </span>            :     true,   // uis_utf16be
+<span class="lineNum">      56 </span>            :     false,  // uis_utf16be_bom1
+<span class="lineNum">      57 </span>            :     false,  // uis_utfle_bom1
+<span class="lineNum">      58 </span>            :     false,  // uis_utf16le_bom2
+<span class="lineNum">      59 </span>            :     false,  // uis_utf32le_bom3
+<span class="lineNum">      60 </span>            :     true,   // uis_utf16le
+<span class="lineNum">      61 </span>            :     true,   // uis_utf32le
+<span class="lineNum">      62 </span>            :     false,  // uis_utf8_imp
+<span class="lineNum">      63 </span>            :     false,  // uis_utf16le_imp
+<span class="lineNum">      64 </span>            :     false,  // uis_utf32le_imp3
+<span class="lineNum">      65 </span>            :     false,  // uis_utf8_bom1
+<span class="lineNum">      66 </span>            :     false,  // uis_utf8_bom2
+<span class="lineNum">      67 </span>            :     true,   // uis_utf8
+<span class="lineNum">      68 </span>            :     true,   // uis_error
+<span class="lineNum">      69 </span>            : };
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            : static UtfIntroState s_introTransitions[][uictMax] = {
+<span class="lineNum">      72 </span>            :     // uict00,           uictBB,           uictBF,           uictEF,
+<span class="lineNum">      73 </span>            :     // uictFE,           uictFF,           uictAscii,        uictOther
+<span class="lineNum">      74 </span>            :     {uis_utfbe_b1, uis_utf8, uis_utf8, uis_utf8_bom1, uis_utf16be_bom1,
+<span class="lineNum">      75 </span>            :      uis_utfle_bom1, uis_utf8_imp, uis_utf8},
+<span class="lineNum">      76 </span>            :     {uis_utf32be_b2, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8,
+<span class="lineNum">      77 </span>            :      uis_utf16be, uis_utf8},
+<span class="lineNum">      78 </span>            :     {uis_utf32be, uis_utf8, uis_utf8, uis_utf8, uis_utf32be_bom3, uis_utf8,
+<span class="lineNum">      79 </span>            :      uis_utf8, uis_utf8},
+<span class="lineNum">      80 </span>            :     {uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf32be, uis_utf8,
+<span class="lineNum">      81 </span>            :      uis_utf8},
+<span class="lineNum">      82 </span>            :     {uis_utf32be, uis_utf32be, uis_utf32be, uis_utf32be, uis_utf32be,
+<span class="lineNum">      83 </span>            :      uis_utf32be, uis_utf32be, uis_utf32be},
+<span class="lineNum">      84 </span>            :     {uis_utf16be, uis_utf16be, uis_utf16be, uis_utf16be, uis_utf16be,
+<span class="lineNum">      85 </span>            :      uis_utf16be, uis_utf16be, uis_utf16be},
+<span class="lineNum">      86 </span>            :     {uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf16be, uis_utf8,
+<span class="lineNum">      87 </span>            :      uis_utf8},
+<span class="lineNum">      88 </span>            :     {uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf16le_bom2, uis_utf8,
+<span class="lineNum">      89 </span>            :      uis_utf8, uis_utf8},
+<span class="lineNum">      90 </span>            :     {uis_utf32le_bom3, uis_utf16le, uis_utf16le, uis_utf16le, uis_utf16le,
+<span class="lineNum">      91 </span>            :      uis_utf16le, uis_utf16le, uis_utf16le},
+<span class="lineNum">      92 </span>            :     {uis_utf32le, uis_utf16le, uis_utf16le, uis_utf16le, uis_utf16le,
+<span class="lineNum">      93 </span>            :      uis_utf16le, uis_utf16le, uis_utf16le},
+<span class="lineNum">      94 </span>            :     {uis_utf16le, uis_utf16le, uis_utf16le, uis_utf16le, uis_utf16le,
+<span class="lineNum">      95 </span>            :      uis_utf16le, uis_utf16le, uis_utf16le},
+<span class="lineNum">      96 </span>            :     {uis_utf32le, uis_utf32le, uis_utf32le, uis_utf32le, uis_utf32le,
+<span class="lineNum">      97 </span>            :      uis_utf32le, uis_utf32le, uis_utf32le},
+<span class="lineNum">      98 </span>            :     {uis_utf16le_imp, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8,
+<span class="lineNum">      99 </span>            :      uis_utf8, uis_utf8},
+<span class="lineNum">     100 </span>            :     {uis_utf32le_imp3, uis_utf16le, uis_utf16le, uis_utf16le, uis_utf16le,
+<span class="lineNum">     101 </span>            :      uis_utf16le, uis_utf16le, uis_utf16le},
+<span class="lineNum">     102 </span>            :     {uis_utf32le, uis_utf16le, uis_utf16le, uis_utf16le, uis_utf16le,
+<span class="lineNum">     103 </span>            :      uis_utf16le, uis_utf16le, uis_utf16le},
+<span class="lineNum">     104 </span>            :     {uis_utf8, uis_utf8_bom2, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8,
+<span class="lineNum">     105 </span>            :      uis_utf8},
+<span class="lineNum">     106 </span>            :     {uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8,
+<span class="lineNum">     107 </span>            :      uis_utf8},
+<span class="lineNum">     108 </span>            :     {uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8, uis_utf8,
+<span class="lineNum">     109 </span>            :      uis_utf8},
+<span class="lineNum">     110 </span>            : };
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span>            : static char s_introUngetCount[][uictMax] = {
+<span class="lineNum">     113 </span>            :     // uict00, uictBB, uictBF, uictEF, uictFE, uictFF, uictAscii, uictOther
+<span class="lineNum">     114 </span>            :     {0, 1, 1, 0, 0, 0, 0, 1},
+<span class="lineNum">     115 </span>            :     {0, 2, 2, 2, 2, 2, 2, 2},
+<span class="lineNum">     116 </span>            :     {3, 3, 3, 3, 0, 3, 3, 3},
+<span class="lineNum">     117 </span>            :     {4, 4, 4, 4, 4, 0, 4, 4},
+<span class="lineNum">     118 </span>            :     {1, 1, 1, 1, 1, 1, 1, 1},
+<span class="lineNum">     119 </span>            :     {1, 1, 1, 1, 1, 1, 1, 1},
+<span class="lineNum">     120 </span>            :     {2, 2, 2, 2, 2, 0, 2, 2},
+<span class="lineNum">     121 </span>            :     {2, 2, 2, 2, 0, 2, 2, 2},
+<span class="lineNum">     122 </span>            :     {0, 1, 1, 1, 1, 1, 1, 1},
+<span class="lineNum">     123 </span>            :     {0, 2, 2, 2, 2, 2, 2, 2},
+<span class="lineNum">     124 </span>            :     {1, 1, 1, 1, 1, 1, 1, 1},
+<span class="lineNum">     125 </span>            :     {1, 1, 1, 1, 1, 1, 1, 1},
+<span class="lineNum">     126 </span>            :     {0, 2, 2, 2, 2, 2, 2, 2},
+<span class="lineNum">     127 </span>            :     {0, 3, 3, 3, 3, 3, 3, 3},
+<span class="lineNum">     128 </span>            :     {4, 4, 4, 4, 4, 4, 4, 4},
+<span class="lineNum">     129 </span>            :     {2, 0, 2, 2, 2, 2, 2, 2},
+<span class="lineNum">     130 </span>            :     {3, 3, 0, 3, 3, 3, 3, 3},
+<span class="lineNum">     131 </span>            :     {1, 1, 1, 1, 1, 1, 1, 1},
+<a name="132"><span class="lineNum">     132 </span>            : };</a>
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span><span class="lineCov">       4359 : inline UtfIntroCharType IntroCharTypeOf(std::istream::int_type ch) {</span>
+<span class="lineNum">     135 </span><span class="lineCov">       4359 :   if (std::istream::traits_type::eof() == ch) {</span>
+<span class="lineNum">     136 </span><span class="lineCov">         19 :     return uictOther;</span>
+<span class="lineNum">     137 </span>            :   }
+<span class="lineNum">     138 </span>            : 
+<span class="lineNum">     139 </span><span class="lineCov">       4340 :   switch (ch) {</span>
+<span class="lineNum">     140 </span>            :     case 0:
+<span class="lineNum">     141 </span><span class="lineCov">        452 :       return uict00;</span>
+<span class="lineNum">     142 </span>            :     case 0xBB:
+<span class="lineNum">     143 </span><span class="lineCov">          7 :       return uictBB;</span>
+<span class="lineNum">     144 </span>            :     case 0xBF:
+<span class="lineNum">     145 </span><span class="lineCov">          2 :       return uictBF;</span>
+<span class="lineNum">     146 </span>            :     case 0xEF:
+<span class="lineNum">     147 </span><span class="lineCov">          9 :       return uictEF;</span>
+<span class="lineNum">     148 </span>            :     case 0xFE:
+<span class="lineNum">     149 </span><span class="lineCov">         21 :       return uictFE;</span>
+<span class="lineNum">     150 </span>            :     case 0xFF:
+<span class="lineNum">     151 </span><span class="lineCov">         39 :       return uictFF;</span>
+<span class="lineNum">     152 </span>            :   }
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineCov">       3810 :   if ((ch &gt; 0) &amp;&amp; (ch &lt; 0xFF)) {</span>
+<span class="lineNum">     155 </span><span class="lineCov">       3810 :     return uictAscii;</span>
+<span class="lineNum">     156 </span>            :   }
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span><span class="lineNoCov">          0 :   return uictOther;</span>
+<a name="159"><span class="lineNum">     159 </span>            : }</a>
+<span class="lineNum">     160 </span>            : 
+<span class="lineNum">     161 </span><span class="lineCov">    1199755 : inline char Utf8Adjust(unsigned long ch, unsigned char lead_bits,</span>
+<span class="lineNum">     162 </span>            :                        unsigned char rshift) {
+<span class="lineNum">     163 </span><span class="lineCov">    1199755 :   const unsigned char header = ((1 &lt;&lt; lead_bits) - 1) &lt;&lt; (8 - lead_bits);</span>
+<span class="lineNum">     164 </span><span class="lineCov">    1199755 :   const unsigned char mask = (0xFF &gt;&gt; (lead_bits + 1));</span>
+<span class="lineNum">     165 </span>            :   return static_cast&lt;char&gt;(
+<span class="lineNum">     166 </span><span class="lineCov">    1199755 :       static_cast&lt;unsigned char&gt;(header | ((ch &gt;&gt; rshift) &amp; mask)));</span>
+<a name="167"><span class="lineNum">     167 </span>            : }</a>
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span><span class="lineCov">     432761 : inline void QueueUnicodeCodepoint(std::deque&lt;char&gt;&amp; q, unsigned long ch) {</span>
+<span class="lineNum">     170 </span>            :   // We are not allowed to queue the Stream::eof() codepoint, so
+<span class="lineNum">     171 </span>            :   // replace it with CP_REPLACEMENT_CHARACTER
+<span class="lineNum">     172 </span><span class="lineCov">     432761 :   if (static_cast&lt;unsigned long&gt;(Stream::eof()) == ch) {</span>
+<span class="lineNum">     173 </span><span class="lineCov">          7 :     ch = CP_REPLACEMENT_CHARACTER;</span>
+<span class="lineNum">     174 </span>            :   }
+<span class="lineNum">     175 </span>            : 
+<span class="lineNum">     176 </span><span class="lineCov">     432761 :   if (ch &lt; 0x80) {</span>
+<span class="lineNum">     177 </span><span class="lineCov">      49491 :     q.push_back(Utf8Adjust(ch, 0, 0));</span>
+<span class="lineNum">     178 </span><span class="lineCov">     383270 :   } else if (ch &lt; 0x800) {</span>
+<span class="lineNum">     179 </span><span class="lineCov">      57556 :     q.push_back(Utf8Adjust(ch, 2, 6));</span>
+<span class="lineNum">     180 </span><span class="lineCov">      57556 :     q.push_back(Utf8Adjust(ch, 1, 0));</span>
+<span class="lineNum">     181 </span><span class="lineCov">     325714 :   } else if (ch &lt; 0x10000) {</span>
+<span class="lineNum">     182 </span><span class="lineCov">     267704 :     q.push_back(Utf8Adjust(ch, 3, 12));</span>
+<span class="lineNum">     183 </span><span class="lineCov">     267704 :     q.push_back(Utf8Adjust(ch, 1, 6));</span>
+<span class="lineNum">     184 </span><span class="lineCov">     267704 :     q.push_back(Utf8Adjust(ch, 1, 0));</span>
+<span class="lineNum">     185 </span>            :   } else {
+<span class="lineNum">     186 </span><span class="lineCov">      58010 :     q.push_back(Utf8Adjust(ch, 4, 18));</span>
+<span class="lineNum">     187 </span><span class="lineCov">      58010 :     q.push_back(Utf8Adjust(ch, 1, 12));</span>
+<span class="lineNum">     188 </span><span class="lineCov">      58010 :     q.push_back(Utf8Adjust(ch, 1, 6));</span>
+<span class="lineNum">     189 </span><span class="lineCov">      58010 :     q.push_back(Utf8Adjust(ch, 1, 0));</span>
+<span class="lineNum">     190 </span>            :   }
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">     432761 : }</span></a>
+<span class="lineNum">     192 </span>            : 
+<span class="lineNum">     193 </span><span class="lineCov">       2036 : Stream::Stream(std::istream&amp; input)</span>
+<span class="lineNum">     194 </span>            :     : m_input(input),
+<span class="lineNum">     195 </span><span class="lineCov">       2036 :       m_pPrefetched(new unsigned char[YAML_PREFETCH_SIZE]),</span>
+<span class="lineNum">     196 </span>            :       m_nPrefetchedAvailable(0),
+<span class="lineNum">     197 </span><span class="lineCov">       4072 :       m_nPrefetchedUsed(0) {</span>
+<span class="lineNum">     198 </span>            :   typedef std::istream::traits_type char_traits;
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span><span class="lineCov">       2036 :   if (!input)</span>
+<span class="lineNum">     201 </span><span class="lineNoCov">          0 :     return;</span>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span>            :   // Determine (or guess) the character-set by reading the BOM, if any.  See
+<span class="lineNum">     204 </span>            :   // the YAML specification for the determination algorithm.
+<span class="lineNum">     205 </span>            :   char_traits::int_type intro[4];
+<span class="lineNum">     206 </span><span class="lineCov">       2036 :   int nIntroUsed = 0;</span>
+<span class="lineNum">     207 </span><span class="lineCov">       2036 :   UtfIntroState state = uis_start;</span>
+<span class="lineNum">     208 </span><span class="lineCov">      10754 :   for (; !s_introFinalState[state];) {</span>
+<span class="lineNum">     209 </span><span class="lineCov">       4359 :     std::istream::int_type ch = input.get();</span>
+<span class="lineNum">     210 </span><span class="lineCov">       4359 :     intro[nIntroUsed++] = ch;</span>
+<span class="lineNum">     211 </span><span class="lineCov">       4359 :     UtfIntroCharType charType = IntroCharTypeOf(ch);</span>
+<span class="lineNum">     212 </span><span class="lineCov">       4359 :     UtfIntroState newState = s_introTransitions[state][charType];</span>
+<span class="lineNum">     213 </span><span class="lineCov">       4359 :     int nUngets = s_introUngetCount[state][charType];</span>
+<span class="lineNum">     214 </span><span class="lineCov">       4359 :     if (nUngets &gt; 0) {</span>
+<span class="lineNum">     215 </span><span class="lineCov">       2023 :       input.clear();</span>
+<span class="lineNum">     216 </span><span class="lineCov">      10673 :       for (; nUngets &gt; 0; --nUngets) {</span>
+<span class="lineNum">     217 </span><span class="lineCov">       4325 :         if (char_traits::eof() != intro[--nIntroUsed])</span>
+<span class="lineNum">     218 </span><span class="lineCov">       4306 :           input.putback(char_traits::to_char_type(intro[nIntroUsed]));</span>
+<span class="lineNum">     219 </span>            :       }
+<span class="lineNum">     220 </span>            :     }
+<span class="lineNum">     221 </span><span class="lineCov">       4359 :     state = newState;</span>
+<span class="lineNum">     222 </span>            :   }
+<span class="lineNum">     223 </span>            : 
+<span class="lineNum">     224 </span><span class="lineCov">       2036 :   switch (state) {</span>
+<span class="lineNum">     225 </span>            :     case uis_utf8:
+<span class="lineNum">     226 </span><span class="lineCov">       1759 :       m_charSet = utf8;</span>
+<span class="lineNum">     227 </span><span class="lineCov">       1759 :       break;</span>
+<span class="lineNum">     228 </span>            :     case uis_utf16le:
+<span class="lineNum">     229 </span><span class="lineCov">        153 :       m_charSet = utf16le;</span>
+<span class="lineNum">     230 </span><span class="lineCov">        153 :       break;</span>
+<span class="lineNum">     231 </span>            :     case uis_utf16be:
+<span class="lineNum">     232 </span><span class="lineCov">         40 :       m_charSet = utf16be;</span>
+<span class="lineNum">     233 </span><span class="lineCov">         40 :       break;</span>
+<span class="lineNum">     234 </span>            :     case uis_utf32le:
+<span class="lineNum">     235 </span><span class="lineCov">         36 :       m_charSet = utf32le;</span>
+<span class="lineNum">     236 </span><span class="lineCov">         36 :       break;</span>
+<span class="lineNum">     237 </span>            :     case uis_utf32be:
+<span class="lineNum">     238 </span><span class="lineCov">         48 :       m_charSet = utf32be;</span>
+<span class="lineNum">     239 </span><span class="lineCov">         48 :       break;</span>
+<span class="lineNum">     240 </span>            :     default:
+<span class="lineNum">     241 </span><span class="lineNoCov">          0 :       m_charSet = utf8;</span>
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 :       break;</span>
+<span class="lineNum">     243 </span>            :   }
+<span class="lineNum">     244 </span>            : 
+<span class="lineNum">     245 </span><span class="lineCov">       2036 :   ReadAheadTo(0);</span>
+<a name="246"><span class="lineNum">     246 </span>            : }</a>
+<span class="lineNum">     247 </span>            : 
+<a name="248"><span class="lineNum">     248 </span><span class="lineCov">       2036 : Stream::~Stream() { delete[] m_pPrefetched; }</span></a>
+<span class="lineNum">     249 </span>            : 
+<span class="lineNum">     250 </span><span class="lineCov">    4654381 : char Stream::peek() const {</span>
+<span class="lineNum">     251 </span><span class="lineCov">    4654381 :   if (m_readahead.empty()) {</span>
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :     return Stream::eof();</span>
+<span class="lineNum">     253 </span>            :   }
+<span class="lineNum">     254 </span>            : 
+<span class="lineNum">     255 </span><span class="lineCov">    4654381 :   return m_readahead[0];</span>
+<a name="256"><span class="lineNum">     256 </span>            : }</a>
+<span class="lineNum">     257 </span>            : 
+<span class="lineNum">     258 </span><span class="lineCov">    2715564 : Stream::operator bool() const {</span>
+<span class="lineNum">     259 </span><span class="lineCov">    5432674 :   return m_input.good() ||</span>
+<span class="lineNum">     260 </span><span class="lineCov">    2725756 :          (!m_readahead.empty() &amp;&amp; m_readahead[0] != Stream::eof());</span>
+<span class="lineNum">     261 </span>            : }
+<span class="lineNum">     262 </span>            : 
+<a name="263"><span class="lineNum">     263 </span>            : // get</a>
+<span class="lineNum">     264 </span>            : // . Extracts a character from the stream and updates our position
+<span class="lineNum">     265 </span><span class="lineCov">    2389002 : char Stream::get() {</span>
+<span class="lineNum">     266 </span><span class="lineCov">    2389002 :   char ch = peek();</span>
+<span class="lineNum">     267 </span><span class="lineCov">    2389002 :   AdvanceCurrent();</span>
+<span class="lineNum">     268 </span><span class="lineCov">    2389002 :   m_mark.column++;</span>
+<span class="lineNum">     269 </span>            : 
+<span class="lineNum">     270 </span><span class="lineCov">    2389002 :   if (ch == '\n') {</span>
+<span class="lineNum">     271 </span><span class="lineCov">      42592 :     m_mark.column = 0;</span>
+<span class="lineNum">     272 </span><span class="lineCov">      42592 :     m_mark.line++;</span>
+<span class="lineNum">     273 </span>            :   }
+<span class="lineNum">     274 </span>            : 
+<span class="lineNum">     275 </span><span class="lineCov">    2389002 :   return ch;</span>
+<span class="lineNum">     276 </span>            : }
+<span class="lineNum">     277 </span>            : 
+<a name="278"><span class="lineNum">     278 </span>            : // get</a>
+<span class="lineNum">     279 </span>            : // . Extracts 'n' characters from the stream and updates our position
+<span class="lineNum">     280 </span><span class="lineCov">      33535 : std::string Stream::get(int n) {</span>
+<span class="lineNum">     281 </span><span class="lineCov">      33535 :   std::string ret;</span>
+<span class="lineNum">     282 </span><span class="lineCov">      33535 :   ret.reserve(n);</span>
+<span class="lineNum">     283 </span><span class="lineCov">      67274 :   for (int i = 0; i &lt; n; i++)</span>
+<span class="lineNum">     284 </span><span class="lineCov">      33739 :     ret += get();</span>
+<span class="lineNum">     285 </span><span class="lineCov">      33535 :   return ret;</span>
+<span class="lineNum">     286 </span>            : }
+<span class="lineNum">     287 </span>            : 
+<a name="288"><span class="lineNum">     288 </span>            : // eat</a>
+<span class="lineNum">     289 </span>            : // . Eats 'n' characters and updates our position.
+<span class="lineNum">     290 </span><span class="lineCov">     295408 : void Stream::eat(int n) {</span>
+<span class="lineNum">     291 </span><span class="lineCov">     593620 :   for (int i = 0; i &lt; n; i++)</span>
+<span class="lineNum">     292 </span><span class="lineCov">     298212 :     get();</span>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">     295408 : }</span></a>
+<span class="lineNum">     294 </span>            : 
+<span class="lineNum">     295 </span><span class="lineCov">    2389002 : void Stream::AdvanceCurrent() {</span>
+<span class="lineNum">     296 </span><span class="lineCov">    2389002 :   if (!m_readahead.empty()) {</span>
+<span class="lineNum">     297 </span><span class="lineCov">    2389002 :     m_readahead.pop_front();</span>
+<span class="lineNum">     298 </span><span class="lineCov">    2389002 :     m_mark.pos++;</span>
+<span class="lineNum">     299 </span>            :   }
+<span class="lineNum">     300 </span>            : 
+<span class="lineNum">     301 </span><span class="lineCov">    2389002 :   ReadAheadTo(0);</span>
+<a name="302"><span class="lineNum">     302 </span><span class="lineCov">    2389002 : }</span></a>
+<span class="lineNum">     303 </span>            : 
+<span class="lineNum">     304 </span><span class="lineCov">    3220508 : bool Stream::_ReadAheadTo(size_t i) const {</span>
+<span class="lineNum">     305 </span><span class="lineCov">    4830740 :   while (m_input.good() &amp;&amp; (m_readahead.size() &lt;= i)) {</span>
+<span class="lineNum">     306 </span><span class="lineCov">    1610232 :     switch (m_charSet) {</span>
+<span class="lineNum">     307 </span>            :       case utf8:
+<span class="lineNum">     308 </span><span class="lineCov">    1198610 :         StreamInUtf8();</span>
+<span class="lineNum">     309 </span><span class="lineCov">    1198610 :         break;</span>
+<span class="lineNum">     310 </span>            :       case utf16le:
+<span class="lineNum">     311 </span><span class="lineCov">     350490 :         StreamInUtf16();</span>
+<span class="lineNum">     312 </span><span class="lineCov">     350490 :         break;</span>
+<span class="lineNum">     313 </span>            :       case utf16be:
+<span class="lineNum">     314 </span><span class="lineCov">       1688 :         StreamInUtf16();</span>
+<span class="lineNum">     315 </span><span class="lineCov">       1688 :         break;</span>
+<span class="lineNum">     316 </span>            :       case utf32le:
+<span class="lineNum">     317 </span><span class="lineCov">      33297 :         StreamInUtf32();</span>
+<span class="lineNum">     318 </span><span class="lineCov">      33297 :         break;</span>
+<span class="lineNum">     319 </span>            :       case utf32be:
+<span class="lineNum">     320 </span><span class="lineCov">      26147 :         StreamInUtf32();</span>
+<span class="lineNum">     321 </span><span class="lineCov">      26147 :         break;</span>
+<span class="lineNum">     322 </span>            :     }
+<span class="lineNum">     323 </span>            :   }
+<span class="lineNum">     324 </span>            : 
+<span class="lineNum">     325 </span>            :   // signal end of stream
+<span class="lineNum">     326 </span><span class="lineCov">    1610276 :   if (!m_input.good())</span>
+<span class="lineNum">     327 </span><span class="lineCov">       1322 :     m_readahead.push_back(Stream::eof());</span>
+<span class="lineNum">     328 </span>            : 
+<span class="lineNum">     329 </span><span class="lineCov">    1610276 :   return m_readahead.size() &gt; i;</span>
+<a name="330"><span class="lineNum">     330 </span>            : }</a>
+<span class="lineNum">     331 </span>            : 
+<span class="lineNum">     332 </span><span class="lineCov">    1198610 : void Stream::StreamInUtf8() const {</span>
+<span class="lineNum">     333 </span><span class="lineCov">    1198610 :   unsigned char b = GetNextByte();</span>
+<span class="lineNum">     334 </span><span class="lineCov">    1198610 :   if (m_input.good()) {</span>
+<span class="lineNum">     335 </span><span class="lineCov">    1197581 :     m_readahead.push_back(b);</span>
+<span class="lineNum">     336 </span>            :   }
+<a name="337"><span class="lineNum">     337 </span><span class="lineCov">    1198610 : }</span></a>
+<span class="lineNum">     338 </span>            : 
+<span class="lineNum">     339 </span><span class="lineCov">     352178 : void Stream::StreamInUtf16() const {</span>
+<span class="lineNum">     340 </span><span class="lineCov">     352178 :   unsigned long ch = 0;</span>
+<span class="lineNum">     341 </span>            :   unsigned char bytes[2];
+<span class="lineNum">     342 </span><span class="lineCov">     352178 :   int nBigEnd = (m_charSet == utf16be) ? 0 : 1;</span>
+<span class="lineNum">     343 </span>            : 
+<span class="lineNum">     344 </span><span class="lineCov">     352178 :   bytes[0] = GetNextByte();</span>
+<span class="lineNum">     345 </span><span class="lineCov">     352178 :   bytes[1] = GetNextByte();</span>
+<span class="lineNum">     346 </span><span class="lineCov">     352178 :   if (!m_input.good()) {</span>
+<span class="lineNum">     347 </span><span class="lineCov">       4187 :     return;</span>
+<span class="lineNum">     348 </span>            :   }
+<span class="lineNum">     349 </span><span class="lineCov">     704050 :   ch = (static_cast&lt;unsigned long&gt;(bytes[nBigEnd]) &lt;&lt; 8) |</span>
+<span class="lineNum">     350 </span><span class="lineCov">     704050 :        static_cast&lt;unsigned long&gt;(bytes[1 ^ nBigEnd]);</span>
+<span class="lineNum">     351 </span>            : 
+<span class="lineNum">     352 </span><span class="lineCov">     352025 :   if (ch &gt;= 0xDC00 &amp;&amp; ch &lt; 0xE000) {</span>
+<span class="lineNum">     353 </span>            :     // Trailing (low) surrogate...ugh, wrong order
+<span class="lineNum">     354 </span><span class="lineCov">       2558 :     QueueUnicodeCodepoint(m_readahead, CP_REPLACEMENT_CHARACTER);</span>
+<span class="lineNum">     355 </span><span class="lineCov">       2558 :     return;</span>
+<span class="lineNum">     356 </span><span class="lineCov">     349467 :   } else if (ch &gt;= 0xD800 &amp;&amp; ch &lt; 0xDC00) {</span>
+<span class="lineNum">     357 </span>            :     // ch is a leading (high) surrogate
+<span class="lineNum">     358 </span>            : 
+<span class="lineNum">     359 </span>            :     // Four byte UTF-8 code point
+<span class="lineNum">     360 </span>            : 
+<span class="lineNum">     361 </span>            :     // Read the trailing (low) surrogate
+<span class="lineNum">     362 </span><span class="lineCov">      20065 :     for (;;) {</span>
+<span class="lineNum">     363 </span><span class="lineCov">      21478 :       bytes[0] = GetNextByte();</span>
+<span class="lineNum">     364 </span><span class="lineCov">      21478 :       bytes[1] = GetNextByte();</span>
+<span class="lineNum">     365 </span><span class="lineCov">      21478 :       if (!m_input.good()) {</span>
+<span class="lineNum">     366 </span><span class="lineCov">         16 :         QueueUnicodeCodepoint(m_readahead, CP_REPLACEMENT_CHARACTER);</span>
+<span class="lineNum">     367 </span><span class="lineCov">         16 :         return;</span>
+<span class="lineNum">     368 </span>            :       }
+<span class="lineNum">     369 </span><span class="lineCov">      42924 :       unsigned long chLow = (static_cast&lt;unsigned long&gt;(bytes[nBigEnd]) &lt;&lt; 8) |</span>
+<span class="lineNum">     370 </span><span class="lineCov">      42924 :                             static_cast&lt;unsigned long&gt;(bytes[1 ^ nBigEnd]);</span>
+<span class="lineNum">     371 </span><span class="lineCov">      21462 :       if (chLow &lt; 0xDC00 || chLow &gt;= 0xE000) {</span>
+<span class="lineNum">     372 </span>            :         // Trouble...not a low surrogate.  Dump a REPLACEMENT CHARACTER into the
+<span class="lineNum">     373 </span>            :         // stream.
+<span class="lineNum">     374 </span><span class="lineCov">      21372 :         QueueUnicodeCodepoint(m_readahead, CP_REPLACEMENT_CHARACTER);</span>
+<span class="lineNum">     375 </span>            : 
+<span class="lineNum">     376 </span>            :         // Deal with the next UTF-16 unit
+<span class="lineNum">     377 </span><span class="lineCov">      21372 :         if (chLow &lt; 0xD800 || chLow &gt;= 0xE000) {</span>
+<span class="lineNum">     378 </span>            :           // Easiest case: queue the codepoint and return
+<span class="lineNum">     379 </span><span class="lineCov">       1307 :           QueueUnicodeCodepoint(m_readahead, ch);</span>
+<span class="lineNum">     380 </span><span class="lineCov">       1307 :           return;</span>
+<span class="lineNum">     381 </span>            :         } else {
+<span class="lineNum">     382 </span>            :           // Start the loop over with the new high surrogate
+<span class="lineNum">     383 </span><span class="lineCov">      20065 :           ch = chLow;</span>
+<span class="lineNum">     384 </span><span class="lineCov">      20065 :           continue;</span>
+<span class="lineNum">     385 </span>            :         }
+<span class="lineNum">     386 </span>            :       }
+<span class="lineNum">     387 </span>            : 
+<span class="lineNum">     388 </span>            :       // Select the payload bits from the high surrogate
+<span class="lineNum">     389 </span><span class="lineCov">         90 :       ch &amp;= 0x3FF;</span>
+<span class="lineNum">     390 </span><span class="lineCov">         90 :       ch &lt;&lt;= 10;</span>
+<span class="lineNum">     391 </span>            : 
+<span class="lineNum">     392 </span>            :       // Include bits from low surrogate
+<span class="lineNum">     393 </span><span class="lineCov">         90 :       ch |= (chLow &amp; 0x3FF);</span>
+<span class="lineNum">     394 </span>            : 
+<span class="lineNum">     395 </span>            :       // Add the surrogacy offset
+<span class="lineNum">     396 </span><span class="lineCov">         90 :       ch += 0x10000;</span>
+<span class="lineNum">     397 </span><span class="lineCov">         90 :       break;</span>
+<span class="lineNum">     398 </span>            :     }
+<span class="lineNum">     399 </span>            :   }
+<span class="lineNum">     400 </span>            : 
+<span class="lineNum">     401 </span><span class="lineCov">     348144 :   QueueUnicodeCodepoint(m_readahead, ch);</span>
+<a name="402"><span class="lineNum">     402 </span>            : }</a>
+<span class="lineNum">     403 </span>            : 
+<span class="lineNum">     404 </span><span class="lineCov">       4169 : inline char* ReadBuffer(unsigned char* pBuffer) {</span>
+<span class="lineNum">     405 </span><span class="lineCov">       4169 :   return reinterpret_cast&lt;char*&gt;(pBuffer);</span>
+<a name="406"><span class="lineNum">     406 </span>            : }</a>
+<span class="lineNum">     407 </span>            : 
+<span class="lineNum">     408 </span><span class="lineCov">    2183698 : unsigned char Stream::GetNextByte() const {</span>
+<span class="lineNum">     409 </span><span class="lineCov">    2183698 :   if (m_nPrefetchedUsed &gt;= m_nPrefetchedAvailable) {</span>
+<span class="lineNum">     410 </span><span class="lineCov">       4169 :     std::streambuf* pBuf = m_input.rdbuf();</span>
+<span class="lineNum">     411 </span>            :     m_nPrefetchedAvailable = static_cast&lt;std::size_t&gt;(
+<span class="lineNum">     412 </span><span class="lineCov">       4169 :         pBuf-&gt;sgetn(ReadBuffer(m_pPrefetched), YAML_PREFETCH_SIZE));</span>
+<span class="lineNum">     413 </span><span class="lineCov">       4169 :     m_nPrefetchedUsed = 0;</span>
+<span class="lineNum">     414 </span><span class="lineCov">       4169 :     if (!m_nPrefetchedAvailable) {</span>
+<span class="lineNum">     415 </span><span class="lineCov">       1468 :       m_input.setstate(std::ios_base::eofbit);</span>
+<span class="lineNum">     416 </span>            :     }
+<span class="lineNum">     417 </span>            : 
+<span class="lineNum">     418 </span><span class="lineCov">       4169 :     if (0 == m_nPrefetchedAvailable) {</span>
+<span class="lineNum">     419 </span><span class="lineCov">       1468 :       return 0;</span>
+<span class="lineNum">     420 </span>            :     }
+<span class="lineNum">     421 </span>            :   }
+<span class="lineNum">     422 </span>            : 
+<span class="lineNum">     423 </span><span class="lineCov">    2182230 :   return m_pPrefetched[m_nPrefetchedUsed++];</span>
+<a name="424"><span class="lineNum">     424 </span>            : }</a>
+<span class="lineNum">     425 </span>            : 
+<span class="lineNum">     426 </span><span class="lineCov">      59444 : void Stream::StreamInUtf32() const {</span>
+<span class="lineNum">     427 </span>            :   static int indexes[2][4] = {{3, 2, 1, 0}, {0, 1, 2, 3}};
+<span class="lineNum">     428 </span>            : 
+<span class="lineNum">     429 </span><span class="lineCov">      59444 :   unsigned long ch = 0;</span>
+<span class="lineNum">     430 </span>            :   unsigned char bytes[4];
+<span class="lineNum">     431 </span><span class="lineCov">      59444 :   int* pIndexes = (m_charSet == utf32be) ? indexes[1] : indexes[0];</span>
+<span class="lineNum">     432 </span>            : 
+<span class="lineNum">     433 </span><span class="lineCov">      59444 :   bytes[0] = GetNextByte();</span>
+<span class="lineNum">     434 </span><span class="lineCov">      59444 :   bytes[1] = GetNextByte();</span>
+<span class="lineNum">     435 </span><span class="lineCov">      59444 :   bytes[2] = GetNextByte();</span>
+<span class="lineNum">     436 </span><span class="lineCov">      59444 :   bytes[3] = GetNextByte();</span>
+<span class="lineNum">     437 </span><span class="lineCov">      59444 :   if (!m_input.good()) {</span>
+<span class="lineNum">     438 </span><span class="lineCov">         80 :     return;</span>
+<span class="lineNum">     439 </span>            :   }
+<span class="lineNum">     440 </span>            : 
+<span class="lineNum">     441 </span><span class="lineCov">     296820 :   for (int i = 0; i &lt; 4; ++i) {</span>
+<span class="lineNum">     442 </span><span class="lineCov">     237456 :     ch &lt;&lt;= 8;</span>
+<span class="lineNum">     443 </span><span class="lineCov">     237456 :     ch |= bytes[pIndexes[i]];</span>
+<span class="lineNum">     444 </span>            :   }
+<span class="lineNum">     445 </span>            : 
+<a name="446"><span class="lineNum">     446 </span><span class="lineCov">      59364 :   QueueUnicodeCodepoint(m_readahead, ch);</span></a>
+<span class="lineNum">     447 </span>            : }
+<span class="lineNum">     448 </span><span class="lineCov">       6108 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

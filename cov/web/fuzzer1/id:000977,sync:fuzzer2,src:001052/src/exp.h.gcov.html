@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - id:000977,sync:fuzzer2,src:001052.lcov_info_final - src/exp.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - exp.h<span style="font-size: 80%;"> (source / <a href="exp.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">id:000977,sync:fuzzer2,src:001052.lcov_info_final</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">120</td>
+            <td class="headerCovTableEntry">120</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-03-13 10:42:47</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef EXP_H_62B23520_7C8E_11DE_8A39_0800200C9A66</a>
+<span class="lineNum">       2 </span>            : #define EXP_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #if defined(_MSC_VER) ||                                            \
+<span class="lineNum">       5 </span>            :     (defined(__GNUC__) &amp;&amp; (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ &gt;= 4) || \
+<span class="lineNum">       6 </span>            :      (__GNUC__ &gt;= 4))  // GCC supports &quot;pragma once&quot; correctly since 3.4
+<span class="lineNum">       7 </span>            : #pragma once
+<span class="lineNum">       8 </span>            : #endif
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : #include &lt;ios&gt;
+<span class="lineNum">      11 </span>            : #include &lt;string&gt;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : #include &quot;regex_yaml.h&quot;
+<span class="lineNum">      14 </span>            : #include &quot;stream.h&quot;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : namespace YAML {
+<span class="lineNum">      17 </span>            : ////////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      18 </span>            : // Here we store a bunch of expressions for matching different parts of the
+<span class="lineNum">      19 </span>            : // file.
+<span class="lineNum">      20 </span>            : 
+<a name="21"><span class="lineNum">      21 </span>            : namespace Exp {</a>
+<span class="lineNum">      22 </span>            : // misc
+<span class="lineNum">      23 </span><span class="lineCov">        477 : inline const RegEx&amp; Empty() {</span>
+<span class="lineNum">      24 </span><span class="lineCov">        477 :   static const RegEx e;</span>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">        477 :   return e;</span></a>
+<span class="lineNum">      26 </span>            : }
+<span class="lineNum">      27 </span><span class="lineCov">       2029 : inline const RegEx&amp; Space() {</span>
+<span class="lineNum">      28 </span><span class="lineCov">       2029 :   static const RegEx e = RegEx(' ');</span>
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">       2029 :   return e;</span></a>
+<span class="lineNum">      30 </span>            : }
+<span class="lineNum">      31 </span><span class="lineCov">      68774 : inline const RegEx&amp; Tab() {</span>
+<span class="lineNum">      32 </span><span class="lineCov">      68774 :   static const RegEx e = RegEx('\t');</span>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">      68774 :   return e;</span></a>
+<span class="lineNum">      34 </span>            : }
+<span class="lineNum">      35 </span><span class="lineCov">      77254 : inline const RegEx&amp; Blank() {</span>
+<span class="lineNum">      36 </span><span class="lineCov">      77254 :   static const RegEx e = Space() || Tab();</span>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">      77254 :   return e;</span></a>
+<span class="lineNum">      38 </span>            : }
+<span class="lineNum">      39 </span><span class="lineCov">    1244684 : inline const RegEx&amp; Break() {</span>
+<span class="lineNum">      40 </span><span class="lineCov">    1244684 :   static const RegEx e = RegEx('\n') || RegEx(&quot;\r\n&quot;);</span>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">    1244684 :   return e;</span></a>
+<span class="lineNum">      42 </span>            : }
+<span class="lineNum">      43 </span><span class="lineCov">    1100615 : inline const RegEx&amp; BlankOrBreak() {</span>
+<span class="lineNum">      44 </span><span class="lineCov">    1100615 :   static const RegEx e = Blank() || Break();</span>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">    1100615 :   return e;</span></a>
+<span class="lineNum">      46 </span>            : }
+<span class="lineNum">      47 </span><span class="lineCov">       2094 : inline const RegEx&amp; Digit() {</span>
+<span class="lineNum">      48 </span><span class="lineCov">       2094 :   static const RegEx e = RegEx('0', '9');</span>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">       2094 :   return e;</span></a>
+<span class="lineNum">      50 </span>            : }
+<span class="lineNum">      51 </span><span class="lineCov">        747 : inline const RegEx&amp; Alpha() {</span>
+<span class="lineNum">      52 </span><span class="lineCov">        747 :   static const RegEx e = RegEx('a', 'z') || RegEx('A', 'Z');</span>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">        747 :   return e;</span></a>
+<span class="lineNum">      54 </span>            : }
+<span class="lineNum">      55 </span><span class="lineCov">        747 : inline const RegEx&amp; AlphaNumeric() {</span>
+<span class="lineNum">      56 </span><span class="lineCov">        747 :   static const RegEx e = Alpha() || Digit();</span>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">        747 :   return e;</span></a>
+<span class="lineNum">      58 </span>            : }
+<span class="lineNum">      59 </span><span class="lineCov">      16891 : inline const RegEx&amp; Word() {</span>
+<span class="lineNum">      60 </span><span class="lineCov">      16891 :   static const RegEx e = AlphaNumeric() || RegEx('-');</span>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">      16891 :   return e;</span></a>
+<span class="lineNum">      62 </span>            : }
+<span class="lineNum">      63 </span><span class="lineCov">       2040 : inline const RegEx&amp; Hex() {</span>
+<span class="lineNum">      64 </span><span class="lineCov">       2040 :   static const RegEx e = Digit() || RegEx('A', 'F') || RegEx('a', 'f');</span>
+<span class="lineNum">      65 </span><span class="lineCov">       2040 :   return e;</span>
+<span class="lineNum">      66 </span>            : }
+<a name="67"><span class="lineNum">      67 </span>            : // Valid Unicode code points that are not part of c-printable (YAML 1.2, sec.</a>
+<span class="lineNum">      68 </span>            : // 5.1)
+<span class="lineNum">      69 </span><span class="lineCov">       1648 : inline const RegEx&amp; NotPrintable() {</span>
+<span class="lineNum">      70 </span>            :   static const RegEx e =
+<span class="lineNum">      71 </span><span class="lineCov">       1648 :       RegEx(0) ||</span>
+<span class="lineNum">      72 </span><span class="lineCov">       3296 :       RegEx(&quot;\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x7F&quot;, REGEX_OR) ||</span>
+<span class="lineNum">      73 </span>            :       RegEx(0x0E, 0x1F) ||
+<span class="lineNum">      74 </span><span class="lineCov">       3296 :       (RegEx('\xC2') + (RegEx('\x80', '\x84') || RegEx('\x86', '\x9F')));</span>
+<a name="75"><span class="lineNum">      75 </span><span class="lineCov">       1648 :   return e;</span></a>
+<span class="lineNum">      76 </span>            : }
+<span class="lineNum">      77 </span><span class="lineCov">       1648 : inline const RegEx&amp; Utf8_ByteOrderMark() {</span>
+<span class="lineNum">      78 </span><span class="lineCov">       1648 :   static const RegEx e = RegEx(&quot;\xEF\xBB\xBF&quot;);</span>
+<span class="lineNum">      79 </span><span class="lineCov">       1648 :   return e;</span>
+<span class="lineNum">      80 </span>            : }
+<span class="lineNum">      81 </span>            : 
+<a name="82"><span class="lineNum">      82 </span>            : // actual tags</a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineCov">      26512 : inline const RegEx&amp; DocStart() {</span>
+<span class="lineNum">      85 </span><span class="lineCov">      26512 :   static const RegEx e = RegEx(&quot;---&quot;) + (BlankOrBreak() || RegEx());</span>
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">      26512 :   return e;</span></a>
+<span class="lineNum">      87 </span>            : }
+<span class="lineNum">      88 </span><span class="lineCov">      25863 : inline const RegEx&amp; DocEnd() {</span>
+<span class="lineNum">      89 </span><span class="lineCov">      25863 :   static const RegEx e = RegEx(&quot;...&quot;) + (BlankOrBreak() || RegEx());</span>
+<a name="90"><span class="lineNum">      90 </span><span class="lineCov">      25863 :   return e;</span></a>
+<span class="lineNum">      91 </span>            : }
+<span class="lineNum">      92 </span><span class="lineCov">      14679 : inline const RegEx&amp; DocIndicator() {</span>
+<span class="lineNum">      93 </span><span class="lineCov">      14679 :   static const RegEx e = DocStart() || DocEnd();</span>
+<a name="94"><span class="lineNum">      94 </span><span class="lineCov">      14679 :   return e;</span></a>
+<span class="lineNum">      95 </span>            : }
+<span class="lineNum">      96 </span><span class="lineCov">     112106 : inline const RegEx&amp; BlockEntry() {</span>
+<span class="lineNum">      97 </span><span class="lineCov">     112106 :   static const RegEx e = RegEx('-') + (BlankOrBreak() || RegEx());</span>
+<a name="98"><span class="lineNum">      98 </span><span class="lineCov">     112106 :   return e;</span></a>
+<span class="lineNum">      99 </span>            : }
+<span class="lineNum">     100 </span><span class="lineCov">      56703 : inline const RegEx&amp; Key() {</span>
+<span class="lineNum">     101 </span><span class="lineCov">      56703 :   static const RegEx e = RegEx('?') + BlankOrBreak();</span>
+<a name="102"><span class="lineNum">     102 </span><span class="lineCov">      56703 :   return e;</span></a>
+<span class="lineNum">     103 </span>            : }
+<span class="lineNum">     104 </span><span class="lineCov">      21843 : inline const RegEx&amp; KeyInFlow() {</span>
+<span class="lineNum">     105 </span><span class="lineCov">      21843 :   static const RegEx e = RegEx('?') + BlankOrBreak();</span>
+<a name="106"><span class="lineNum">     106 </span><span class="lineCov">      21843 :   return e;</span></a>
+<span class="lineNum">     107 </span>            : }
+<span class="lineNum">     108 </span><span class="lineCov">      41916 : inline const RegEx&amp; Value() {</span>
+<span class="lineNum">     109 </span><span class="lineCov">      41916 :   static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx());</span>
+<a name="110"><span class="lineNum">     110 </span><span class="lineCov">      41916 :   return e;</span></a>
+<span class="lineNum">     111 </span>            : }
+<span class="lineNum">     112 </span><span class="lineCov">      19437 : inline const RegEx&amp; ValueInFlow() {</span>
+<span class="lineNum">     113 </span><span class="lineCov">      19437 :   static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx(&quot;,}&quot;, REGEX_OR));</span>
+<a name="114"><span class="lineNum">     114 </span><span class="lineCov">      19437 :   return e;</span></a>
+<span class="lineNum">     115 </span>            : }
+<span class="lineNum">     116 </span><span class="lineCov">       2191 : inline const RegEx&amp; ValueInJSONFlow() {</span>
+<span class="lineNum">     117 </span><span class="lineCov">       2191 :   static const RegEx e = RegEx(':');</span>
+<a name="118"><span class="lineNum">     118 </span><span class="lineCov">       2191 :   return e;</span></a>
+<span class="lineNum">     119 </span>            : }
+<span class="lineNum">     120 </span><span class="lineCov">     249761 : inline const RegEx Comment() {</span>
+<span class="lineNum">     121 </span><span class="lineCov">     249761 :   static const RegEx e = RegEx('#');</span>
+<a name="122"><span class="lineNum">     122 </span><span class="lineCov">     249761 :   return e;</span></a>
+<span class="lineNum">     123 </span>            : }
+<span class="lineNum">     124 </span><span class="lineCov">      45588 : inline const RegEx&amp; Anchor() {</span>
+<span class="lineNum">     125 </span><span class="lineCov">      45588 :   static const RegEx e = !(RegEx(&quot;[]{},&quot;, REGEX_OR) || BlankOrBreak());</span>
+<a name="126"><span class="lineNum">     126 </span><span class="lineCov">      45588 :   return e;</span></a>
+<span class="lineNum">     127 </span>            : }
+<span class="lineNum">     128 </span><span class="lineCov">       5628 : inline const RegEx&amp; AnchorEnd() {</span>
+<span class="lineNum">     129 </span><span class="lineCov">       5628 :   static const RegEx e = RegEx(&quot;?:,]}%@`&quot;, REGEX_OR) || BlankOrBreak();</span>
+<a name="130"><span class="lineNum">     130 </span><span class="lineCov">       5628 :   return e;</span></a>
+<span class="lineNum">     131 </span>            : }
+<span class="lineNum">     132 </span><span class="lineCov">       6034 : inline const RegEx&amp; URI() {</span>
+<span class="lineNum">     133 </span><span class="lineCov">        918 :   static const RegEx e = Word() || RegEx(&quot;#;/?:@&amp;=+$,_.!~*'()[]&quot;, REGEX_OR) ||</span>
+<span class="lineNum">     134 </span><span class="lineCov">       6952 :                          (RegEx('%') + Hex() + Hex());</span>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">       6034 :   return e;</span></a>
+<span class="lineNum">     136 </span>            : }
+<span class="lineNum">     137 </span><span class="lineCov">      26064 : inline const RegEx&amp; Tag() {</span>
+<span class="lineNum">     138 </span><span class="lineCov">       1122 :   static const RegEx e = Word() || RegEx(&quot;#;/?:@&amp;=+$_.~*'&quot;, REGEX_OR) ||</span>
+<span class="lineNum">     139 </span><span class="lineCov">      27186 :                          (RegEx('%') + Hex() + Hex());</span>
+<span class="lineNum">     140 </span><span class="lineCov">      26064 :   return e;</span>
+<span class="lineNum">     141 </span>            : }
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span>            : // Plain scalar rules:
+<span class="lineNum">     144 </span>            : // . Cannot start with a blank.
+<span class="lineNum">     145 </span>            : // . Can never start with any of , [ ] { } # &amp; * ! | &gt; \' \&quot; % @ `
+<span class="lineNum">     146 </span>            : // . In the block context - ? : must be not be followed with a space.
+<a name="147"><span class="lineNum">     147 </span>            : // . In the flow context ? is illegal and : and - must not be followed with a</a>
+<span class="lineNum">     148 </span>            : // space.
+<span class="lineNum">     149 </span><span class="lineCov">      24887 : inline const RegEx&amp; PlainScalar() {</span>
+<span class="lineNum">     150 </span>            :   static const RegEx e =
+<span class="lineNum">     151 </span><span class="lineCov">       2916 :       !(BlankOrBreak() || RegEx(&quot;,[]{}#&amp;*!|&gt;\'\&quot;%@`&quot;, REGEX_OR) ||</span>
+<span class="lineNum">     152 </span><span class="lineCov">      27803 :         (RegEx(&quot;-?:&quot;, REGEX_OR) + (BlankOrBreak() || RegEx())));</span>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">      24887 :   return e;</span></a>
+<span class="lineNum">     154 </span>            : }
+<span class="lineNum">     155 </span><span class="lineCov">      15808 : inline const RegEx&amp; PlainScalarInFlow() {</span>
+<span class="lineNum">     156 </span>            :   static const RegEx e =
+<span class="lineNum">     157 </span><span class="lineCov">        902 :       !(BlankOrBreak() || RegEx(&quot;?,[]{}#&amp;*!|&gt;\'\&quot;%@`&quot;, REGEX_OR) ||</span>
+<span class="lineNum">     158 </span><span class="lineCov">      16710 :         (RegEx(&quot;-:&quot;, REGEX_OR) + Blank()));</span>
+<a name="159"><span class="lineNum">     159 </span><span class="lineCov">      15808 :   return e;</span></a>
+<span class="lineNum">     160 </span>            : }
+<span class="lineNum">     161 </span><span class="lineCov">       2219 : inline const RegEx&amp; EndScalar() {</span>
+<span class="lineNum">     162 </span><span class="lineCov">       2219 :   static const RegEx e = RegEx(':') + (BlankOrBreak() || RegEx());</span>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">       2219 :   return e;</span></a>
+<span class="lineNum">     164 </span>            : }
+<span class="lineNum">     165 </span><span class="lineCov">       1275 : inline const RegEx&amp; EndScalarInFlow() {</span>
+<span class="lineNum">     166 </span>            :   static const RegEx e =
+<span class="lineNum">     167 </span><span class="lineCov">       2296 :       (RegEx(':') + (BlankOrBreak() || RegEx() || RegEx(&quot;,]}&quot;, REGEX_OR))) ||</span>
+<span class="lineNum">     168 </span><span class="lineCov">       3571 :       RegEx(&quot;,?[]{}&quot;, REGEX_OR);</span>
+<span class="lineNum">     169 </span><span class="lineCov">       1275 :   return e;</span>
+<a name="170"><span class="lineNum">     170 </span>            : }</a>
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span><span class="lineCov">      13877 : inline const RegEx&amp; ScanScalarEndInFlow() {</span>
+<span class="lineNum">     173 </span><span class="lineCov">      13877 :   static const RegEx e = (EndScalarInFlow() || (BlankOrBreak() + Comment()));</span>
+<span class="lineNum">     174 </span><span class="lineCov">      13877 :   return e;</span>
+<a name="175"><span class="lineNum">     175 </span>            : }</a>
+<span class="lineNum">     176 </span>            : 
+<span class="lineNum">     177 </span><span class="lineCov">      16177 : inline const RegEx&amp; ScanScalarEnd() {</span>
+<span class="lineNum">     178 </span><span class="lineCov">      16177 :   static const RegEx e = EndScalar() || (BlankOrBreak() + Comment());</span>
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">      16177 :   return e;</span></a>
+<span class="lineNum">     180 </span>            : }
+<span class="lineNum">     181 </span><span class="lineCov">        300 : inline const RegEx&amp; EscSingleQuote() {</span>
+<span class="lineNum">     182 </span><span class="lineCov">        300 :   static const RegEx e = RegEx(&quot;\'\'&quot;);</span>
+<a name="183"><span class="lineNum">     183 </span><span class="lineCov">        300 :   return e;</span></a>
+<span class="lineNum">     184 </span>            : }
+<span class="lineNum">     185 </span><span class="lineCov">      48056 : inline const RegEx&amp; EscBreak() {</span>
+<span class="lineNum">     186 </span><span class="lineCov">      48056 :   static const RegEx e = RegEx('\\') + Break();</span>
+<span class="lineNum">     187 </span><span class="lineCov">      48056 :   return e;</span>
+<a name="188"><span class="lineNum">     188 </span>            : }</a>
+<span class="lineNum">     189 </span>            : 
+<span class="lineNum">     190 </span><span class="lineCov">        561 : inline const RegEx&amp; ChompIndicator() {</span>
+<span class="lineNum">     191 </span><span class="lineCov">        561 :   static const RegEx e = RegEx(&quot;+-&quot;, REGEX_OR);</span>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">        561 :   return e;</span></a>
+<span class="lineNum">     193 </span>            : }
+<span class="lineNum">     194 </span><span class="lineCov">        503 : inline const RegEx&amp; Chomp() {</span>
+<span class="lineNum">     195 </span><span class="lineCov">        374 :   static const RegEx e = (ChompIndicator() + Digit()) ||</span>
+<span class="lineNum">     196 </span><span class="lineCov">        748 :                          (Digit() + ChompIndicator()) || ChompIndicator() ||</span>
+<span class="lineNum">     197 </span><span class="lineCov">        690 :                          Digit();</span>
+<span class="lineNum">     198 </span><span class="lineCov">        503 :   return e;</span>
+<span class="lineNum">     199 </span>            : }
+<span class="lineNum">     200 </span>            : 
+<span class="lineNum">     201 </span>            : // and some functions
+<span class="lineNum">     202 </span>            : std::string Escape(Stream&amp; in);
+<span class="lineNum">     203 </span>            : }
+<span class="lineNum">     204 </span>            : 
+<span class="lineNum">     205 </span>            : namespace Keys {
+<span class="lineNum">     206 </span>            : const char Directive = '%';
+<span class="lineNum">     207 </span>            : const char FlowSeqStart = '[';
+<span class="lineNum">     208 </span>            : const char FlowSeqEnd = ']';
+<span class="lineNum">     209 </span>            : const char FlowMapStart = '{';
+<span class="lineNum">     210 </span>            : const char FlowMapEnd = '}';
+<span class="lineNum">     211 </span>            : const char FlowEntry = ',';
+<span class="lineNum">     212 </span>            : const char Alias = '*';
+<span class="lineNum">     213 </span>            : const char Anchor = '&amp;';
+<span class="lineNum">     214 </span>            : const char Tag = '!';
+<span class="lineNum">     215 </span>            : const char LiteralScalar = '|';
+<span class="lineNum">     216 </span>            : const char FoldedScalar = '&gt;';
+<span class="lineNum">     217 </span>            : const char VerbatimTagStart = '&lt;';
+<span class="lineNum">     218 </span>            : const char VerbatimTagEnd = '&gt;';
+<span class="lineNum">     219 </span>            : }
+<span class="lineNum">     220 </span>            : }
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span>            : #endif  // EXP_H_62B23520_7C8E_11DE_8A39_0800200C9A66
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.11</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

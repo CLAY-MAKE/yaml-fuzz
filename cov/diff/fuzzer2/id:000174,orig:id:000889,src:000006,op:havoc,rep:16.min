@@ -1,0 +1,7 @@
+diff fuzzer2/id:000173,orig:id:000889,src:000006,op:arith8,pos:163,val:+23,+cov.min -> fuzzer2/id:000174,orig:id:000889,src:000006,op:havoc,rep:16.min
+Src file: /root/yaml-cpp/src/scanscalar.cpp
+  New 'line' coverage: 59
+  New 'line' coverage: 60
+  New 'line' coverage: 61
+  New 'line' coverage: 62
+  New 'line' coverage: 63
